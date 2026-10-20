@@ -4,8 +4,8 @@
 
 一个英语学习网站，包含盲听、精读、生词学习、跟读、默写、复盘六个学习阶段。支持用户标记生词、AI 补充释义、定时生成新语料。
 
-**线上地址**：https://daily-english-22755.app.workbuddy.host/
-**WorkBuddy 应用 ID**：wbapp_6rjFhUddsmXX1zjt5ytvBv
+**线上地址**：https://daily-english-38358.app.workbuddy.host/?sharecode=REDACTED_SHARECODE
+**WorkBuddy 应用 ID**：wbapp_e6Oe7it7Pjh6aPbJsV77LA
 
 ---
 
@@ -30,13 +30,9 @@
 
 | 文件 | 说明 |
 |------|------|
-| `data/export_daily_sentences.json` | 云数据库 daily_sentences 表导出（30 条语料） |
-| `data/export_word_dictionary.json` | 云数据库 word_dictionary 表导出（310 个单词） |
-| `data/export_vocabulary.json` | 用户生词本导出（16 条，RLS 限制需 SQL 导出） |
-| `data/export_study_log.json` | 学习记录导出（4 条） |
-| `data/export_dictation_history.json` | 默写历史导出（30 条） |
+| `data/export_daily_sentences.json` | 语料快照（2026-10-19，30 天）。仅供 `pipeline.py --from-export` 离线回填，**当前数据以云库为准** |
+| `data/export_word_dictionary.json` | 词库快照（2026-10-19，310 词）。同上 |
 | `data/export_schema.json` | 数据库表结构定义 |
-| `corpus.js` | 旧版本地语料数据（已停用，保留作备份） |
 | `dictionary.js` | 旧版本地词典数据（已停用，数据已导入云数据库） |
 
 ### 工具脚本
@@ -65,7 +61,6 @@
 
 | 文件 | 说明 |
 |------|------|
-| `.wbapp_6rjFhUddsmXX1zjt5ytvBv.genie` | WorkBuddy 应用标记文件 |
 | `.workbuddy/memory/` | 工作记忆日志 |
 
 ---
@@ -121,7 +116,7 @@
 ## WorkBuddy Cloud 配置
 
 ```
-endpoint: https://daily-english-22755.app.workbuddy.host
+endpoint: https://daily-english-38358.app.workbuddy.host
 publishableKey: wbpk_REDACTED
 oauthRelayBaseUrl: https://www.workbuddy.cn/v2/as/genie-baas/oauth
 ```
