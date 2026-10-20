@@ -59,8 +59,11 @@ jobs:
           WB_EMAIL: ${{ secrets.WB_EMAIL }}
           WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
         run: |
+          # 只输出长度，不输出值；用于判断 Secret 是否真的注入
+          echo "WB_KEY len=${#WB_KEY} | WB_EMAIL len=${#WB_EMAIL} | WB_PASSWORD len=${#WB_PASSWORD}"
           if [ -z "$WB_EMAIL" ] || [ -z "$WB_PASSWORD" ]; then
             echo "::warning::未配置 WB_EMAIL / WB_PASSWORD，跳过语料生成（仅同步音频）"
+            echo "::warning::请检查 Settings → Secrets and variables → Actions → Repository secrets 中是否存在这两个名字"
             exit 0
           fi
           python pipeline.py \
