@@ -1,7 +1,7 @@
-# B 方案：WorkBuddy 生成语料 + GitHub 同步音频
+# A 方案：GitHub Actions 全自动生成语料与音频
 
-> 目标：WorkBuddy 定时生成语料并写库；GitHub Actions 只读语料、用 Python edge-tts 预生成音频、提交回仓库。
-> 结果：**不需要 WorkBuddy 密码，不需要数据库写权限，0 人工，0 冷启动。**
+> 目标：**0 人工**。GitHub Actions 每天用 WorkBuddy LLM 生成语料、写入云库、用 Python edge-tts 预生成音频，全部提交回仓库。
+> 前台常驻 WorkBuddy Sites，浏览器从 jsDelivr 读预生成 MP3，运行时不再调用任何 TTS 或 LLM。
 
 ---
 
@@ -9,31 +9,27 @@
 
 | 角色 | 由谁负责 | 说明 |
 |---|---|---|
-| 生成语料 + 生词 | WorkBuddy 现有定时任务 | 每周一 03:00，用 LLM 生成并写入 `daily_sentences` / `word_dictionary` |
-| 读取语料 | GitHub Actions | 只带 publishable key 匿名读，不需要登录 |
+| 生成语料 + 生词 | GitHub Actions | 调 WorkBuddy LLM（`glm-5.3-flash`），消耗 WorkBuddy 积分 |
+| 写入云库 | GitHub Actions | 用 WorkBuddy 账号登录拿 token，受 RLS 限制只能写指定表 |
+| 读取语料 | GitHub Actions | 匿名读（publishable key），不需要登录 |
 | 生成音频 | GitHub Actions + Python edge-tts | 句子、全文、生词 MP3，全部预生成 |
 | 存放音频 | GitHub 仓库 `audio/` | 提交回仓库，jsDelivr 直接提供 CDN |
-| 前台 | WorkBuddy Sites | 常驻、国内快、原生登录/DB/LLM |
+| 前台 | WorkBuddy Sites | 常驻、国内快、原生登录 / DB / LLM |
 | 播放音频 | jsDelivr / R2 / COS | 纯静态 CDN，运行时不再调 TTS |
-
-为什么 B 能做到“无密码”：`daily_sentences` 和 `word_dictionary` 的 RLS 允许匿名 SELECT，
-Actions 只需要 `WB_KEY`（本来就在前端公开的 publishable key）就能读，完全不碰写接口。
 
 ---
 
 ## 二、链路
 
 ```
-┌──────────────── WorkBuddy（每周一 03:00） ────────────────┐
-│  LLM 生成语料 + 生词 → 写入 daily_sentences / word_dictionary │
-└──────────────────────────┬───────────────────────────────┘
-                           │（内容已在云库）
-┌──────────────────────────▼───────────────────────────────┐
-│ GitHub Actions audio-sync（每天 04:00，兜底）              │
-│  1. 匿名读取 daily_sentences / word_dictionary             │
-│  2. 计算音频任务，manifest 指纹命中就跳过                   │
-│  3. Python edge-tts 只生成缺失的 MP3                       │
-│  4. git commit audio/ + manifest.json                     │
+┌──────────── GitHub Actions（每天 04:00 CST） ─────────────┐
+│  1. 登录 WorkBuddy（WB_EMAIL / WB_PASSWORD）               │
+│  2. 读云库最新日期，算出未来 30 天窗口缺哪几天              │
+│  3. 逐天调 LLM 生成语料（WorkBuddy 积分）                   │
+│  4. 校验后写入 daily_sentences / word_dictionary           │
+│  5. 匿名重读语料，算出音频任务                              │
+│  6. Python edge-tts 只生成缺失的 MP3                       │
+│  7. git commit audio/ + manifest.json                     │
 └──────────────────────────┬───────────────────────────────┘
                            │
               ┌────────────┴────────────┐
@@ -45,117 +41,175 @@ Actions 只需要 `WB_KEY`（本来就在前端公开的 publishable key）就�
                     浏览器播放音频
 ```
 
-为什么 Actions 每天跑而不是每周：WorkBuddy 任务如果延迟或失败，第二天的运行会自动补上；
-没有新内容时只是两次数据库读 + 487 个文件跳过，约 1 秒结束。
+**WorkBuddy 和 GitHub 之间没有双向通讯。** 唯一的跨系统调用是 Actions →
+WorkBuddy 的公开 REST 接口（读语料、调 LLM、写库），从 GitHub 机房发出，
+与你的电脑、你的网络、代理开关都无关。
+
+为什么每天跑而不是每周：单天失败只影响单天，第二天自动补；没有新内容时，
+`plan_dates` 判定缓冲区已满，不会调用 LLM（不花积分），只做一次数据库读。
 
 ---
 
-## 三、流水线每一步
+## 三、LLM 与密码的分工
 
-文件：`pipeline.py`（默认 B 模式）、`tts.py`、`.github/workflows/audio-sync.yml`。
+这是最容易混淆的一点：
 
-### 1. 匿名读取
+| 动作 | 认证方式 | 需要密码吗 | 计费 |
+|---|---|---|---|
+| 调 LLM 生成语料 | `x-wb-webapp-access-key: wbpk_...` | 不需要 | **扣 WorkBuddy 积分** |
+| 写 `daily_sentences` / `word_dictionary` | 登录得到的 `access_token` | 需要 | 无关 |
+| 读语料 | `x-wb-webapp-access-key: wbpk_...` | 不需要 | 无关 |
+
+也就是说密码只用于「以你的身份执行 INSERT」。模型调用走的仍然是 WorkBuddy
+自己的 LLM 网关，和浏览器里补词义用的是同一套积分。
+
+---
+
+## 四、安全边界
+
+### 1. 密码怎么存
+
+GitHub → Settings → Secrets and variables → Actions → Secrets。
+
+- 服务端加密保存，**存进去后连你自己也看不到明文**，只能覆盖或删除；
+- 只在 workflow 运行时解密为环境变量，日志中出现会自动脱敏成 `***`；
+- 仓库代码里只有 `${{ secrets.WB_PASSWORD }}` 占位符，不含真实值；
+- GitHub 不会向 fork 的 PR 注入 secrets。
+
+`pipeline.py` 中密码只出现在登录请求的 body 里，没有任何打印语句。
+
+### 2. 数据库权限（RLS）
+
+| 表 | 匿名 | 登录用户 | 你的账号（uid `OWNER_UID`） |
+|---|---|---|---|
+| `daily_sentences` | 只读 | 只读 | 只读 + 插入 + 更新 |
+| `word_dictionary` | 只读 | 只读 | 只读 + 写 |
+| `vocabulary` / `study_log` / `dictation_history` / `user_profiles` | 无 | 仅自己的行 | 仅自己的行 |
+
+策略名：`daily_sentences_owner_insert`、`daily_sentences_owner_update`、
+`word_dictionary_owner_write`，条件均为 `auth.uid() = 'OWNER_UID'`。
+
+即使密码泄露，攻击者也**只能写这两张内容表**，碰不到你的生词本和学习记录。
+
+### 3. 公开仓库会暴露什么
+
+- 会：源码、音频文件、Actions 日志、`app.js` 里的 publishable key（本来就公开，只能读）。
+- 不会：`WB_PASSWORD`、`WB_EMAIL`、`WB_KEY` 的值。
+
+建议给 GitHub 账号开启 2FA，且不要随意添加 Collaborator。
+
+---
+
+## 五、流水线每一步
+
+文件：`pipeline.py`（`--with-corpus` 为 A 模式）、`tts.py`、`.github/workflows/audio-sync.yml`。
+
+### 1. 登录
 
 ```
-GET /.cloud/database/rest/daily_sentences?select=...&order=date.asc
-GET /.cloud/database/rest/word_dictionary?select=...
+POST /.cloud/auth/v1/signin
 Header: x-wb-webapp-access-key: wbpk_...
+Body:   {"username": "...", "password": "..."}
 ```
 
-没有 `Authorization`，没有登录，没有密码。
+返回 `access_token`，后续写库带 `Authorization: Bearer <token>`。
 
-### 2. 音频任务
+### 2. 语料生成
+
+逐天调用，避免长输出被截断：
+
+```
+POST /.cloud/llm/chat/completions
+Body: {model, messages, stream: true}
+```
+
+每天产出：4-5 句英文、中文翻译、来源与难度、8 个生词（含音标 / 词性 / 释义 / 例句）。
+
+### 3. 校验
+
+- 日期连续、不与已有行重复；
+- `sentences` 拆分结果与 `english_text` 一致；
+- 中文翻译非空、生词字段完整；
+- 不满足则重试，超过阈值跳过当天（下次运行再补）。
+
+### 4. 写库
+
+```
+POST /.cloud/database/rest/daily_sentences
+POST /.cloud/database/rest/word_dictionary
+Header: Authorization: Bearer <token>
+```
+
+`id` 显式指定（两张表都不带自增默认值）。
+
+### 5. 音频任务
 
 - 句子：`{date}_s0.mp3`、`{date}_s1.mp3`…
 - 全文：`{date}_full.mp3`
 - 生词：`vocab_{word}.mp3`
-- 语音：`en-US-JennyNeural`（和原有 1144 个音频同音色）
+- 语音：`en-US-JennyNeural`（和原有音频同音色）
 
-### 3. 去重
+### 6. 去重与重试
 
-`audio/manifest.json` 记录每个文件对应文本的 SHA1 指纹：
-文本没变就跳过；文本变了自动重生成。重复运行是幂等的（实测 487 个文件 0 秒跳过）。
+`audio/manifest.json` 记录每个文件对应文本的 SHA1 指纹，文本没变就跳过。
+每个文件重试 4 次，整批结束后再串行重试一次；并发 3。
 
-### 4. 失败处理
+### 7. 语料告警
 
-- 每个文件重试 4 次，整批结束后再串行重试一次；
-- 并发 3（实测并发 4 会偶发微软接口断连）；
-- 单个失败不影响其他文件，下次运行自动补。
-
-### 5. 语料告警
-
-`--fail-if-stale 2`：如果云库里最新日期不足“今天 + 2 天”，任务以退出码 3 结束。
-工作流仍然会先提交已生成的音频，再标红告警，提示 WorkBuddy 定时任务可能没跑。
+`--fail-if-stale 2`：云库最新日期不足「今天 + 2 天」时以退出码 3 结束，
+Actions 标红并邮件通知，说明语料生成环节出了问题。
 
 ---
 
-## 四、一次性配置
+## 六、一次性配置
 
-### 1. 建仓库并推送
-
-```bash
-cd C:/PycharmProject/自建应用
-git init
-git add .
-git commit -m "feat: B 方案音频同步流水线"
-git remote add origin git@github.com:<你的账号>/daily-english.git
-git push -u origin main
-```
-
-> jsDelivr 只能读**公开仓库**。个人学习数据（`data/export_vocabulary.json` 等）已在 `.gitignore` 排除。
-> 如果必须私有，把 `AUDIO_BASE` 换成 Cloudflare R2 / 腾讯云 COS，其它不变。
-
-### 2. 配置 GitHub
+### 1. 配置 GitHub Secrets
 
 Settings → Secrets and variables → Actions：
 
 | 类型 | 名称 | 值 |
 |---|---|---|
-| Secret | `WB_KEY` | `wbpk_...`（app.js 里那串 publishable key） |
-| Variable | `WB_ENDPOINT` | 可选，默认 `https://daily-english-22755.app.workbuddy.host` |
+| Secret | `WB_KEY` | `app.js` 里 `publishableKey` 那串 `wbpk_...` |
+| Secret | `WB_EMAIL` | `your@email.com` |
+| Secret | `WB_PASSWORD` | WorkBuddy 登录密码 |
+| Variable | `WB_ENDPOINT` | `https://daily-english-38358.app.workbuddy.host` |
 
-**不需要** `WB_EMAIL` / `WB_PASSWORD`。
+三个 Secret 缺任一，`Generate corpus` 会跳过并打警告（音频同步仍照常运行）。
 
-### 3. 首次同步音频
+### 2. 触发一次
 
-Actions → `audio-sync` → Run workflow → Run。
-本地已有的 487 个 MP3 会被跳过；如果仓库里没有音频，会全量生成（约 5-10 分钟）。
+Actions → `audio-sync` → **Run workflow**（右上角下拉，不是 Re-run）→ Run。
 
-### 4. 前端指向 CDN
+> 注意：**不要用「Re-run all jobs」**。Re-run 会复用原始运行的 SHA 和旧版工作流定义，
+> 改了工作流也不会生效，表现为一直报同样的错。
 
-编辑 `config.js`：
+### 3. 前端指向 CDN
+
+`config.js`：
 
 ```js
 window.APP_CONFIG = {
-  // 推荐 gcore / testingcf，本机实测比 cdn 更稳
   audioBase: "https://gcore.jsdelivr.net/gh/<账号>/daily-english@main/audio/",
   cloudEndpoint: ""
 };
 ```
 
-重新发布一次 WorkBuddy Sites（只此一次，之后每周不再动前端）。
-
-### 5. 保留 WorkBuddy 定时任务
-
-B 方案依赖它生成语料，**不要停用**：
-
-- 名称：英语学习网站语料自动更新
-- ID：`2f24f90d-9169-4a51-b21a-f51022e0e6c5`
-- 时间：每周一 03:00
+改完重新发布一次 WorkBuddy Sites，之后不再需要动前端。
 
 ---
 
-## 五、日常运行
+## 七、日常运行
 
-- 周一 03:00：WorkBuddy 生成语料并写库。
-- 周一 04:00：Actions 同步音频；之后每天 04:00 再兜底检查一次。
-- 有新内容：生成缺失 MP3、提交仓库、jsDelivr 生效，前端不用重新部署。
-- 没新内容：两次数据库读 + 全部跳过，约 1 秒。
+- 每天 04:00：Actions 登录 → 补足 30 天语料窗口 → 写库 → 生成缺失音频 → 提交仓库。
+- 有新内容：LLM 生成 + TTS 预生成，jsDelivr 自动生效，前端不用重新部署。
+- 没新内容：`plan_dates` 返回空，不调 LLM（不花积分），音频全部跳过，约 1-2 秒。
 - 语料不足 2 天：Actions 标红告警。
+- 本机 git push 需要代理（`http.proxy` 已设为 `socks5h://127.0.0.1:10808`），
+  但**日常运行完全不需要你 push**。
 
 ---
 
-## 六、音频发布选择
+## 八、音频发布选择
 
 | 方案 | 成本 | 国内速度 | 额外账号 | 说明 |
 |---|---|---|---|---|
@@ -167,20 +221,20 @@ B 方案依赖它生成语料，**不要停用**：
 
 ---
 
-## 七、成本
+## 九、成本
 
 | 项目 | 费用 |
 |---|---|
 | 前台（WorkBuddy Sites） | 0 |
-| 定时任务（GitHub Actions） | 0（公开仓库免费；私有仓库约 10 分钟/月） |
+| 定时任务（GitHub Actions） | 0（公开仓库免费） |
 | 音频 CDN（jsDelivr） | 0 |
 | TTS（edge-tts） | 0 |
-| LLM（WorkBuddy 积分，由 WorkBuddy 任务消耗） | 按原样 |
+| LLM（WorkBuddy 积分） | 按原样消耗 |
 | **合计** | **0 元** |
 
 ---
 
-## 八、为什么不是 Render 做前台
+## 十、为什么不是 Render 做前台
 
 Render 免费 Web Service 15 分钟无请求就休眠，冷启动 30-60 秒；保活只能降低概率：
 
@@ -188,27 +242,32 @@ Render 免费 Web Service 15 分钟无请求就休眠，冷启动 30-60 秒；�
 - Render 可随时重启免费实例，重启后第一个请求仍会慢；
 - 保活器本身可能挂，官方也不推荐保活。
 
-Render 适合做后台批处理（冷启动无所谓），不适合“打开即用”的前台。
+Render 适合做后台批处理（冷启动无所谓），不适合「打开即用」的前台。
 如果一定要前台离开 WorkBuddy，免费且真正无冷启动的是 Render Static Site + Cloudflare Worker 反代。
 
 ---
 
-## 九、故障排查
+## 十一、故障排查
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| Actions 报 `语料覆盖不足` | WorkBuddy 定时任务没跑/延迟 | 检查并手动跑一次 WorkBuddy 任务；Actions 会在下次自动补音频 |
-| 音频 404 | push 没成功 / jsDelivr 还没回源 | 看 Actions 的 `Commit audio` 步骤；浏览器直接打开 MP3 URL 验证 |
-| 音频没更新 | manifest 认为文本没变 | 确认 `daily_sentences` 真的更新了；必要时 `--force-audio` |
-| TTS 部分失败 | 微软接口限流/断连 | 已内置 4 次重试 + 串行二次重试；下次运行自动补 |
+| `Generate corpus` 报缺少 `WB_EMAIL / WB_PASSWORD` | Secrets 没配 | 按第六节补上三个 Secret |
+| 登录 401 / 400 | 密码错，或账号被改 | 用浏览器登录一次前台确认密码，再更新 Secret |
+| 写库 401 `permission denied` | RLS 策略缺失，或登录的不是 owner 账号 | 检查 `daily_sentences_owner_insert/update` 与 uid 是否匹配 |
+| `语料覆盖不足` | 生成环节失败多日 | 看 `Generate corpus` 日志；Actions 会在下次自动补 |
+| Commit 步骤 `fetch first` | 用了 Re-run，或仓库有分支保护 | 改用右上角 Run workflow；分支保护则改走 PR |
+| 音频 404 | push 没成功 / jsDelivr 未回源 | 看 `Commit audio` 步骤；浏览器直接打开 MP3 URL |
+| 音频没更新 | manifest 认为文本没变 | 确认语料真的变了；必要时 `--force-audio` |
+| TTS 部分失败 | 微软接口限流/断连 | 已内置重试；下次运行自动补 |
 | 前端没声音 | `config.js` 的 `audioBase` 没改 | 检查该值，重新发布一次前台 |
 
 ---
 
-## 十、验收标准
+## 十二、验收标准
 
-- Actions 跑一次：匿名读到 30 天语料 + 310 个生词，只补缺失音频，提交回仓库。
-- WorkBuddy 新增一天语料后，24 小时内 Actions 自动生成当天句子/全文/生词音频。
-- GitHub 中不存在 WorkBuddy 密码。
+- Actions 跑一次：补足 30 天语料窗口、写入新语料、生成对应音频、提交回仓库。
+- 第二天 04:00 再跑：`plan_dates` 判定缓冲区已满，不调 LLM，全部跳过，1-2 秒结束。
+- GitHub 中不存在明文密码，日志中不出现密码。
+- 匿名用户无法写 `daily_sentences`（返回 401 `permission denied`）。
 - 前端播放新音频不需要重新部署。
 - 语料不足时 Actions 失败告警。

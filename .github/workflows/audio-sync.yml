@@ -9,7 +9,7 @@ on:
       days:
         description: "保持未来多少天的语料缓冲"
         required: false
-        default: "14"
+        default: "30"
       force_audio:
         description: "强制重新生成全部音频"
         type: boolean
@@ -65,7 +65,7 @@ jobs:
           fi
           python pipeline.py \
             --with-corpus \
-            --days "${{ github.event.inputs.days || '14' }}" \
+            --days "${{ github.event.inputs.days || '30' }}" \
             --no-audio \
             --fail-if-stale 0
 

@@ -16,3 +16,6 @@ data/export_vocabulary.json
 data/export_study_log.json
 data/export_dictation_history.json
 .workbuddy/
+
+# WorkBuddy 本地应用标记（含本机路径，不进公开仓库）
+.wbapp_*.genie

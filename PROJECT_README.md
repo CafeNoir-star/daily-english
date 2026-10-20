@@ -20,10 +20,10 @@
 | `config.js` | 运行时配置（音频 CDN 前缀 `audioBase`） | ~300B |
 | `server.js` | Node.js 后端（静态文件服务 + /api/lookup 词典查询） | ~12KB |
 | `package.json` | 依赖声明（@tencent-ai/workbuddy-cloud-sdk + @travisvn/edge-tts） | ~200B |
-| `pipeline.py` | 音频流水线：匿名读语料 → edge-tts 预生成音频（`--with-corpus` 可选 A 模式） | ~700 行 |
+| `pipeline.py` | 全自动流水线：生成语料 → 写库 → edge-tts 预生成音频（`--with-corpus` 为 A 模式） | ~960 行 |
 | `tts.py` | edge-tts 单条合成 CLI（Node / shell 可调用） | ~60 行 |
 | `requirements.txt` | Python 依赖（edge-tts + requests） | ~60B |
-| `.github/workflows/audio-sync.yml` | GitHub Actions 音频同步（每天 04:00，匿名读语料） | ~90 行 |
+| `.github/workflows/audio-sync.yml` | GitHub Actions 每日同步（语料 + 音频，每天 04:00） | ~150 行 |
 | `audio/` | 预生成 MP3 音频（由 pipeline.py 生成，提交回仓库） | 按语料量增长 |
 
 ### 数据文件（本地备份）
@@ -55,7 +55,7 @@
 | 文件 | 说明 |
 |------|------|
 | `test/security.test.js` | 安全测试（23 项，路径穿越/敏感文件/API 验证/Headers） |
-| `test/test_pipeline.py` | B 方案流水线单元测试（9 项：匿名读、鉴权读、覆盖检查、CLI） |
+| `test/test_pipeline.py` | 流水线单元测试（9 项：匿名读、鉴权读、覆盖检查、CLI） |
 
 ### 文档
 
@@ -85,7 +85,7 @@
 - `difficulty` text（beginner/intermediate/advanced）
 - `sentences` jsonb（拆分的单句数组）
 - `created_at` timestamptz
-- RLS：authenticated + anon 可读（B 方案只读，不需要写策略）
+- RLS：anon / authenticated 可读；仅 owner 账号（uid `OWNER_UID`）可 INSERT / UPDATE
 
 ### word_dictionary（词典表，310 条）
 - `id` bigint PK
@@ -131,28 +131,23 @@ oauthRelayBaseUrl: https://www.workbuddy.cn/v2/as/genie-baas/oauth
 
 ---
 
-## 定时任务（B 方案：WorkBuddy 生成语料 + GitHub 同步音频）
+## 定时任务（A 方案：GitHub Actions 全包）
 
-**语料生成仍由 WorkBuddy 定时任务负责；GitHub Actions 只做音频，0 人工、无密码。**
-
-### WorkBuddy 定时任务（保留，不要停用）
-
-- **名称**：英语学习网站语料自动更新
-- **ID**：`2f24f90d-9169-4a51-b21a-f51022e0e6c5`
-- **时间**：每周一 03:00（Asia/Shanghai）
-- **内容**：LLM 生成语料 + 生词，写入 `daily_sentences` / `word_dictionary`
-
-### GitHub Actions 音频同步
+**GitHub Actions 每天自动生成语料、写库、预生成音频，0 人工。**
 
 - **工作流**：`.github/workflows/audio-sync.yml`
 - **时间**：每天 04:00（Asia/Shanghai），支持手动触发
 - **步骤**：
-  1. 只用 `WB_KEY` 匿名读取 `daily_sentences` / `word_dictionary`
-  2. 用 `edge-tts` 预生成句子 / 全文 / 生词 MP3 到 `audio/`
-  3. 提交 `audio/` + `manifest.json` 回仓库，前端通过 jsDelivr 播放
-  4. 语料不足 2 天时标红告警
-- **幂等**：`audio/manifest.json` 记录文本指纹，未变化不重复生成
-- **无需** `WB_EMAIL` / `WB_PASSWORD`，不需要数据库写权限
+  1. 登录 WorkBuddy（`WB_EMAIL` / `WB_PASSWORD`），补足未来 30 天语料窗口
+  2. 逐天调 WorkBuddy LLM（`glm-5.3-flash`，消耗积分）生成语料并校验
+  3. 写入 `daily_sentences` / `word_dictionary`（RLS 仅允许 owner 账号）
+  4. 匿名重读语料，用 `edge-tts` 预生成句子 / 全文 / 生词 MP3
+  5. 提交 `audio/` + `manifest.json` 回仓库，前端通过 jsDelivr 播放
+  6. 语料不足 2 天时标红告警
+- **幂等**：`plan_dates` 在缓冲区已满时不调用 LLM（不花积分）；`manifest.json` 记录文本指纹，未变化不重复生成
+- **Secrets**：`WB_KEY`、`WB_EMAIL`、`WB_PASSWORD`；**Variable**：`WB_ENDPOINT`
+
+> 旧的 WorkBuddy 定时任务已随旧应用一并删除，A 方案不再依赖它。
 
 详细说明见 `docs/deployment-and-automation.md`。
 
@@ -191,4 +186,4 @@ oauthRelayBaseUrl: https://www.workbuddy.cn/v2/as/genie-baas/oauth
 - app.js 版本：v=20261020a
 - 最后更新：2026-10-20
 - 前台部署：WorkBuddy Sites（Node.js HTTP 服务）
-- 自动化：B 方案（WorkBuddy 生成语料 + GitHub Actions 每天同步音频 + jsDelivr）
+- 自动化：A 方案（GitHub Actions 每天生成语料 + 写库 + 预生成音频 + jsDelivr）
