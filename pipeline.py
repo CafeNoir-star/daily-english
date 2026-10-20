@@ -42,7 +42,7 @@ import requests
 # 配置
 # ---------------------------------------------------------------------------
 
-WB_ENDPOINT = os.getenv("WB_ENDPOINT", "https://daily-english-22755.app.workbuddy.host").rstrip("/")
+WB_ENDPOINT = os.getenv("WB_ENDPOINT", "https://daily-english-38358.app.workbuddy.host").rstrip("/")
 WB_KEY = os.getenv("WB_KEY", "").strip()
 WB_EMAIL = os.getenv("WB_EMAIL", "").strip()
 WB_PASSWORD = os.getenv("WB_PASSWORD", "")

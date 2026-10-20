@@ -45,7 +45,7 @@ jobs:
         id: sync
         continue-on-error: true
         env:
-          WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-22755.app.workbuddy.host' }}
+          WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-38358.app.workbuddy.host' }}
           WB_KEY: ${{ secrets.WB_KEY }}
         run: |
           EXTRA=""
