@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-20T17:39:27+08:00",
+  "generated_at": "2026-10-21T06:53:02+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1058,6 +1058,36 @@
       "bytes": 45936,
       "text": "By slowing down and reading carefully, we can protect ourselves from confusion and make better judgments about the world"
     },
+    "2026-11-19_full.mp3": {
+      "h": "e38c9b18a0c27c79",
+      "bytes": 232992,
+      "text": "When Sarah arrived in Lisbon for the first time, she felt both excited and nervous about navigating a city where she did"
+    },
+    "2026-11-19_s0.mp3": {
+      "h": "f6f4469b1d8cc6a8",
+      "bytes": 49248,
+      "text": "When Sarah arrived in Lisbon for the first time, she felt both excited and nervous about navigating a city where she did"
+    },
+    "2026-11-19_s1.mp3": {
+      "h": "9e0151a84ce963a7",
+      "bytes": 44496,
+      "text": "Instead of sticking to famous tourist attractions, she joined a local cooking class run by an elderly woman named Maria."
+    },
+    "2026-11-19_s2.mp3": {
+      "h": "fc71d2d57fada819",
+      "bytes": 53712,
+      "text": "Through preparing traditional dishes together, they shared stories about their families, and Sarah discovered that food "
+    },
+    "2026-11-19_s3.mp3": {
+      "h": "af601cd2da71f2f0",
+      "bytes": 49824,
+      "text": "By the end of her trip, she had gained not just memories of colorful streets, but a genuine friendship that crossed cult"
+    },
+    "2026-11-19_s4.mp3": {
+      "h": "7712c27cd4fa3543",
+      "bytes": 38448,
+      "text": "She realized that meaningful travel is less about seeing places and more about connecting with people."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 10080,
@@ -1588,6 +1618,11 @@
       "bytes": 9072,
       "text": "books"
     },
+    "vocab_boundary.mp3": {
+      "h": "2db8c22f75474a58",
+      "bytes": 11232,
+      "text": "boundary"
+    },
     "vocab_brain.mp3": {
       "h": "8b9248a4e0b64bbc",
       "bytes": 8784,
@@ -2088,6 +2123,11 @@
       "bytes": 9504,
       "text": "gently"
     },
+    "vocab_genuine.mp3": {
+      "h": "6f092934300dd334",
+      "bytes": 11232,
+      "text": "genuine"
+    },
     "vocab_geopolitical.mp3": {
       "h": "75284e62bbc78bc9",
       "bytes": 11664,
@@ -2538,6 +2578,11 @@
       "bytes": 9072,
       "text": "rather"
     },
+    "vocab_realize.mp3": {
+      "h": "dab96e77cfd931f6",
+      "bytes": 11232,
+      "text": "realize"
+    },
     "vocab_recession.mp3": {
       "h": "dee6298ec744852a",
       "bytes": 10368,
@@ -2592,6 +2637,11 @@
       "h": "95de5fa8b9cc1a8b",
       "bytes": 9792,
       "text": "rightful"
+    },
+    "vocab_run_by.mp3": {
+      "h": "c8d9229242d4b2d2",
+      "bytes": 11232,
+      "text": "run by"
     },
     "vocab_scent.mp3": {
       "h": "8e6b2801689893e7",
@@ -2658,6 +2708,11 @@
       "bytes": 11808,
       "text": "spectacular"
     },
+    "vocab_stick_to.mp3": {
+      "h": "19ead2a1dfb89960",
+      "bytes": 11232,
+      "text": "stick to"
+    },
     "vocab_stiffness.mp3": {
       "h": "4766ac42fb58b90f",
       "bytes": 10656,
@@ -2713,6 +2768,11 @@
       "bytes": 8352,
       "text": "three"
     },
+    "vocab_tourist_attraction.mp3": {
+      "h": "e0263e292b9f12d9",
+      "bytes": 12528,
+      "text": "tourist attraction"
+    },
     "vocab_traction.mp3": {
       "h": "dbe430a13866b3f6",
       "bytes": 10080,
@@ -2747,6 +2807,11 @@
       "h": "fd2a27641c8303d9",
       "bytes": 11232,
       "text": "unexpected"
+    },
+    "vocab_universal.mp3": {
+      "h": "da5f51a102d85541",
+      "bytes": 11232,
+      "text": "universal"
     },
     "vocab_universally.mp3": {
       "h": "8e41d5f5054dc5bf",
