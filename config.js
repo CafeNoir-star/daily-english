@@ -7,6 +7,6 @@
 //   - 留空：直连 WorkBuddy（WorkBuddy Sites 部署时用这个）
 //   - "same-origin"：走本站 /.cloud 反向代理（Render / 自建服务器时用这个）
 window.APP_CONFIG = {
-  audioBase: "",
+  audioBase: "https://gcore.jsdelivr.net/gh/CafeNoir-star/daily-english@main/audio/",
   cloudEndpoint: ""
 };
