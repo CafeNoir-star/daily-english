@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: daily-english
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: WB_ENDPOINT
+        value: https://daily-english-22755.app.workbuddy.host
+      - key: WB_KEY
+        sync: false
+      - key: ALLOWED_EMAILS
+        sync: false

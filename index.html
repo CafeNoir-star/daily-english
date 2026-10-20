@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>每日英语学习</title>
+<style>
+:root, [data-theme="light"] {
+  --bg-primary: #f0f2f5; --bg-secondary: #ffffff; --bg-card: #ffffff; --bg-card-hover: #f0f2f5;
+  --text-primary: #1a1d29; --text-secondary: #4b5563; --text-muted: #9ca3af;
+  --accent-blue: #2563eb; --accent-blue-light: #3b82f6;
+  --accent-green: #059669; --accent-red: #dc2626; --accent-orange: #d97706; --accent-purple: #7c3aed;
+  --border-color: #e5e7eb; --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --radius: 12px; --radius-sm: 8px;
+  --hover-overlay: rgba(59,130,246,0.1); --marked-bg: rgba(217,119,6,0.15); --highlight-bg: rgba(59,130,246,0.1);
+}
+[data-theme="dark"] {
+  --bg-primary: #0f1117; --bg-secondary: #1a1d29; --bg-card: #232735; --bg-card-hover: #2a2f3e;
+  --text-primary: #e4e7ec; --text-secondary: #9ca3af; --text-muted: #6b7280;
+  --accent-blue: #3b82f6; --accent-blue-light: #60a5fa;
+  --accent-green: #10b981; --accent-red: #ef4444; --accent-orange: #f59e0b; --accent-purple: #8b5cf6;
+  --border-color: #2d3142; --shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --hover-overlay: rgba(59,130,246,0.2); --marked-bg: rgba(245,158,11,0.2); --highlight-bg: rgba(59,130,246,0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scrollbar-gutter: stable; overflow-y: scroll; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; line-height: 1.6; transition: background 0.3s, color 0.3s; font-size: 15px; }
+
+/* Auth */
+.auth-overlay { position: fixed; inset: 0; background: var(--bg-primary); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { background: var(--bg-card); border-radius: var(--radius); padding: 32px; max-width: 380px; width: 100%; box-shadow: var(--shadow); border: 1px solid var(--border-color); }
+.auth-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 8px; color: var(--accent-blue); }
+.auth-subtitle { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 24px; }
+.auth-tabs { display: flex; gap: 0; margin-bottom: 20px; background: var(--bg-secondary); border-radius: var(--radius-sm); overflow: hidden; }
+.auth-tab { flex: 1; padding: 10px; text-align: center; font-size: 14px; cursor: pointer; border: none; background: transparent; color: var(--text-secondary); font-family: inherit; transition: all 0.2s; }
+.auth-tab.active { background: var(--accent-blue); color: #fff; font-weight: 600; }
+.auth-field { margin-bottom: 16px; }
+.auth-label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+.auth-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); color: var(--text-primary); font-size: 15px; font-family: inherit; }
+.auth-input:focus { outline: none; border-color: var(--accent-blue); }
+.auth-error { color: var(--accent-red); font-size: 13px; margin-top: 8px; min-height: 18px; }
+.auth-btn { width: 100%; padding: 12px; font-size: 15px; }
+
+/* Navbar */
+.navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 56px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+.nav-logo { font-size: 18px; font-weight: 700; color: var(--accent-blue); white-space: nowrap; }
+.nav-tabs { display: flex; gap: 4px; }
+.nav-tab { padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; color: var(--text-secondary); transition: all 0.2s; border: none; background: transparent; font-family: inherit; white-space: nowrap; }
+.nav-tab:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+.nav-tab.active { background: var(--accent-blue); color: #fff; font-weight: 600; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.streak-badge, .timer-badge { display: flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 16px; background: var(--bg-card); font-size: 13px; white-space: nowrap; }
+.timer-badge { color: var(--accent-green); }
+.timer-badge #timerDisplay { font-variant-numeric: tabular-nums; font-weight: 600; }
+.theme-toggle { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--bg-card); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.user-badge { display: flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 16px; background: var(--bg-card); font-size: 13px; }
+.logout-btn { background: transparent; border: 1px solid var(--border-color); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; }
+.logout-btn:hover { background: var(--accent-red); color: #fff; border-color: var(--accent-red); }
+
+/* Main */
+.main-content { max-width: 860px; margin: 0 auto; padding: 20px 16px 70px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card { background: var(--bg-card); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--border-color); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 8px; }
+.card-title { font-size: 18px; font-weight: 600; }
+.card-meta { font-size: 13px; color: var(--text-muted); }
+
+/* Phase Steps */
+.phase-steps { display: flex; gap: 0; margin-bottom: 20px; overflow-x: auto; background: var(--bg-secondary); border-radius: var(--radius-sm); }
+.phase-step { flex: 1; min-width: 72px; padding: 12px 8px; text-align: center; font-size: 13px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; white-space: nowrap; }
+.phase-step.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+.phase-step.completed { color: var(--accent-green); }
+.phase-step.completed::after { content: ' \2713'; }
+.phase-step .step-num { font-size: 11px; opacity: 0.6; }
+
+/* Sentence - unified for all phases */
+.sentence-block { background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 12px; border-left: 3px solid var(--accent-blue); }
+.sentence-en { font-size: 17px; line-height: 2; margin-bottom: 8px; }
+.sentence-en .word { cursor: pointer; padding: 1px 3px; border-radius: 3px; transition: background 0.15s; }
+.sentence-en .word:hover { background: var(--hover-overlay); }
+.sentence-en .word.marked { background: var(--marked-bg); color: var(--accent-orange); font-weight: 600; }
+.sentence-zh { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+.sentence-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-icon { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: var(--text-secondary); transition: all 0.2s; font-family: inherit; }
+.btn-icon:hover { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+.btn-icon:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Buttons */
+.btn { padding: 12px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.2s; font-family: inherit; }
+.btn-primary { background: var(--accent-blue); color: #fff; }
+.btn-primary:hover { background: var(--accent-blue-light); }
+.btn-primary:disabled { background: var(--text-muted); cursor: not-allowed; }
+.btn-secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); }
+.btn-secondary:hover { background: var(--bg-card-hover); }
+.btn-success { background: var(--accent-green); color: #fff; }
+.btn-success:disabled { background: var(--text-muted); cursor: not-allowed; }
+.btn-danger { background: var(--accent-red); color: #fff; }
+.btn-danger-sm { background: transparent; border: 1px solid var(--accent-red); color: var(--accent-red); border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.btn-danger-sm:hover { background: var(--accent-red); color: #fff; }
+
+/* Unified phase action bar (bottom buttons) */
+.phase-actions { text-align: center; margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+/* Blind Listen - unified with other phases */
+.blind-listen-box { text-align: center; padding: 20px 0; }
+.blind-listen-instruction { font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.8; }
+.listen-controls { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.speed-control { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-secondary); }
+.speed-control select { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px; font-size: 14px; font-family: inherit; }
+
+/* Vocab Learning - unified padding with sentence-block */
+.vocab-learning-card { background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 12px; border-left: 3px solid var(--accent-purple); }
+.vocab-learning-word { font-size: 22px; font-weight: 700; color: var(--accent-purple); }
+.vocab-learning-phonetic { font-size: 15px; color: var(--text-muted); font-style: italic; margin-left: 8px; }
+.vocab-learning-def { font-size: 15px; margin-top: 10px; color: var(--text-primary); }
+.vocab-learning-example { font-size: 14px; color: var(--text-secondary); font-style: italic; margin-top: 8px; }
+.vocab-learning-tips { background: var(--bg-card); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 14px; }
+.vocab-learning-tips .tip-label { font-weight: 600; color: var(--accent-purple); }
+.vocab-learning-tips .tip-row { margin-bottom: 6px; }
+.vocab-card-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+/* Read Along - unified padding with sentence-block */
+.read-along-sentence { padding: 18px; margin-bottom: 12px; border-radius: var(--radius-sm); background: var(--bg-secondary); transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-left: 3px solid transparent; }
+.read-along-sentence.highlight { background: var(--highlight-bg); border-left: 3px solid var(--accent-blue); }
+.read-along-sentence .en { font-size: 17px; }
+.read-along-sentence .zh { font-size: 15px; color: var(--text-muted); margin-top: 4px; }
+
+/* Dictation - unified padding */
+.dictation-input { width: 100%; min-height: 80px; padding: 16px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 16px; line-height: 1.8; resize: vertical; font-family: inherit; }
+.dictation-input:focus { outline: none; border-color: var(--accent-blue); }
+.dictation-result { margin-top: 12px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-sm); }
+.comparison-line { padding: 12px; margin-bottom: 8px; border-radius: 6px; line-height: 2; font-size: 16px; }
+.word-correct { color: var(--accent-green); }
+.word-wrong { color: var(--accent-red); text-decoration: underline wavy var(--accent-red); }
+.word-missing { color: var(--accent-orange); background: var(--marked-bg); padding: 0 4px; border-radius: 3px; }
+.word-extra { color: var(--accent-purple); text-decoration: line-through; }
+.error-summary { margin-top: 12px; }
+.error-tag { display: inline-block; padding: 3px 12px; margin: 3px; border-radius: 12px; font-size: 13px; }
+.error-tag.spelling { background: rgba(220,38,38,0.1); color: var(--accent-red); }
+.error-tag.article { background: rgba(124,58,237,0.1); color: var(--accent-purple); }
+
+/* Stats */
+.review-summary { text-align: center; padding: 0; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+.stat-item { background: var(--bg-secondary); padding: 18px; border-radius: var(--radius-sm); }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--accent-blue); }
+.stat-label { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+/* Vocab List */
+.vocab-item { background: var(--bg-card); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 12px; border: 1px solid var(--border-color); }
+.vocab-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.vocab-word { font-size: 20px; font-weight: 700; color: var(--accent-blue); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.vocab-phonetic { font-size: 14px; color: var(--text-muted); font-style: italic; }
+.vocab-pos { font-size: 12px; padding: 3px 10px; border-radius: 10px; background: var(--bg-secondary); color: var(--text-secondary); }
+.vocab-status { font-size: 12px; padding: 3px 12px; border-radius: 10px; }
+.vocab-status.new { background: rgba(220,38,38,0.1); color: var(--accent-red); }
+.vocab-status.learning { background: rgba(217,119,6,0.1); color: var(--accent-orange); }
+.vocab-status.mastered { background: rgba(5,150,105,0.1); color: var(--accent-green); }
+.vocab-status.permanent { background: rgba(124,58,237,0.1); color: var(--accent-purple); }
+.vocab-body { font-size: 14px; color: var(--text-secondary); }
+.vocab-body .definition { margin-bottom: 8px; color: var(--text-primary); font-size: 15px; }
+.vocab-body .example { font-style: italic; margin-bottom: 8px; font-size: 14px; }
+.vocab-tips { background: var(--bg-secondary); padding: 12px; border-radius: 8px; margin-top: 10px; }
+.vocab-tips .tip-row { margin-bottom: 6px; font-size: 14px; }
+.vocab-tips .tip-label { font-size: 13px; font-weight: 600; color: var(--accent-purple); }
+
+/* Review */
+.review-card { text-align: center; padding: 20px 0; }
+.review-card .word-display { font-size: 36px; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; }
+.review-card .phonetic-display { font-size: 18px; color: var(--text-muted); margin-bottom: 16px; }
+.review-card .reveal-area { min-height: 80px; padding: 20px; background: var(--bg-secondary); border-radius: var(--radius-sm); margin: 20px 0; }
+.review-card .definition-display { font-size: 17px; color: var(--text-primary); }
+.review-card .example-display { font-size: 14px; color: var(--text-secondary); margin-top: 8px; font-style: italic; }
+.review-buttons { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+.review-btn { padding: 12px 28px; font-size: 15px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-family: inherit; font-weight: 600; }
+.review-btn.forgot { background: var(--accent-red); color: #fff; }
+.review-btn.fuzzy { background: var(--accent-orange); color: #fff; }
+.review-btn.remembered { background: var(--accent-green); color: #fff; }
+.review-progress { display: flex; justify-content: center; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.review-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-color); }
+.review-dot.done { background: var(--accent-green); }
+.review-dot.current { background: var(--accent-blue); }
+
+/* Dashboard */
+.dashboard-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.dash-stat { background: var(--bg-card); padding: 20px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color); }
+.dash-stat .value { font-size: 28px; font-weight: 700; color: var(--accent-blue); }
+.dash-stat .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 10px; }
+.calendar-day { display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 14px; padding: 6px 0; background: var(--bg-secondary); color: var(--text-primary); font-weight: 500; }
+.calendar-day.other-month { opacity: 0.15; color: var(--text-muted); font-weight: 400; }
+.calendar-day.studied { background: var(--accent-green); color: #fff; font-weight: 700; }
+.calendar-day.today { border: 2px solid var(--accent-blue); font-weight: 700; }
+.calendar-day-header { text-align: center; font-size: 12px; color: var(--text-muted); padding: 2px 0; font-weight: 600; }
+.simple-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding: 10px 0; }
+.chart-bar { flex: 1; background: var(--accent-blue); border-radius: 4px 4px 0 0; min-height: 2px; position: relative; transition: height 0.3s; }
+.chart-bar .bar-label { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.chart-bar .bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-secondary); }
+
+/* Misc */
+.empty-state { text-align: center; padding: 48px 16px; color: var(--text-muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 8px; }
+.empty-state .msg { font-size: 15px; }
+.loading { text-align: center; padding: 40px; color: var(--text-muted); }
+.spinner { border: 3px solid var(--border-color); border-top: 3px solid var(--accent-blue); border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--bg-card); color: var(--text-primary); padding: 12px 24px; border-radius: var(--radius-sm); box-shadow: var(--shadow); z-index: 1000; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; border: 1px solid var(--border-color); }
+.toast.show { opacity: 1; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  .navbar { padding: 0 10px; height: auto; flex-wrap: wrap; gap: 6px; padding-top: 8px; padding-bottom: 8px; }
+  .nav-logo { font-size: 16px; order: 1; }
+  .nav-right { order: 2; gap: 6px; }
+  .nav-tabs { order: 3; width: 100%; justify-content: space-around; margin-top: 4px; }
+  .nav-tab { padding: 6px 12px; font-size: 13px; }
+  .streak-badge, .timer-badge, .user-badge { padding: 3px 8px; font-size: 12px; }
+  .theme-toggle { width: 32px; height: 32px; font-size: 14px; }
+  .main-content { padding: 12px 10px 70px; }
+  .card { padding: 16px; }
+  .card-title { font-size: 16px; }
+  .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-grid { grid-template-columns: 1fr !important; }
+  .phase-step { font-size: 11px; padding: 10px 4px; min-width: 56px; }
+  .sentence-en { font-size: 16px; }
+  .dictation-input { font-size: 15px; min-height: 60px; }
+  .review-card .word-display { font-size: 28px; }
+  .review-btn { padding: 10px 20px; font-size: 14px; }
+  .simple-chart { gap: 4px; height: 90px; }
+  .calendar-day { font-size: 11px; }
+  .vocab-word { font-size: 18px; }
+  .btn { padding: 10px 18px; font-size: 14px; }
+  .review-buttons { flex-wrap: wrap; }
+  .auth-card { padding: 24px; }
+}
+@media (max-width: 380px) {
+  .nav-logo { display: none; }
+  .nav-tab { padding: 6px 8px; font-size: 12px; }
+  .user-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Auth Overlay -->
+<div class="auth-overlay" id="authOverlay" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-title">English Daily</div>
+    <div class="auth-subtitle">每日英语学习 · 注册登录后数据独立保存</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">登录</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">注册</button>
+    </div>
+    <div id="authForm">
+      <div class="auth-field" id="usernameField" style="display:none;">
+        <label class="auth-label">用户名</label>
+        <input class="auth-input" type="text" id="authUsername" placeholder="给自己起个名字" autocomplete="name">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">邮箱</label>
+        <input class="auth-input" type="email" id="authEmail" placeholder="请输入邮箱" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">密码</label>
+        <input class="auth-input" type="password" id="authPassword" placeholder="请输入密码（至少6位）" autocomplete="current-password">
+      </div>
+      <div class="auth-field" id="confirmField" style="display:none;">
+        <label class="auth-label">确认密码</label>
+        <input class="auth-input" type="password" id="authConfirm" placeholder="再次输入密码">
+      </div>
+      <div class="auth-error" id="authError"></div>
+      <button class="btn btn-primary auth-btn" id="authSubmit" onclick="handleAuth()">登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app" style="display:none;">
+  <nav class="navbar">
+    <div class="nav-logo">English Daily</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="today" onclick="switchTab('today')">今日学习</button>
+      <button class="nav-tab" data-tab="vocab" onclick="switchTab('vocab')">生词本</button>
+      <button class="nav-tab" data-tab="review" onclick="switchTab('review')">复习</button>
+      <button class="nav-tab" data-tab="dashboard" onclick="switchTab('dashboard')">记录</button>
+    </div>
+    <div class="nav-right">
+      <div class="streak-badge"><span>🔥</span><span id="streakCount">0</span></div>
+      <div class="timer-badge"><span>⏰</span><span id="timerDisplay">00:00</span></div>
+      <div class="user-badge" id="userBadge"></div>
+      <button class="logout-btn" onclick="handleLogout()">退出</button>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="tab-content active" id="tab-today"><div id="todayContent"><div class="loading"><div class="spinner"></div><p>加载中...</p></div></div></div>
+    <div class="tab-content" id="tab-vocab"><div class="card"><div class="card-header"><div class="card-title">生词本</div><div class="card-meta" id="vocabCount">0 个生词</div></div><div id="vocabList"><div class="empty-state"><div class="icon">📚</div><div class="msg">还没有生词，去今日学习中标记吧！</div></div></div></div></div>
+    <div class="tab-content" id="tab-review"><div id="reviewContent"><div class="loading"><div class="spinner"></div><p>加载中...</p></div></div></div>
+    <div class="tab-content" id="tab-dashboard"><div id="dashboardContent"><div class="loading"><div class="spinner"></div><p>加载中...</p></div></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script src="config.js"></script>
+<script src="app.js?v=20261020a"></script>
+</body>
+</html>

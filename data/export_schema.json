@@ -1,0 +1,22 @@
+{
+  "daily_sentences": {
+    "columns": "id(bigint PK), date(text), english_text(text), chinese_translation(text), source(text), source_type(text), difficulty(text), sentences(jsonb), created_at(timestamptz)",
+    "rls": "enabled, SELECT policy for authenticated+anon"
+  },
+  "word_dictionary": {
+    "columns": "id(bigint PK), word(text UNIQUE), phonetic(text), pos(text), definition(text), example_sentence(text), example_translation(text), memory_tips(jsonb), audio_url(text), difficulty_level(text), created_at(timestamptz), updated_at(timestamptz)",
+    "rls": "enabled, SELECT policy for authenticated+anon, INSERT/UPDATE for authenticated"
+  },
+  "vocabulary": {
+    "columns": "id(bigint PK), word(text), phonetic(text), pos(text), definition(text), example_sentence(text), example_translation(text), memory_tips(jsonb), audio_url(text), difficulty_level(text), srs_level(int), next_review(date), review_count(int), status(text), added_date(date), last_reviewed(date), source_date(text), source_text(text), owner_id(text)",
+    "rls": "enabled, owner_id = auth.uid()"
+  },
+  "study_log": {
+    "columns": "id(bigint PK), date(text), start_time(timestamptz), study_duration(int), completed_phases(text), new_words_count(int), review_words_count(int), dictation_score(int), owner_id(text)",
+    "rls": "enabled, owner_id = auth.uid()"
+  },
+  "dictation_history": {
+    "columns": "id(bigint PK), date(text), sentence_index(int), original_text(text), user_input(text), errors(jsonb), accuracy(real), owner_id(text)",
+    "rls": "enabled, owner_id = auth.uid()"
+  }
+}

@@ -1,0 +1,84 @@
+name: audio-sync
+
+on:
+  schedule:
+    # 每天 04:00 Asia/Shanghai（UTC 20:00）
+    # WorkBuddy 定时任务周一 03:00 生成语料，这里每天兜底同步音频
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+    inputs:
+      force_audio:
+        description: "强制重新生成全部音频"
+        type: boolean
+        default: false
+      stale_days:
+        description: "未来语料至少提前多少天（不足则告警）"
+        required: false
+        default: "2"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audio-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync audio
+        id: sync
+        continue-on-error: true
+        env:
+          WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-22755.app.workbuddy.host' }}
+          WB_KEY: ${{ secrets.WB_KEY }}
+        run: |
+          EXTRA=""
+          if [ "${{ github.event.inputs.force_audio }}" = "true" ]; then
+            EXTRA="--force-audio"
+          fi
+          python pipeline.py --fail-if-stale "${{ github.event.inputs.stale_days || '2' }}" $EXTRA
+
+      - name: Commit audio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audio
+          if git diff --cached --quiet; then
+            echo "没有音频变更"
+          else
+            git commit -m "chore(audio): $(date -u +%F) 音频同步"
+            git push
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### 音频同步"
+            echo ""
+            echo "- 音频文件数：$(find audio -name '*.mp3' 2>/dev/null | wc -l)"
+            echo "- 音频总体积：$(du -sh audio 2>/dev/null | cut -f1)"
+            echo "- 最近提交：$(git log -1 --pretty=format:'%h %s')"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail when corpus is stale
+        if: steps.sync.outcome == 'failure'
+        run: |
+          echo "::error::音频同步失败或语料覆盖不足，请检查 WorkBuddy 定时任务与上方日志"
+          exit 1

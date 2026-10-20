@@ -1,0 +1,12 @@
+{
+  "name": "daily-english",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "generate-audio": "node generate_audio.js"
+  },
+  "dependencies": {
+    "@tencent-ai/workbuddy-cloud-sdk": "dev",
+    "@travisvn/edge-tts": "^1.2.0"
+  }
+}
