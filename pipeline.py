@@ -111,6 +111,10 @@ def _base_headers(with_auth: bool = False) -> dict[str, str]:
         "x-wb-webapp-access-key": WB_KEY,
         "Accept": "application/json",
         "Content-Type": "application/json",
+        # auth 网关会用 Origin 生成 JWT 的 azp（authorized party）；
+        # 缺了它，登录会返回 401 invalid_grant「issued for another client」
+        "Origin": WB_ENDPOINT,
+        "Referer": f"{WB_ENDPOINT}/",
     }
     if with_auth:
         if not TOKEN:
