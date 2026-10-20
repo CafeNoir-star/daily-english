@@ -3,10 +3,13 @@ name: audio-sync
 on:
   schedule:
     # 每天 04:00 Asia/Shanghai（UTC 20:00）
-    # WorkBuddy 定时任务周一 03:00 生成语料，这里每天兜底同步音频
     - cron: "0 20 * * *"
   workflow_dispatch:
     inputs:
+      days:
+        description: "保持未来多少天的语料缓冲"
+        required: false
+        default: "14"
       force_audio:
         description: "强制重新生成全部音频"
         type: boolean
@@ -26,7 +29,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
@@ -45,6 +48,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 第一步：用 WorkBuddy LLM 生成语料并写入云库（消耗 WorkBuddy 积分）
+      # 需要 WB_EMAIL / WB_PASSWORD；未配置时自动跳过，只做音频同步。
+      - name: Generate corpus
+        id: corpus
+        continue-on-error: true
+        env:
+          WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-38358.app.workbuddy.host' }}
+          WB_KEY: ${{ secrets.WB_KEY }}
+          WB_EMAIL: ${{ secrets.WB_EMAIL }}
+          WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
+        run: |
+          if [ -z "$WB_EMAIL" ] || [ -z "$WB_PASSWORD" ]; then
+            echo "::warning::未配置 WB_EMAIL / WB_PASSWORD，跳过语料生成（仅同步音频）"
+            exit 0
+          fi
+          python pipeline.py \
+            --with-corpus \
+            --days "${{ github.event.inputs.days || '14' }}" \
+            --no-audio \
+            --fail-if-stale 0
+
+      # 第二步：匿名读语料，补齐缺失音频（不需要密码）
       - name: Sync audio
         id: sync
         continue-on-error: true
@@ -87,15 +112,17 @@ jobs:
         if: always()
         run: |
           {
-            echo "### 音频同步"
+            echo "### 每日同步"
             echo ""
+            echo "- 语料生成：${{ steps.corpus.outcome }}"
+            echo "- 音频同步：${{ steps.sync.outcome }}"
             echo "- 音频文件数：$(find audio -name '*.mp3' 2>/dev/null | wc -l)"
             echo "- 音频总体积：$(du -sh audio 2>/dev/null | cut -f1)"
             echo "- 最近提交：$(git log -1 --pretty=format:'%h %s')"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Fail when corpus is stale
-        if: steps.sync.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.corpus.outcome == 'failure'
         run: |
-          echo "::error::音频同步失败或语料覆盖不足，请检查 WorkBuddy 定时任务与上方日志"
+          echo "::error::语料生成或音频同步失败，请检查上方日志与 Secrets 配置"
           exit 1
