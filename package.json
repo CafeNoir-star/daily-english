@@ -1,12 +1,9 @@
 {
   "name": "daily-english",
   "version": "1.0.0",
+  "private": true,
+  "description": "每日英语学习站点（静态前端 + Node 静态服务，零第三方依赖）",
   "scripts": {
-    "start": "node server.js",
-    "generate-audio": "node generate_audio.js"
-  },
-  "dependencies": {
-    "@tencent-ai/workbuddy-cloud-sdk": "dev",
-    "@travisvn/edge-tts": "^1.2.0"
+    "start": "node server.js"
   }
 }
