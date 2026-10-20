@@ -43,9 +43,6 @@
 
 | 文件 | 说明 |
 |------|------|
-| `generate_audio.js` | 旧版本地音频生成脚本（已被 `pipeline.py` 取代） |
-| `generate_audio_and_deploy.bat` | 旧版一键脚本（已停用） |
-| `export_db.js` | 导出云数据库到本地 JSON |
 | `generate_dict.js` | 旧版词典生成脚本（已停用） |
 | `import_dict.js` | 旧版词典导入脚本（已停用） |
 | `fetch_definitions.mjs` | 旧版释义抓取脚本（已停用） |
@@ -61,7 +58,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| `docs/deployment-and-automation.md` | 全自动语料 + 音频链路、GitHub Actions 配置、Render 说明 |
+| `docs/deployment-and-automation.md` | 全自动语料 + 音频链路、GitHub Actions 配置、Secrets 与 RLS 说明 |
 | `docs/tencent-cloud-deploy-guide.md` | 旧版腾讯云 SCF + COS 方案（已不适用） |
 
 ### WorkBuddy 配置

@@ -5,14 +5,6 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
-// --- WorkBuddy Cloud 反向代理（Render / 自建服务器时启用） ---
-const WB_ENDPOINT = (process.env.WB_ENDPOINT || 'https://daily-english-22755.app.workbuddy.host').replace(/\/+$/, '');
-const WB_KEY = (process.env.WB_KEY || '').trim();
-const ALLOWED_EMAILS = (process.env.ALLOWED_EMAILS || '')
-  .split(',')
-  .map(s => s.trim().toLowerCase())
-  .filter(Boolean);
-
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
@@ -59,138 +51,7 @@ setInterval(() => {
   for (const [ip, entry] of rateLimit) {
     if (now > entry.resetTime) rateLimit.delete(ip);
   }
-  for (const [ip, entry] of cloudRateLimit) {
-    if (now > entry.resetTime) cloudRateLimit.delete(ip);
-  }
 }, 5 * 60 * 1000);
-
-// --- Cloud proxy: separate, higher limit (app makes many DB/LLM calls per load) ---
-const cloudRateLimit = new Map();
-const CLOUD_RATE_LIMIT_MAX = 300;
-
-function checkCloudRateLimit(ip) {
-  const now = Date.now();
-  const entry = cloudRateLimit.get(ip);
-  if (!entry || now > entry.resetTime) {
-    if (cloudRateLimit.size >= RATE_LIMIT_MAP_MAX) {
-      const firstKey = cloudRateLimit.keys().next().value;
-      if (firstKey) cloudRateLimit.delete(firstKey);
-    }
-    cloudRateLimit.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
-    return true;
-  }
-  if (entry.count >= CLOUD_RATE_LIMIT_MAX) return false;
-  entry.count++;
-  return true;
-}
-
-const HOP_BY_HOP = [
-  'connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization',
-  'te', 'trailers', 'transfer-encoding', 'upgrade',
-];
-
-function readRequestBody(req, limit = 64 * 1024) {
-  return new Promise((resolve, reject) => {
-    let size = 0;
-    const chunks = [];
-    req.on('data', (chunk) => {
-      size += chunk.length;
-      if (size > limit) {
-        reject(new Error('body too large'));
-        req.destroy();
-        return;
-      }
-      chunks.push(chunk);
-    });
-    req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', reject);
-  });
-}
-
-function emailFromAuthBody(pathname, body) {
-  try {
-    const data = JSON.parse(body.toString('utf8'));
-    if (pathname.endsWith('/v1/signin')) {
-      return String(data.username || data.email || '').trim().toLowerCase();
-    }
-    if (pathname.endsWith('/v1/verification')) {
-      return String(data.email || '').trim().toLowerCase();
-    }
-  } catch (e) { /* not JSON, let upstream decide */ }
-  return '';
-}
-
-// 同源反向代理：浏览器 → /.cloud/* → WorkBuddy（剥离 Origin/Referer，注入 access key）
-function proxyCloud(req, res, url, ip) {
-  if (!WB_KEY) {
-    writeHead(res, 503, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'WB_KEY not configured' }));
-    return;
-  }
-  if (!checkCloudRateLimit(ip)) {
-    writeHead(res, 429, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Too many requests' }));
-    return;
-  }
-
-  const gateAuth = ALLOWED_EMAILS.length > 0
-    && req.method === 'POST'
-    && (url.pathname.endsWith('/v1/signin') || url.pathname.endsWith('/v1/verification'));
-
-  const headers = Object.assign({}, req.headers);
-  delete headers.host;
-  delete headers.origin;
-  delete headers.referer;
-  headers['x-wb-webapp-access-key'] = WB_KEY;
-
-  let target;
-  try {
-    target = new URL(WB_ENDPOINT + url.pathname + url.search);
-  } catch (e) {
-    writeHead(res, 400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Invalid target' }));
-    return;
-  }
-
-  const send = (body) => {
-    const proxyReq = https.request(target, { method: req.method, headers, timeout: 180000 }, (upstream) => {
-      const responseHeaders = Object.assign({}, upstream.headers);
-      for (const name of HOP_BY_HOP) delete responseHeaders[name];
-      if (!res.headersSent) res.writeHead(upstream.statusCode || 502, responseHeaders);
-      upstream.pipe(res);
-    });
-    proxyReq.on('timeout', () => proxyReq.destroy(new Error('upstream timeout')));
-    proxyReq.on('error', (err) => {
-      if (!res.headersSent) {
-        writeHead(res, 502, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'cloud upstream error', detail: err.message }));
-      } else {
-        res.destroy();
-      }
-    });
-    if (body) proxyReq.end(body);
-    else req.pipe(proxyReq);
-  };
-
-  if (gateAuth) {
-    readRequestBody(req).then((body) => {
-      const email = emailFromAuthBody(url.pathname, body);
-      if (!email || !ALLOWED_EMAILS.includes(email)) {
-        writeHead(res, 403, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'email not allowed' }));
-        return;
-      }
-      headers['content-length'] = String(body.length);
-      send(body);
-    }).catch(() => {
-      writeHead(res, 413, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'body too large' }));
-    });
-    return;
-  }
-
-  send(null);
-}
 
 // --- Security: Extract real client IP safely ---
 function getClientIP(req) {
@@ -352,12 +213,6 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/health') {
     writeHead(res, 200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     res.end(JSON.stringify({ ok: true, ts: Date.now() }));
-    return;
-  }
-
-  // 同源反向代理：Render / 自建服务器时，前端把 endpoint 指向本站
-  if (url.pathname.startsWith('/.cloud/')) {
-    proxyCloud(req, res, url, ip);
     return;
   }
 
