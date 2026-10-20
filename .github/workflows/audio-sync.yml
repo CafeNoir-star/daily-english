@@ -31,6 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 不依赖触发时的 SHA（手动 Run 时可能指向旧提交），始终基于最新 main
+          ref: main
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -61,10 +65,23 @@ jobs:
           git add audio
           if git diff --cached --quiet; then
             echo "没有音频变更"
-          else
-            git commit -m "chore(audio): $(date -u +%F) 音频同步"
-            git push
+            exit 0
           fi
+          git commit -m "chore(audio): $(date -u +%F) 音频同步"
+
+          # 远端可能在本 job 运行期间前进（其它 run 或人工推送），
+          # 先 rebase 再推；audio/manifest.json 冲突时以本次生成的为准。
+          for i in 1 2 3; do
+            if git pull --rebase -X theirs origin main && git push origin main; then
+              echo "推送成功（第 $i 次尝试）"
+              exit 0
+            fi
+            echo "第 $i 次推送失败，清理后重试"
+            git rebase --abort 2>/dev/null || true
+            sleep 10
+          done
+          echo "::error::连续 3 次推送失败，请检查分支保护规则或并发运行"
+          exit 1
 
       - name: Summary
         if: always()
