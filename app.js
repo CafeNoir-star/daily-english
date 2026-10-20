@@ -2,7 +2,7 @@
 // CONFIG
 // ========================================================================
 const PUBLIC_CONFIG = {
-  endpoint: "https://daily-english-22755.app.workbuddy.host",
+  endpoint: "https://daily-english-38358.app.workbuddy.host",
   oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
   publishableKey: "wbpk_REDACTED"
 };
