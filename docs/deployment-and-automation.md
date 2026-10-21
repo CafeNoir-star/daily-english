@@ -285,3 +285,57 @@ Render 适合做后台批处理（冷启动无所谓），不适合「打开即�
 | 示例配置 | `.env.example` 移除真实邮箱 |
 
 回归测试：`test/security-hardening.test.js`（15 项）+ `test/security.test.js`（23 项）全部通过。
+
+---
+
+## 十四、待补词队列（2026-10-21 起）
+
+**前端不再直接调用大模型。** 这是为了从根上消除「publishableKey 公开 → 任何人可无限刷积分」的风险。
+
+### 改前 vs 改后
+
+| | 改前 | 改后 |
+|---|---|---|
+| 用户标记的词不在词库 | 前端立即调 LLM 补释义 | 写入 `pending_words` 队列，卡片显示「待补充」 |
+| LLM 由谁调用 | **浏览器**（用公开 key） | **GitHub Actions**（用账号密码登录） |
+| key 泄露后果 | 可无限刷积分 | 只能读语料（受 RLS 限制） |
+
+### 数据流
+
+```
+用户标记生词（词库没有）
+  → 前端 upsert 到 pending_words（只有 word 一列，不含用户身份）
+        ↓
+Actions 每天 04:00
+  → 读 pending_words（上限 PENDING_BATCH=50）
+  → 调 LLM 补释义
+  → 写入 word_dictionary（公共词库，所有人受益）
+  → 从 pending_words 删除
+        ↓
+下次任何人查这个词，都有释义了
+```
+
+工作流步骤顺序：`Generate corpus` → **`Enrich pending words`** → `Sync audio`。
+放在音频同步之前，是为了让新增的词能在同一次运行里生成读音。
+
+### pending_words 表
+
+```sql
+CREATE TABLE public.pending_words (
+  word       TEXT PRIMARY KEY CHECK (word ~ '^[a-z][a-z''-]{1,49}$'),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+```
+
+| 策略 | 角色 | 规则 |
+|---|---|---|
+| `pending_words_read` | authenticated | `USING (true)` |
+| `pending_words_insert` | authenticated | `WITH CHECK (true)`，必须登录才能写 |
+| `pending_words_owner_delete` | authenticated | 仅 owner uid 可删除（Actions 清理用） |
+
+匿名既不能读也不能写。`CHECK` 约束只允许小写英文单词，防止垃圾数据注入。
+
+### 取舍
+
+- **代价**：当天新标记的陌生词，释义要等到下一次 Actions 运行（最多 24 小时）。
+- **收益**：前端一个 LLM 请求都不发，积分盗刷面归零；补一次所有用户共享。

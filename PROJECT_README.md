@@ -175,7 +175,7 @@ oauthRelayBaseUrl: https://www.workbuddy.cn/v2/as/genie-baas/oauth
 
 ## 当前版本
 
-- app.js 版本：v=20261021a
-- 最后更新：2026-10-21（安全加固：属性转义、安全响应头、CI action 固定 SHA、LLM 每日配额）
+- app.js 版本：v=20261021c
+- 最后更新：2026-10-21（安全加固 + 前端不再直连大模型，缺释义词走公共待补队列）
 - 前台部署：WorkBuddy Sites（Node.js HTTP 服务）
-- 自动化：A 方案（GitHub Actions 每天生成语料 + 写库 + 预生成音频 + jsDelivr）
+- 自动化：A 方案（GitHub Actions 每天生成语料 + 补齐待补词 + 写库 + 预生成音频 + jsDelivr）
