@@ -191,3 +191,54 @@ class DayIndexTests(PipelineTestCase):
         src = Path(pipeline.__file__).read_text(encoding="utf-8")
         self.assertIn("fetch_day_index(auth=True)", src, "主流程规划阶段应使用轻量索引")
         self.assertIn("fetch_day_index(auth=False)", src, "匿名规划阶段应使用轻量索引")
+
+
+class UpsertDaysTests(unittest.TestCase):
+    """覆盖模式写库：曾因漏写 PostgREST 的 eq. 前缀导致 PATCH 400。"""
+
+    DAY = {
+        "date": "2026-10-21",
+        "english_text": "Some English text.",
+        "chinese_translation": "一些中文。",
+        "source": "The Guardian",
+        "source_type": "news",
+        "difficulty": "intermediate",
+        "sentences": ["Some English text."],
+    }
+
+    def test_filter_uses_eq_operator(self):
+        captured = {}
+
+        def fake_update(table, filters, patch, **kwargs):
+            captured["table"] = table
+            captured["filters"] = filters
+            captured["patch"] = patch
+            return [patch]
+
+        with patch.object(pipeline, "rest_update", side_effect=fake_update):
+            with patch.object(pipeline, "insert_days", return_value=0):
+                pipeline.upsert_days([self.DAY], [{"date": "2026-10-21"}])
+
+        self.assertEqual(captured["table"], "daily_sentences")
+        self.assertEqual(
+            captured["filters"],
+            {"date": "eq.2026-10-21"},
+            "PATCH 的过滤条件必须带 eq. 前缀，裸值会被 PostgREST 判为 400",
+        )
+        self.assertEqual(captured["patch"]["source"], "The Guardian")
+        self.assertIn("sentences", captured["patch"])
+
+    def test_missing_date_is_inserted(self):
+        with patch.object(pipeline, "rest_update") as upd:
+            with patch.object(pipeline, "insert_days", return_value=1) as ins:
+                pipeline.upsert_days([self.DAY], [{"date": "2026-10-20"}])
+        upd.assert_not_called()
+        ins.assert_called_once()
+
+    def test_update_failure_raises(self):
+        def boom(*args, **kwargs):
+            raise RuntimeError("未命中任何行")
+
+        with patch.object(pipeline, "rest_update", side_effect=boom):
+            with self.assertRaises(RuntimeError):
+                pipeline.upsert_days([self.DAY], [{"date": "2026-10-21"}])

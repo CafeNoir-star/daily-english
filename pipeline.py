@@ -234,13 +234,25 @@ def rest_delete(table: str, filters: dict[str, str]) -> None:
     )
 
 
-def rest_update(table: str, filters: dict[str, str], patch: dict[str, Any]) -> None:
+def rest_update(
+    table: str,
+    filters: dict[str, str],
+    patch: dict[str, Any],
+    *,
+    expect_rows: bool = True,
+) -> list[dict[str, Any]]:
+    """PATCH 更新。
+
+    ``expect_rows=True`` 时用 ``return=representation`` 并校验真的改到了行：
+    RLS 把更新过滤掉时 PostgREST 仍返回 2xx，只有回读影响行数才能发现
+    "报成功但没改"的假成功。
+    """
     if DRY_RUN:
         log(f"[dry-run] 跳过更新 {table} {filters}")
-        return
+        return []
     headers = _base_headers(with_auth=True)
-    headers["Prefer"] = "return=minimal"
-    request_json(
+    headers["Prefer"] = "return=representation" if expect_rows else "return=minimal"
+    rows = request_json(
         "PATCH",
         f"{WB_ENDPOINT}/.cloud/database/rest/{table}",
         headers=headers,
@@ -248,6 +260,11 @@ def rest_update(table: str, filters: dict[str, str], patch: dict[str, Any]) -> N
         json_body=patch,
         timeout=60,
     )
+    if expect_rows and not rows:
+        raise RuntimeError(
+            f"更新 {table} 未命中任何行（filters={filters}）—— 可能被 RLS 过滤，或被过滤条件写错"
+        )
+    return rows or []
 
 
 # ---------------------------------------------------------------------------
@@ -926,7 +943,7 @@ def upsert_days(days: list[dict[str, Any]], existing: list[dict[str, Any]]) -> t
             continue
         rest_update(
             "daily_sentences",
-            {"date": day["date"]},
+            {"date": f"eq.{day['date']}"},
             {
                 "english_text": day["english_text"],
                 "chinese_translation": day["chinese_translation"],
