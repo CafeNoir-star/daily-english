@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-21T15:56:06+08:00",
+  "generated_at": "2026-10-21T16:29:03+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1178,6 +1178,11 @@
       "bytes": 9936,
       "text": "according"
     },
+    "vocab_accountability.mp3": {
+      "h": "f7f50285e1077421",
+      "bytes": 12096,
+      "text": "accountability"
+    },
     "vocab_accounted.mp3": {
       "h": "649e9fe7a57c0e1b",
       "bytes": 9936,
@@ -1257,6 +1262,11 @@
       "h": "bd7f9e7c5c114e3f",
       "bytes": 10224,
       "text": "adopting"
+    },
+    "vocab_adulthood.mp3": {
+      "h": "abd682b39862286a",
+      "bytes": 11232,
+      "text": "adulthood"
     },
     "vocab_adults.mp3": {
       "h": "bf07c56d48d5bd58",
@@ -1348,6 +1358,11 @@
       "bytes": 9936,
       "text": "alarming"
     },
+    "vocab_alga.mp3": {
+      "h": "994b79659d1b8b79",
+      "bytes": 11232,
+      "text": "alga"
+    },
     "vocab_alike.mp3": {
       "h": "b79634d7c3ad9b2c",
       "bytes": 9504,
@@ -1362,6 +1377,11 @@
       "h": "d87c448044defb77",
       "bytes": 8352,
       "text": "all"
+    },
+    "vocab_allocate.mp3": {
+      "h": "7a81a830c9c574c6",
+      "bytes": 11232,
+      "text": "allocate"
     },
     "vocab_alongside.mp3": {
       "h": "54c1c68edd859a66",
@@ -1408,6 +1428,11 @@
       "bytes": 11376,
       "text": "americans"
     },
+    "vocab_amount_to.mp3": {
+      "h": "9ca5a01507635479",
+      "bytes": 11232,
+      "text": "amount to"
+    },
     "vocab_an.mp3": {
       "h": "de73eac0c305038f",
       "bytes": 7776,
@@ -1438,6 +1463,11 @@
       "bytes": 9504,
       "text": "another"
     },
+    "vocab_anti_government.mp3": {
+      "h": "b532bcd3f687538f",
+      "bytes": 11952,
+      "text": "anti-government"
+    },
     "vocab_antibody.mp3": {
       "h": "5b0d4be101e82a40",
       "bytes": 11232,
@@ -1452,6 +1482,11 @@
       "h": "631841a10e2272fe",
       "bytes": 9792,
       "text": "anyone"
+    },
+    "vocab_applicable.mp3": {
+      "h": "1530aadbaf21aefa",
+      "bytes": 11232,
+      "text": "applicable"
     },
     "vocab_applications.mp3": {
       "h": "f4ff7e7f60f04788",
@@ -1488,15 +1523,30 @@
       "bytes": 10656,
       "text": "artificial"
     },
+    "vocab_artificial_intelligence.mp3": {
+      "h": "21839c83f19b411a",
+      "bytes": 14832,
+      "text": "artificial intelligence"
+    },
     "vocab_as.mp3": {
       "h": "df211ccdd94a63e0",
       "bytes": 8352,
       "text": "as"
     },
+    "vocab_ashamed.mp3": {
+      "h": "0f43c8dd90c7f5db",
+      "bytes": 11232,
+      "text": "ashamed"
+    },
     "vocab_aspect.mp3": {
       "h": "4b58e98b642af4bc",
       "bytes": 11232,
       "text": "aspect"
+    },
+    "vocab_asset.mp3": {
+      "h": "05fac94380a70241",
+      "bytes": 11232,
+      "text": "asset"
     },
     "vocab_assumption.mp3": {
       "h": "577633048497efd1",
@@ -1523,10 +1573,25 @@
       "bytes": 10224,
       "text": "atticus"
     },
+    "vocab_autonomous.mp3": {
+      "h": "81cc9cb210d5f785",
+      "bytes": 11232,
+      "text": "autonomous"
+    },
     "vocab_autumn.mp3": {
       "h": "91fb64276c08bb21",
       "bytes": 8640,
       "text": "autumn"
+    },
+    "vocab_avoidable.mp3": {
+      "h": "fdc2f673fc62a3bd",
+      "bytes": 11232,
+      "text": "avoidable"
+    },
+    "vocab_await.mp3": {
+      "h": "30118aa1aa8a06fa",
+      "bytes": 11232,
+      "text": "await"
     },
     "vocab_away.mp3": {
       "h": "f416d44c605f8de8",
@@ -1538,10 +1603,30 @@
       "bytes": 8928,
       "text": "back"
     },
+    "vocab_back_up.mp3": {
+      "h": "52bee37f33113f22",
+      "bytes": 11232,
+      "text": "back up"
+    },
+    "vocab_backdrop.mp3": {
+      "h": "8d488f4adac10fb7",
+      "bytes": 11232,
+      "text": "backdrop"
+    },
     "vocab_background.mp3": {
       "h": "248a20b62efba8f4",
       "bytes": 10080,
       "text": "background"
+    },
+    "vocab_ballooning.mp3": {
+      "h": "8395a4d57595a1fa",
+      "bytes": 11232,
+      "text": "ballooning"
+    },
+    "vocab_bankruptcy.mp3": {
+      "h": "3beca75ef492aa94",
+      "bytes": 11232,
+      "text": "bankruptcy"
     },
     "vocab_banks.mp3": {
       "h": "9b20934eac1c5157",
@@ -1562,6 +1647,26 @@
       "h": "986b1bc1eb8de896",
       "bytes": 8208,
       "text": "be"
+    },
+    "vocab_be_combined_with.mp3": {
+      "h": "95c11c3f1355ab55",
+      "bytes": 11952,
+      "text": "be combined with"
+    },
+    "vocab_be_consulted.mp3": {
+      "h": "a811949b990d686c",
+      "bytes": 11376,
+      "text": "be consulted"
+    },
+    "vocab_be_forced_to.mp3": {
+      "h": "fabf13b51a672277",
+      "bytes": 11232,
+      "text": "be forced to"
+    },
+    "vocab_be_hard_pushed.mp3": {
+      "h": "edf4aacee9db42da",
+      "bytes": 11664,
+      "text": "be hard pushed"
     },
     "vocab_beacon.mp3": {
       "h": "c31f77b1e01a1042",
@@ -1673,6 +1778,11 @@
       "bytes": 11808,
       "text": "biodiversity"
     },
+    "vocab_bioweapons.mp3": {
+      "h": "7194150ceb389e9c",
+      "bytes": 11376,
+      "text": "bioweapons"
+    },
     "vocab_birds.mp3": {
       "h": "abe7e510fcad31b6",
       "bytes": 9216,
@@ -1718,10 +1828,30 @@
       "bytes": 9072,
       "text": "broaden"
     },
+    "vocab_campaigner.mp3": {
+      "h": "35ac40df8335fd94",
+      "bytes": 11232,
+      "text": "campaigner"
+    },
+    "vocab_capabilities.mp3": {
+      "h": "53fdf514eb90dc91",
+      "bytes": 11808,
+      "text": "capabilities"
+    },
+    "vocab_capability.mp3": {
+      "h": "c5be5b3d86d8c8a2",
+      "bytes": 11232,
+      "text": "capability"
+    },
     "vocab_capacity.mp3": {
       "h": "7cb1f56d3fbe09e8",
       "bytes": 10656,
       "text": "capacity"
+    },
+    "vocab_capital.mp3": {
+      "h": "5d8df9b1deffcdaa",
+      "bytes": 11232,
+      "text": "capital"
     },
     "vocab_captivity.mp3": {
       "h": "4b83f50af9cc8851",
@@ -1732,6 +1862,11 @@
       "h": "0b9c7e1cd3bd9fb5",
       "bytes": 12528,
       "text": "cardiovascular"
+    },
+    "vocab_carrier.mp3": {
+      "h": "12cb5b79d6a26ec4",
+      "bytes": 11232,
+      "text": "carrier"
     },
     "vocab_carry_through.mp3": {
       "h": "52babc0c5e375b62",
@@ -1753,6 +1888,11 @@
       "bytes": 9504,
       "text": "caution"
     },
+    "vocab_cemetery.mp3": {
+      "h": "8a10e5c3b3bf3f71",
+      "bytes": 11232,
+      "text": "cemetery"
+    },
     "vocab_centerpiece.mp3": {
       "h": "7477630fc498ed33",
       "bytes": 11376,
@@ -1763,10 +1903,25 @@
       "bytes": 11664,
       "text": "ceramicist"
     },
+    "vocab_cerebral_palsy.mp3": {
+      "h": "8c12750272cf0441",
+      "bytes": 12816,
+      "text": "cerebral palsy"
+    },
     "vocab_challenge.mp3": {
       "h": "bb064b23223dff9b",
       "bytes": 9936,
       "text": "challenge"
+    },
+    "vocab_challenges_lie_ahead.mp3": {
+      "h": "e6cca3bbdff0688a",
+      "bytes": 13248,
+      "text": "challenges lie ahead"
+    },
+    "vocab_chancellor.mp3": {
+      "h": "e84f42fb466fe0cc",
+      "bytes": 11232,
+      "text": "chancellor"
     },
     "vocab_chronic.mp3": {
       "h": "24fc197e1a51d91a",
@@ -1778,30 +1933,100 @@
       "bytes": 11232,
       "text": "claim"
     },
+    "vocab_clapboard.mp3": {
+      "h": "2ed402ee3fd80279",
+      "bytes": 11232,
+      "text": "clapboard"
+    },
     "vocab_clarify.mp3": {
       "h": "ef8fe782bf949865",
       "bytes": 11232,
       "text": "clarify"
+    },
+    "vocab_clumsy.mp3": {
+      "h": "604985972190f05e",
+      "bytes": 11232,
+      "text": "clumsy"
     },
     "vocab_cognitive.mp3": {
       "h": "b15f6a18731660f4",
       "bytes": 10368,
       "text": "cognitive"
     },
+    "vocab_coherent.mp3": {
+      "h": "c81c4e1f999cb842",
+      "bytes": 11232,
+      "text": "coherent"
+    },
+    "vocab_cohesion.mp3": {
+      "h": "abd57b03b9251d3d",
+      "bytes": 11232,
+      "text": "cohesion"
+    },
+    "vocab_colleague.mp3": {
+      "h": "ace6752be4cc2485",
+      "bytes": 11232,
+      "text": "colleague"
+    },
+    "vocab_collision.mp3": {
+      "h": "925d7ad70bdb6575",
+      "bytes": 11232,
+      "text": "collision"
+    },
     "vocab_collisions.mp3": {
       "h": "2181a1aa97a38218",
       "bytes": 11232,
       "text": "collisions"
+    },
+    "vocab_come_at_a_cost.mp3": {
+      "h": "1dace4f2cfc9f9d3",
+      "bytes": 11808,
+      "text": "come at a cost"
+    },
+    "vocab_come_into_one_s_mind.mp3": {
+      "h": "7f423f2035b00234",
+      "bytes": 12960,
+      "text": "come into one's mind"
+    },
+    "vocab_commit_to.mp3": {
+      "h": "f9e473111e45ea54",
+      "bytes": 11232,
+      "text": "commit to"
+    },
+    "vocab_committee.mp3": {
+      "h": "faa7532269102bab",
+      "bytes": 11232,
+      "text": "committee"
     },
     "vocab_communicative.mp3": {
       "h": "2b875c31bc4ab87d",
       "bytes": 11520,
       "text": "communicative"
     },
+    "vocab_community.mp3": {
+      "h": "418b03c91215cc91",
+      "bytes": 11232,
+      "text": "community"
+    },
+    "vocab_community_trust.mp3": {
+      "h": "4dcb0c3385a4eddd",
+      "bytes": 12528,
+      "text": "community trust"
+    },
+    "vocab_competing.mp3": {
+      "h": "ff67d6e54cfd0d38",
+      "bytes": 11232,
+      "text": "competing"
+    },
     "vocab_complement.mp3": {
       "h": "6d5c9dab960e525e",
       "bytes": 10512,
       "text": "complement"
+    },
+    "vocab_complete.mp3": {
+      "h": "0737c22d3bfae812",
+      "bytes": 11232,
+      "text": "complete"
     },
     "vocab_completion.mp3": {
       "h": "cadc91415a09569d",
@@ -1813,10 +2038,25 @@
       "bytes": 9792,
       "text": "conceive"
     },
+    "vocab_concerned.mp3": {
+      "h": "aac69b54949593c6",
+      "bytes": 11232,
+      "text": "concerned"
+    },
+    "vocab_concerning.mp3": {
+      "h": "e6a695eeda58f3e5",
+      "bytes": 11232,
+      "text": "concerning"
+    },
     "vocab_confidence.mp3": {
       "h": "0165688353ca8107",
       "bytes": 10800,
       "text": "confidence"
+    },
+    "vocab_conflicted.mp3": {
+      "h": "9f7c2c0b8a059c44",
+      "bytes": 11232,
+      "text": "conflicted"
     },
     "vocab_confusion.mp3": {
       "h": "cfc8b23ab1a14c03",
@@ -1833,6 +2073,11 @@
       "bytes": 9360,
       "text": "conquer"
     },
+    "vocab_consensus.mp3": {
+      "h": "4f170d6a09b95cfe",
+      "bytes": 11376,
+      "text": "consensus"
+    },
     "vocab_conservation.mp3": {
       "h": "338526e5c661ccb2",
       "bytes": 11520,
@@ -1848,15 +2093,40 @@
       "bytes": 10656,
       "text": "consistent"
     },
+    "vocab_controversial.mp3": {
+      "h": "4768682bfb3e1a5b",
+      "bytes": 11376,
+      "text": "controversial"
+    },
     "vocab_correlation.mp3": {
       "h": "1469596fc89ae50a",
       "bytes": 10944,
       "text": "correlation"
     },
+    "vocab_counterproductive.mp3": {
+      "h": "cc6e3a8a8c3906fd",
+      "bytes": 12384,
+      "text": "counterproductive"
+    },
     "vocab_courage.mp3": {
       "h": "a2d90f4e973af241",
       "bytes": 9504,
       "text": "courage"
+    },
+    "vocab_cover.mp3": {
+      "h": "a28100fa6a50a3cb",
+      "bytes": 11232,
+      "text": "cover"
+    },
+    "vocab_crack.mp3": {
+      "h": "e852191079ea08b6",
+      "bytes": 11232,
+      "text": "crack"
+    },
+    "vocab_crash.mp3": {
+      "h": "2fc7f1452374b6e3",
+      "bytes": 11232,
+      "text": "crash"
     },
     "vocab_creativity.mp3": {
       "h": "8029201c91dd8dd4",
@@ -1873,10 +2143,25 @@
       "bytes": 11088,
       "text": "criticize"
     },
+    "vocab_curiosity.mp3": {
+      "h": "f90bc924da413d16",
+      "bytes": 11376,
+      "text": "curiosity"
+    },
     "vocab_deathless.mp3": {
       "h": "c59cabf58b7e122e",
       "bytes": 10080,
       "text": "deathless"
+    },
+    "vocab_declare.mp3": {
+      "h": "a0910bc7d1ab368f",
+      "bytes": 11232,
+      "text": "declare"
+    },
+    "vocab_decline.mp3": {
+      "h": "55f2754de6a8d466",
+      "bytes": 11232,
+      "text": "decline"
     },
     "vocab_dedicate.mp3": {
       "h": "811318c64bc31d41",
@@ -1893,15 +2178,50 @@
       "bytes": 10224,
       "text": "delicate"
     },
+    "vocab_demanding.mp3": {
+      "h": "30fd0a457755f9f0",
+      "bytes": 11232,
+      "text": "demanding"
+    },
+    "vocab_demographic.mp3": {
+      "h": "65aa5fa968c0be2a",
+      "bytes": 11232,
+      "text": "demographic"
+    },
+    "vocab_demonstrating.mp3": {
+      "h": "e4d9a762711b3c6e",
+      "bytes": 11232,
+      "text": "demonstrating"
+    },
     "vocab_demonstration.mp3": {
       "h": "80145307573101bb",
       "bytes": 11520,
       "text": "demonstration"
     },
+    "vocab_denial.mp3": {
+      "h": "1d2c64d4f960d6cd",
+      "bytes": 11232,
+      "text": "denial"
+    },
+    "vocab_denote.mp3": {
+      "h": "851612a3ea778bcc",
+      "bytes": 11232,
+      "text": "denote"
+    },
+    "vocab_deposits.mp3": {
+      "h": "e8df668f16e4daa5",
+      "bytes": 11232,
+      "text": "deposits"
+    },
     "vocab_deprivation.mp3": {
       "h": "d77df9734c32e228",
       "bytes": 10944,
       "text": "deprivation"
+    },
+    "vocab_descend.mp3": {
+      "h": "d363f3ea1acff0fb",
+      "bytes": 11232,
+      "text": "descend"
     },
     "vocab_despair.mp3": {
       "h": "9772937af88c3290",
@@ -1913,6 +2233,16 @@
       "bytes": 11232,
       "text": "detection"
     },
+    "vocab_detects.mp3": {
+      "h": "3a3868d672a294e6",
+      "bytes": 11232,
+      "text": "detects"
+    },
+    "vocab_devise.mp3": {
+      "h": "c2c479ad4375753f",
+      "bytes": 11232,
+      "text": "devise"
+    },
     "vocab_diabetes.mp3": {
       "h": "5b2c70e98303c0de",
       "bytes": 11088,
@@ -1922,6 +2252,16 @@
       "h": "fe134dc58ea9b9a8",
       "bytes": 11952,
       "text": "diagnosis"
+    },
+    "vocab_director.mp3": {
+      "h": "235acfdf1375f5ef",
+      "bytes": 11232,
+      "text": "director"
+    },
+    "vocab_dismay.mp3": {
+      "h": "89c2c2e9ccb33e4e",
+      "bytes": 11232,
+      "text": "dismay"
     },
     "vocab_displaced.mp3": {
       "h": "4f1ac135de6b92e8",
@@ -1963,10 +2303,25 @@
       "bytes": 9936,
       "text": "drown out"
     },
+    "vocab_earnings_report.mp3": {
+      "h": "290050a9bb4e1193",
+      "bytes": 11952,
+      "text": "earnings report"
+    },
+    "vocab_edge_towards.mp3": {
+      "h": "9d88664408bb7dce",
+      "bytes": 11520,
+      "text": "edge towards"
+    },
     "vocab_emancipation.mp3": {
       "h": "d6d1cfdb1ac7f713",
       "bytes": 11952,
       "text": "emancipation"
+    },
+    "vocab_embed.mp3": {
+      "h": "cfff27c96089b931",
+      "bytes": 11232,
+      "text": "embed"
     },
     "vocab_embrace.mp3": {
       "h": "c88f94de74abd535",
@@ -1988,10 +2343,20 @@
       "bytes": 11088,
       "text": "emphasize"
     },
+    "vocab_encyclopedia.mp3": {
+      "h": "2677bc5c26e80c21",
+      "bytes": 12240,
+      "text": "encyclopedia"
+    },
     "vocab_endure.mp3": {
       "h": "2953e6c97aec1d12",
       "bytes": 9360,
       "text": "endure"
+    },
+    "vocab_engagement.mp3": {
+      "h": "d8db051bbe1b3d6a",
+      "bytes": 11232,
+      "text": "engagement"
     },
     "vocab_enthusiasm.mp3": {
       "h": "2acc576ee35698bc",
@@ -2003,15 +2368,30 @@
       "bytes": 9072,
       "text": "epoch"
     },
+    "vocab_equipped.mp3": {
+      "h": "115c583a18f0b804",
+      "bytes": 11232,
+      "text": "equipped"
+    },
     "vocab_equivalent.mp3": {
       "h": "d4dcb5b78e9397dd",
       "bytes": 10800,
       "text": "equivalent"
     },
+    "vocab_estimate.mp3": {
+      "h": "cb3fca157fd00bf7",
+      "bytes": 11232,
+      "text": "estimate"
+    },
     "vocab_eternal.mp3": {
       "h": "2162c6ecc245c34e",
       "bytes": 9936,
       "text": "eternal"
+    },
+    "vocab_even_further.mp3": {
+      "h": "01a7b42e811a9ca8",
+      "bytes": 11232,
+      "text": "even further"
     },
     "vocab_evolve.mp3": {
       "h": "c28818d749bfe85e",
@@ -2033,15 +2413,40 @@
       "bytes": 11808,
       "text": "experimental"
     },
+    "vocab_expose.mp3": {
+      "h": "0d23a9d9da666bdd",
+      "bytes": 11232,
+      "text": "expose"
+    },
+    "vocab_express.mp3": {
+      "h": "f3c62de455962fbd",
+      "bytes": 11232,
+      "text": "express"
+    },
     "vocab_extinct.mp3": {
       "h": "9269bb4c54761195",
       "bytes": 9792,
       "text": "extinct"
     },
+    "vocab_extinguish.mp3": {
+      "h": "cb68f2799bddc224",
+      "bytes": 11232,
+      "text": "extinguish"
+    },
+    "vocab_eye_tracking_technology.mp3": {
+      "h": "dfa78fc052775d7e",
+      "bytes": 14544,
+      "text": "eye-tracking technology"
+    },
     "vocab_facility.mp3": {
       "h": "fa9025259c8733bf",
       "bytes": 11232,
       "text": "facility"
+    },
+    "vocab_familiar.mp3": {
+      "h": "1b7e649fe6adac88",
+      "bytes": 11232,
+      "text": "familiar"
     },
     "vocab_fascinating.mp3": {
       "h": "f9c83941c51bdbe7",
@@ -2052,6 +2457,16 @@
       "h": "b9a3a6db7a4012b1",
       "bytes": 9216,
       "text": "fatal"
+    },
+    "vocab_feel_like.mp3": {
+      "h": "b32a2981efaf7649",
+      "bytes": 11232,
+      "text": "feel like"
+    },
+    "vocab_fellow_pupils.mp3": {
+      "h": "161bba7b3a1c5226",
+      "bytes": 12096,
+      "text": "fellow pupils"
     },
     "vocab_fencing.mp3": {
       "h": "b5d9eb8c1c8894ec",
@@ -2108,6 +2523,11 @@
       "bytes": 9648,
       "text": "fleeting"
     },
+    "vocab_flood.mp3": {
+      "h": "ff0db992256ad5c4",
+      "bytes": 11232,
+      "text": "flood"
+    },
     "vocab_follow.mp3": {
       "h": "f7ac253b1bed9171",
       "bytes": 9648,
@@ -2137,6 +2557,11 @@
       "h": "5e8bebc76d895432",
       "bytes": 10224,
       "text": "forcing"
+    },
+    "vocab_forecast.mp3": {
+      "h": "018c49f84bd1bb7b",
+      "bytes": 11232,
+      "text": "forecast"
     },
     "vocab_forever.mp3": {
       "h": "e07f8c4ab6822127",
@@ -2238,6 +2663,26 @@
       "bytes": 9504,
       "text": "funding"
     },
+    "vocab_gadget.mp3": {
+      "h": "e00b554deeb43785",
+      "bytes": 11232,
+      "text": "gadget"
+    },
+    "vocab_garbage.mp3": {
+      "h": "78c67c126575c20c",
+      "bytes": 11232,
+      "text": "garbage"
+    },
+    "vocab_generations.mp3": {
+      "h": "f20cc44b4210f2c1",
+      "bytes": 11664,
+      "text": "generations"
+    },
+    "vocab_generously.mp3": {
+      "h": "e5c35f891e62f4ed",
+      "bytes": 11232,
+      "text": "generously"
+    },
     "vocab_gently.mp3": {
       "h": "5f4e484b31c096d3",
       "bytes": 9504,
@@ -2263,10 +2708,25 @@
       "bytes": 10224,
       "text": "governess"
     },
+    "vocab_grapple.mp3": {
+      "h": "6c928d197b383c13",
+      "bytes": 11232,
+      "text": "grapple"
+    },
     "vocab_grateful.mp3": {
       "h": "54bb9bd5dd471251",
       "bytes": 9936,
       "text": "grateful"
+    },
+    "vocab_grim.mp3": {
+      "h": "fc95e735309552cb",
+      "bytes": 11232,
+      "text": "grim"
+    },
+    "vocab_grow_older.mp3": {
+      "h": "6c5488e16f0266c4",
+      "bytes": 11232,
+      "text": "grow older"
     },
     "vocab_gut.mp3": {
       "h": "823c1e79fcc29f80",
@@ -2277,6 +2737,21 @@
       "h": "1da0e9a6c6b0d50d",
       "bytes": 10656,
       "text": "habitat"
+    },
+    "vocab_had_begun.mp3": {
+      "h": "87e22752ce4d77d5",
+      "bytes": 11232,
+      "text": "had begun"
+    },
+    "vocab_harness.mp3": {
+      "h": "0a4ca4ce7e4990cd",
+      "bytes": 11232,
+      "text": "harness"
+    },
+    "vocab_have_one_s_back.mp3": {
+      "h": "f62043d4c715a779",
+      "bytes": 11664,
+      "text": "have one's back"
     },
     "vocab_headline.mp3": {
       "h": "9cd7c186300be567",
@@ -2312,6 +2787,16 @@
       "h": "46140a1ed1cbb268",
       "bytes": 9504,
       "text": "hearts"
+    },
+    "vocab_heat_index.mp3": {
+      "h": "b5cf07eb55332231",
+      "bytes": 11808,
+      "text": "heat index"
+    },
+    "vocab_hedge.mp3": {
+      "h": "1bbe6dd1229af223",
+      "bytes": 11232,
+      "text": "hedge"
     },
     "vocab_helps.mp3": {
       "h": "74314fc0903eb7e2",
@@ -2403,6 +2888,11 @@
       "bytes": 9648,
       "text": "however"
     },
+    "vocab_huge_volumes_of.mp3": {
+      "h": "8b701ef320bd08ad",
+      "bytes": 12816,
+      "text": "huge volumes of"
+    },
     "vocab_human.mp3": {
       "h": "d787f56b080945c1",
       "bytes": 9216,
@@ -2422,6 +2912,16 @@
       "h": "316be803af63cd39",
       "bytes": 9648,
       "text": "husband"
+    },
+    "vocab_husband_to_be.mp3": {
+      "h": "37775a7036bb3e04",
+      "bytes": 11232,
+      "text": "husband-to-be"
+    },
+    "vocab_identity.mp3": {
+      "h": "1db089a9f84e14e9",
+      "bytes": 11232,
+      "text": "identity"
     },
     "vocab_if.mp3": {
       "h": "958f57f57d72a30f",
@@ -2448,6 +2948,11 @@
       "bytes": 10224,
       "text": "important"
     },
+    "vocab_impressively.mp3": {
+      "h": "dfa4f032dec44672",
+      "bytes": 11376,
+      "text": "impressively"
+    },
     "vocab_improve.mp3": {
       "h": "69a42959af3e5974",
       "bytes": 9936,
@@ -2457,6 +2962,16 @@
       "h": "b7c7420975fd6f08",
       "bytes": 10944,
       "text": "improvements"
+    },
+    "vocab_in_front_of.mp3": {
+      "h": "b41612a4094fb767",
+      "bytes": 11232,
+      "text": "in front of"
+    },
+    "vocab_in_person.mp3": {
+      "h": "288340e3d0b49ce5",
+      "bytes": 11232,
+      "text": "in-person"
     },
     "vocab_inadequate.mp3": {
       "h": "5077a00ad164a781",
@@ -2468,10 +2983,20 @@
       "bytes": 10512,
       "text": "incentive"
     },
+    "vocab_include.mp3": {
+      "h": "d3ecb0d890368d76",
+      "bytes": 11232,
+      "text": "include"
+    },
     "vocab_incredulity.mp3": {
       "h": "36425e17767b82a5",
       "bytes": 11376,
       "text": "incredulity"
+    },
+    "vocab_inequality.mp3": {
+      "h": "9d5452c9cd006d18",
+      "bytes": 11232,
+      "text": "inequality"
     },
     "vocab_inflation.mp3": {
       "h": "0e45dbfb8c559021",
@@ -2483,10 +3008,40 @@
       "bytes": 11808,
       "text": "infrastructure"
     },
+    "vocab_insight.mp3": {
+      "h": "f67b30498047f2f3",
+      "bytes": 11232,
+      "text": "insight"
+    },
     "vocab_inspiration.mp3": {
       "h": "0abd414c18a29b96",
       "bytes": 11232,
       "text": "inspiration"
+    },
+    "vocab_inspire.mp3": {
+      "h": "646247ecf81f2642",
+      "bytes": 11232,
+      "text": "inspire"
+    },
+    "vocab_instantly.mp3": {
+      "h": "083814db3f4825eb",
+      "bytes": 11232,
+      "text": "instantly"
+    },
+    "vocab_institution.mp3": {
+      "h": "1adc83a3838bce4a",
+      "bytes": 11520,
+      "text": "institution"
+    },
+    "vocab_insure.mp3": {
+      "h": "df5f22665ed90c0d",
+      "bytes": 11232,
+      "text": "insure"
+    },
+    "vocab_intelligence.mp3": {
+      "h": "482e7bdd5b5d5323",
+      "bytes": 11808,
+      "text": "intelligence"
     },
     "vocab_intensity.mp3": {
       "h": "33ab2e3c6f591161",
@@ -2497,6 +3052,11 @@
       "h": "14889e1212cdb5d6",
       "bytes": 11232,
       "text": "interpret"
+    },
+    "vocab_interview.mp3": {
+      "h": "af537eebeeb24855",
+      "bytes": 11232,
+      "text": "interview"
     },
     "vocab_intrigue.mp3": {
       "h": "d30ae5b525904cfd",
@@ -2512,6 +3072,11 @@
       "h": "4fe97decbce18319",
       "bytes": 10656,
       "text": "invigorate"
+    },
+    "vocab_irony.mp3": {
+      "h": "5f55c737fd48f856",
+      "bytes": 11232,
+      "text": "irony"
     },
     "vocab_irreplaceable.mp3": {
       "h": "c5d7de1f87172a79",
@@ -2533,20 +3098,95 @@
       "bytes": 11232,
       "text": "judgment"
     },
+    "vocab_label.mp3": {
+      "h": "64c65374dbab6fe3",
+      "bytes": 11232,
+      "text": "label"
+    },
+    "vocab_labelled.mp3": {
+      "h": "31a923dd68e8c2af",
+      "bytes": 11232,
+      "text": "labelled"
+    },
+    "vocab_leave_behind.mp3": {
+      "h": "5b80adf820746ede",
+      "bytes": 11232,
+      "text": "leave behind"
+    },
+    "vocab_legacy.mp3": {
+      "h": "9b33046ed39d182e",
+      "bytes": 11232,
+      "text": "legacy"
+    },
     "vocab_let.mp3": {
       "h": "0262f9bb6ecbef4e",
       "bytes": 11232,
       "text": "let"
+    },
+    "vocab_let_alone.mp3": {
+      "h": "2e35818b7df003a9",
+      "bytes": 11232,
+      "text": "let alone"
+    },
+    "vocab_licence.mp3": {
+      "h": "c291298dd5006726",
+      "bytes": 11232,
+      "text": "licence"
+    },
+    "vocab_life_sized.mp3": {
+      "h": "3c248bda5b3d030e",
+      "bytes": 11232,
+      "text": "life-sized"
     },
     "vocab_lifelong.mp3": {
       "h": "e6b9d446f8afc7d2",
       "bytes": 10368,
       "text": "lifelong"
     },
+    "vocab_lift_one_s_spirits.mp3": {
+      "h": "148ca074640fff66",
+      "bytes": 13248,
+      "text": "lift one's spirits"
+    },
+    "vocab_lobby.mp3": {
+      "h": "6dc57172bc0a4be0",
+      "bytes": 11232,
+      "text": "lobby"
+    },
+    "vocab_manifesto.mp3": {
+      "h": "6358b5cb2992b884",
+      "bytes": 11520,
+      "text": "manifesto"
+    },
+    "vocab_measures.mp3": {
+      "h": "12b879592a57ab92",
+      "bytes": 11232,
+      "text": "measures"
+    },
+    "vocab_melt_away.mp3": {
+      "h": "4fefc493d07e952a",
+      "bytes": 11232,
+      "text": "melt away"
+    },
+    "vocab_memories.mp3": {
+      "h": "2421476536395317",
+      "bytes": 11232,
+      "text": "memories"
+    },
+    "vocab_merger.mp3": {
+      "h": "7fc080987fd4aa9f",
+      "bytes": 11232,
+      "text": "merger"
+    },
     "vocab_migration.mp3": {
       "h": "c5590b164e570f69",
       "bytes": 10800,
       "text": "migration"
+    },
+    "vocab_millennials.mp3": {
+      "h": "0b1258ae3fb45212",
+      "bytes": 11232,
+      "text": "millennials"
     },
     "vocab_misleading.mp3": {
       "h": "8bf177a72c931550",
@@ -2578,6 +3218,16 @@
       "bytes": 10800,
       "text": "momentous"
     },
+    "vocab_monitor.mp3": {
+      "h": "9796809f7dae482d",
+      "bytes": 11232,
+      "text": "monitor"
+    },
+    "vocab_monitored.mp3": {
+      "h": "27b0b1746a3886f3",
+      "bytes": 11232,
+      "text": "monitored"
+    },
     "vocab_motivation.mp3": {
       "h": "5f191134dde6f71f",
       "bytes": 11232,
@@ -2587,6 +3237,11 @@
       "h": "3d6dbb48d2ec8c8f",
       "bytes": 12240,
       "text": "mover and shaker"
+    },
+    "vocab_myriad.mp3": {
+      "h": "03cb7358f1089b5d",
+      "bytes": 11232,
+      "text": "myriad"
     },
     "vocab_nation.mp3": {
       "h": "f6908a01e19f8e04",
@@ -2608,6 +3263,16 @@
       "bytes": 11232,
       "text": "noise"
     },
+    "vocab_nonetheless.mp3": {
+      "h": "cefc253f5f4b326e",
+      "bytes": 11232,
+      "text": "nonetheless"
+    },
+    "vocab_not_least.mp3": {
+      "h": "9433eeeb21e0dcba",
+      "bytes": 11232,
+      "text": "not least"
+    },
     "vocab_noticeably.mp3": {
       "h": "9e47c29a76ba9dc6",
       "bytes": 11232,
@@ -2617,6 +3282,21 @@
       "h": "9161c5f792868455",
       "bytes": 10512,
       "text": "nourishment"
+    },
+    "vocab_on_the_other_end_of_the_phone.mp3": {
+      "h": "d26e648726f6ca65",
+      "bytes": 14256,
+      "text": "on the other end of the phone"
+    },
+    "vocab_one_celled.mp3": {
+      "h": "b1b7ddbf37ebe764",
+      "bytes": 11232,
+      "text": "one-celled"
+    },
+    "vocab_onlooker.mp3": {
+      "h": "4298afdbc57798d7",
+      "bytes": 11232,
+      "text": "onlooker"
     },
     "vocab_onset.mp3": {
       "h": "34a673491870a27b",
@@ -2648,6 +3328,21 @@
       "bytes": 11232,
       "text": "outlet"
     },
+    "vocab_output.mp3": {
+      "h": "1029d67644815d42",
+      "bytes": 11232,
+      "text": "output"
+    },
+    "vocab_output_targets.mp3": {
+      "h": "623b5f002232464c",
+      "bytes": 12240,
+      "text": "output targets"
+    },
+    "vocab_outweigh.mp3": {
+      "h": "4943f1b2003b0ec6",
+      "bytes": 11232,
+      "text": "outweigh"
+    },
     "vocab_overlook.mp3": {
       "h": "1b8ee344f03e5e40",
       "bytes": 10080,
@@ -2657,6 +3352,11 @@
       "h": "bf6b72f602deb3cd",
       "bytes": 11232,
       "text": "overpass"
+    },
+    "vocab_overwhelm.mp3": {
+      "h": "95c65348018609be",
+      "bytes": 11232,
+      "text": "overwhelm"
     },
     "vocab_pave_the_way_for.mp3": {
       "h": "316d23671e6dd52f",
@@ -2673,6 +3373,11 @@
       "bytes": 9792,
       "text": "perceive"
     },
+    "vocab_perform.mp3": {
+      "h": "f6a0d6c96c1f47bc",
+      "bytes": 11232,
+      "text": "perform"
+    },
     "vocab_persecution.mp3": {
       "h": "69bd62c0b8583b97",
       "bytes": 11376,
@@ -2688,10 +3393,25 @@
       "bytes": 11520,
       "text": "personalized"
     },
+    "vocab_personally.mp3": {
+      "h": "396be4c7cf4edcfd",
+      "bytes": 11232,
+      "text": "personally"
+    },
     "vocab_perspective.mp3": {
       "h": "aa6af31d2a0329fa",
       "bytes": 10800,
       "text": "perspective"
+    },
+    "vocab_physiology.mp3": {
+      "h": "ac014429ec9c28d9",
+      "bytes": 11664,
+      "text": "physiology"
+    },
+    "vocab_plea.mp3": {
+      "h": "9c5c42373f830de0",
+      "bytes": 11232,
+      "text": "plea"
     },
     "vocab_pledge.mp3": {
       "h": "ade9260c1c9ec7e9",
@@ -2703,25 +3423,70 @@
       "bytes": 9792,
       "text": "plug in"
     },
+    "vocab_pollutant.mp3": {
+      "h": "50a9f5f2df472a0c",
+      "bytes": 11232,
+      "text": "pollutant"
+    },
+    "vocab_pollution.mp3": {
+      "h": "233471efd5752016",
+      "bytes": 11232,
+      "text": "pollution"
+    },
+    "vocab_pose.mp3": {
+      "h": "bd68205c2099fb1b",
+      "bytes": 11232,
+      "text": "pose"
+    },
     "vocab_possession.mp3": {
       "h": "914fb82ef86c6b18",
       "bytes": 10080,
       "text": "possession"
+    },
+    "vocab_potential.mp3": {
+      "h": "0f19610947383a57",
+      "bytes": 11232,
+      "text": "potential"
+    },
+    "vocab_potentially.mp3": {
+      "h": "f0b2b2ae5e318d4b",
+      "bytes": 11232,
+      "text": "potentially"
+    },
+    "vocab_predict.mp3": {
+      "h": "5226c875836a37ee",
+      "bytes": 11232,
+      "text": "predict"
     },
     "vocab_prediction.mp3": {
       "h": "f8492df6421f4765",
       "bytes": 10368,
       "text": "prediction"
     },
+    "vocab_pressure.mp3": {
+      "h": "3b4c0c6565e036a8",
+      "bytes": 11232,
+      "text": "pressure"
+    },
     "vocab_proclamation.mp3": {
       "h": "22d398173dcd377f",
       "bytes": 11520,
       "text": "proclamation"
     },
+    "vocab_promptly.mp3": {
+      "h": "1beb18531772c810",
+      "bytes": 11232,
+      "text": "promptly"
+    },
     "vocab_proposition.mp3": {
       "h": "39c2a0993ad1b3d5",
       "bytes": 10944,
       "text": "proposition"
+    },
+    "vocab_protests.mp3": {
+      "h": "2894a2d2eb6a223a",
+      "bytes": 11232,
+      "text": "protests"
     },
     "vocab_proud.mp3": {
       "h": "0f4d4213d6d9c701",
@@ -2738,10 +3503,20 @@
       "bytes": 11232,
       "text": "quit"
     },
+    "vocab_rallies.mp3": {
+      "h": "6bd35b26a33be35e",
+      "bytes": 11232,
+      "text": "rallies"
+    },
     "vocab_rather.mp3": {
       "h": "7e8b7811711c3c9e",
       "bytes": 9072,
       "text": "rather"
+    },
+    "vocab_rattle_off.mp3": {
+      "h": "7684f98c4b83f9f9",
+      "bytes": 11232,
+      "text": "rattle off"
     },
     "vocab_realize.mp3": {
       "h": "dab96e77cfd931f6",
@@ -2753,6 +3528,11 @@
       "bytes": 10368,
       "text": "recession"
     },
+    "vocab_recognisable.mp3": {
+      "h": "9d85b18997258135",
+      "bytes": 11808,
+      "text": "recognisable"
+    },
     "vocab_reconstruction.mp3": {
       "h": "a253b715e412ff83",
       "bytes": 12240,
@@ -2763,25 +3543,70 @@
       "bytes": 11232,
       "text": "record"
     },
+    "vocab_recovery.mp3": {
+      "h": "8b60e9d739b5a5bf",
+      "bytes": 11232,
+      "text": "recovery"
+    },
+    "vocab_refuge.mp3": {
+      "h": "cdc93d65384e9644",
+      "bytes": 11232,
+      "text": "refuge"
+    },
+    "vocab_refugee.mp3": {
+      "h": "250d8c26ae4ac5c7",
+      "bytes": 11232,
+      "text": "refugee"
+    },
     "vocab_regular.mp3": {
       "h": "5f51efbecdb644c4",
       "bytes": 9936,
       "text": "regular"
+    },
+    "vocab_rejection.mp3": {
+      "h": "8e25b9ed4f89eb27",
+      "bytes": 11232,
+      "text": "rejection"
+    },
+    "vocab_relative_humidity.mp3": {
+      "h": "ca42b6aaf67c4d1f",
+      "bytes": 12816,
+      "text": "relative humidity"
     },
     "vocab_relevant.mp3": {
       "h": "5360447a42f2841f",
       "bytes": 10224,
       "text": "relevant"
     },
+    "vocab_remarkably.mp3": {
+      "h": "7d20e424991a062a",
+      "bytes": 11232,
+      "text": "remarkably"
+    },
     "vocab_renewable.mp3": {
       "h": "2a5888a10ad3cddc",
       "bytes": 10512,
       "text": "renewable"
     },
+    "vocab_repay.mp3": {
+      "h": "ef2c91c6f32ca0f4",
+      "bytes": 11232,
+      "text": "repay"
+    },
+    "vocab_reputation.mp3": {
+      "h": "26b2a66d3f9245c6",
+      "bytes": 11376,
+      "text": "reputation"
+    },
     "vocab_reserved.mp3": {
       "h": "c3fed1dae2810541",
       "bytes": 9648,
       "text": "reserved"
+    },
+    "vocab_residents.mp3": {
+      "h": "f012b07379ae4901",
+      "bytes": 11232,
+      "text": "residents"
     },
     "vocab_resilience.mp3": {
       "h": "d5e7b9069fe0825b",
@@ -2798,6 +3623,11 @@
       "bytes": 11232,
       "text": "rethink"
     },
+    "vocab_reunion.mp3": {
+      "h": "95ec49c5df4ac17a",
+      "bytes": 11232,
+      "text": "reunion"
+    },
     "vocab_reveal.mp3": {
       "h": "658c8286c17e4026",
       "bytes": 11232,
@@ -2807,6 +3637,11 @@
       "h": "489074d28197cf1e",
       "bytes": 9648,
       "text": "revealed"
+    },
+    "vocab_reverent.mp3": {
+      "h": "c2a5b03a666cc312",
+      "bytes": 11232,
+      "text": "reverent"
     },
     "vocab_revolutionize.mp3": {
       "h": "9dd59f769919409f",
@@ -2818,10 +3653,20 @@
       "bytes": 9792,
       "text": "rightful"
     },
+    "vocab_run_away.mp3": {
+      "h": "0c58121e7097ddb9",
+      "bytes": 11232,
+      "text": "run away"
+    },
     "vocab_run_by.mp3": {
       "h": "c8d9229242d4b2d2",
       "bytes": 11232,
       "text": "run by"
+    },
+    "vocab_run_the_other_way.mp3": {
+      "h": "93a16ab2bc0181ae",
+      "bytes": 11664,
+      "text": "run the other way"
     },
     "vocab_scent.mp3": {
       "h": "8e6b2801689893e7",
@@ -2838,10 +3683,35 @@
       "bytes": 11232,
       "text": "scroll"
     },
+    "vocab_sector.mp3": {
+      "h": "cefd7472c80b3e7d",
+      "bytes": 11232,
+      "text": "sector"
+    },
+    "vocab_sectors.mp3": {
+      "h": "9978eecb4cd1369d",
+      "bytes": 11232,
+      "text": "sectors"
+    },
+    "vocab_seek.mp3": {
+      "h": "1594b7a4636275b8",
+      "bytes": 11232,
+      "text": "seek"
+    },
+    "vocab_sequestration.mp3": {
+      "h": "8d79cb72767ffc26",
+      "bytes": 12096,
+      "text": "sequestration"
+    },
     "vocab_serendipity.mp3": {
       "h": "c2ff7fb2c6b82c2a",
       "bytes": 11232,
       "text": "serendipity"
+    },
+    "vocab_set_out.mp3": {
+      "h": "cce623e0d2a38a08",
+      "bytes": 11232,
+      "text": "set out"
     },
     "vocab_setback.mp3": {
       "h": "a11c2299e538e90b",
@@ -2853,6 +3723,16 @@
       "bytes": 8928,
       "text": "shade"
     },
+    "vocab_shake_off.mp3": {
+      "h": "860ca40824056ee0",
+      "bytes": 11232,
+      "text": "shake off"
+    },
+    "vocab_shareholder.mp3": {
+      "h": "61177aac166dcb71",
+      "bytes": 11232,
+      "text": "shareholder"
+    },
     "vocab_shift.mp3": {
       "h": "dbd79b319f5c1e5d",
       "bytes": 11232,
@@ -2862,6 +3742,16 @@
       "h": "191048ed5a4e50ac",
       "bytes": 9072,
       "text": "shoot"
+    },
+    "vocab_shortages.mp3": {
+      "h": "f8a0249ccb984c85",
+      "bytes": 11232,
+      "text": "shortages"
+    },
+    "vocab_sift_through.mp3": {
+      "h": "6fd34a80f732a307",
+      "bytes": 11232,
+      "text": "sift through"
     },
     "vocab_significantly.mp3": {
       "h": "acb03f8f1a729008",
@@ -2883,15 +3773,55 @@
       "bytes": 12816,
       "text": "sing one's heart out"
     },
+    "vocab_sink.mp3": {
+      "h": "6f2b83563239e866",
+      "bytes": 11232,
+      "text": "sink"
+    },
     "vocab_sixty.mp3": {
       "h": "387f1fe4b7f07681",
       "bytes": 10080,
       "text": "sixty"
     },
+    "vocab_slam_dunk.mp3": {
+      "h": "437e47c39f1654f3",
+      "bytes": 11232,
+      "text": "slam dunk"
+    },
+    "vocab_soaring.mp3": {
+      "h": "9d5dc97b8d5e667e",
+      "bytes": 11232,
+      "text": "soaring"
+    },
+    "vocab_social_contract.mp3": {
+      "h": "995cff4b85e99b11",
+      "bytes": 12816,
+      "text": "social contract"
+    },
     "vocab_spectacular.mp3": {
       "h": "8911def39f3cb708",
       "bytes": 11808,
       "text": "spectacular"
+    },
+    "vocab_stagnating.mp3": {
+      "h": "0e15f51a0b824c05",
+      "bytes": 11232,
+      "text": "stagnating"
+    },
+    "vocab_stakes.mp3": {
+      "h": "e73619f2d6f51fe8",
+      "bytes": 11232,
+      "text": "stakes"
+    },
+    "vocab_stall.mp3": {
+      "h": "6e1c6c9e2cf64e48",
+      "bytes": 11232,
+      "text": "stall"
+    },
+    "vocab_steer_clear_of.mp3": {
+      "h": "6e73aeddb0fcdfc6",
+      "bytes": 12096,
+      "text": "steer clear of"
     },
     "vocab_stick_to.mp3": {
       "h": "19ead2a1dfb89960",
@@ -2908,10 +3838,25 @@
       "bytes": 9216,
       "text": "still"
     },
+    "vocab_stop_doing.mp3": {
+      "h": "b71e21a2e1d4fdf3",
+      "bytes": 11232,
+      "text": "stop doing"
+    },
+    "vocab_strain.mp3": {
+      "h": "26d10fbf2b46d504",
+      "bytes": 11232,
+      "text": "strain"
+    },
     "vocab_stretch.mp3": {
       "h": "14431dad2755f89d",
       "bytes": 11232,
       "text": "stretch"
+    },
+    "vocab_strive.mp3": {
+      "h": "5c970ffc6eec744f",
+      "bytes": 11232,
+      "text": "strive"
     },
     "vocab_substantial.mp3": {
       "h": "c93d705189e161d5",
@@ -2933,15 +3878,35 @@
       "bytes": 10368,
       "text": "surrender"
     },
+    "vocab_surrounded.mp3": {
+      "h": "7e1c997c5005f23c",
+      "bytes": 11232,
+      "text": "surrounded"
+    },
     "vocab_surveillance.mp3": {
       "h": "124ede6e7ef64319",
       "bytes": 11088,
       "text": "surveillance"
     },
+    "vocab_survivor.mp3": {
+      "h": "f52d1b093df0d74e",
+      "bytes": 11232,
+      "text": "survivor"
+    },
     "vocab_sustainable.mp3": {
       "h": "428a6de2a514e786",
       "bytes": 11376,
       "text": "sustainable"
+    },
+    "vocab_swell.mp3": {
+      "h": "eb684e51b40a04d2",
+      "bytes": 11232,
+      "text": "swell"
+    },
+    "vocab_swims_towards.mp3": {
+      "h": "8b698ebc384a3476",
+      "bytes": 12096,
+      "text": "swims towards"
     },
     "vocab_symbolic.mp3": {
       "h": "06f9b0facd2dfc67",
@@ -2953,10 +3918,35 @@
       "bytes": 11232,
       "text": "symptom"
     },
+    "vocab_take_a_bet_on.mp3": {
+      "h": "19aad2963387b4e6",
+      "bytes": 11376,
+      "text": "take a bet on"
+    },
+    "vocab_takeover.mp3": {
+      "h": "6752612bed112cbd",
+      "bytes": 11232,
+      "text": "takeover"
+    },
+    "vocab_tear_through.mp3": {
+      "h": "d46d3dc5d6dac20d",
+      "bytes": 11232,
+      "text": "tear through"
+    },
+    "vocab_tension.mp3": {
+      "h": "e6bacb0da062aa5f",
+      "bytes": 11232,
+      "text": "tension"
+    },
     "vocab_that.mp3": {
       "h": "33b82201081ec7c4",
       "bytes": 8928,
       "text": "that"
+    },
+    "vocab_the_fabric_of_everyday_life.mp3": {
+      "h": "539d2e4fa51a346e",
+      "bytes": 15696,
+      "text": "the fabric of everyday life"
     },
     "vocab_thinking.mp3": {
       "h": "beac9eac1cee74c3",
@@ -2973,20 +3963,60 @@
       "bytes": 11232,
       "text": "thruster"
     },
+    "vocab_thunder.mp3": {
+      "h": "badcfa3c62742b3b",
+      "bytes": 11232,
+      "text": "thunder"
+    },
+    "vocab_tornado.mp3": {
+      "h": "474446ad24ee5490",
+      "bytes": 11232,
+      "text": "tornado"
+    },
     "vocab_tourist_attraction.mp3": {
       "h": "e0263e292b9f12d9",
       "bytes": 12528,
       "text": "tourist attraction"
+    },
+    "vocab_tow_away_zone.mp3": {
+      "h": "22a8aaf3aeef2fdd",
+      "bytes": 11520,
+      "text": "tow-away zone"
+    },
+    "vocab_township.mp3": {
+      "h": "54959c7dd2ad78ba",
+      "bytes": 11232,
+      "text": "township"
+    },
+    "vocab_toxic.mp3": {
+      "h": "a4e0a6fa0b527220",
+      "bytes": 11232,
+      "text": "toxic"
+    },
+    "vocab_tracked.mp3": {
+      "h": "4c54cc4d8b2e8d10",
+      "bytes": 11232,
+      "text": "tracked"
     },
     "vocab_traction.mp3": {
       "h": "dbe430a13866b3f6",
       "bytes": 10080,
       "text": "traction"
     },
+    "vocab_transaction.mp3": {
+      "h": "41c48b55fa9164e1",
+      "bytes": 11232,
+      "text": "transaction"
+    },
     "vocab_transform.mp3": {
       "h": "dd8ce13ad1ba5d66",
       "bytes": 10368,
       "text": "transform"
+    },
+    "vocab_transforming.mp3": {
+      "h": "bff17f8a79df9f9e",
+      "bytes": 11232,
+      "text": "transforming"
     },
     "vocab_transition.mp3": {
       "h": "56bf8ae82a107d34",
@@ -3008,6 +4038,16 @@
       "bytes": 11232,
       "text": "trapped"
     },
+    "vocab_triggering.mp3": {
+      "h": "4604b55107f21e22",
+      "bytes": 11232,
+      "text": "triggering"
+    },
+    "vocab_undermine.mp3": {
+      "h": "7ecd02fc2b52fa45",
+      "bytes": 11232,
+      "text": "undermine"
+    },
     "vocab_unemployed.mp3": {
       "h": "c49aa3ebeec85955",
       "bytes": 10512,
@@ -3017,6 +4057,11 @@
       "h": "fd2a27641c8303d9",
       "bytes": 11232,
       "text": "unexpected"
+    },
+    "vocab_uninhabitable.mp3": {
+      "h": "3b62a97a6aead5c6",
+      "bytes": 11808,
+      "text": "uninhabitable"
     },
     "vocab_universal.mp3": {
       "h": "da5f51a102d85541",
@@ -3038,6 +4083,21 @@
       "bytes": 10080,
       "text": "unravel"
     },
+    "vocab_unveil.mp3": {
+      "h": "f3497ea335eb1e55",
+      "bytes": 11232,
+      "text": "unveil"
+    },
+    "vocab_vast.mp3": {
+      "h": "6a7ebfc5e096475a",
+      "bytes": 11232,
+      "text": "vast"
+    },
+    "vocab_via.mp3": {
+      "h": "a19e070e30616772",
+      "bytes": 11232,
+      "text": "via"
+    },
     "vocab_viral.mp3": {
       "h": "85b2cdd5d52b4741",
       "bytes": 9216,
@@ -3053,10 +4113,30 @@
       "bytes": 10368,
       "text": "vulnerable"
     },
+    "vocab_warned.mp3": {
+      "h": "ca76b86c52ff31a3",
+      "bytes": 11232,
+      "text": "warned"
+    },
     "vocab_waste.mp3": {
       "h": "3fcdcb3d0e685f28",
       "bytes": 11232,
       "text": "waste"
+    },
+    "vocab_wearable.mp3": {
+      "h": "0195564e5dfb34ad",
+      "bytes": 11232,
+      "text": "wearable"
+    },
+    "vocab_weed.mp3": {
+      "h": "a72f7b3f8f9bfcfc",
+      "bytes": 11232,
+      "text": "weed"
+    },
+    "vocab_wellness.mp3": {
+      "h": "1644d71a678054a6",
+      "bytes": 11232,
+      "text": "wellness"
     },
     "vocab_whatever.mp3": {
       "h": "d869db7fe62fb07c",
@@ -3077,6 +4157,16 @@
       "h": "91f3be3b7a64c291",
       "bytes": 10656,
       "text": "workforce"
+    },
+    "vocab_worse_off.mp3": {
+      "h": "4b0556624d5449c1",
+      "bytes": 11232,
+      "text": "worse off"
+    },
+    "vocab_wrestle_with.mp3": {
+      "h": "1557a00db3963261",
+      "bytes": 11232,
+      "text": "wrestle with"
     }
   }
 }
