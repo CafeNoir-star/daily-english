@@ -71,7 +71,7 @@ const SECURITY_HEADERS = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; media-src 'self' data: blob: https://api.dictionaryapi.dev https://*.jsdelivr.net https://*.r2.dev https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.workbuddy.host https://*.workbuddy.cn https://api.dictionaryapi.dev https://freedictionaryapi.com https://*.jsdelivr.net https://*.r2.dev",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; media-src 'self' data: blob: https://api.dictionaryapi.dev https://*.jsdelivr.net https://*.r2.dev https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.workbuddy.host https://*.workbuddy.cn https://api.dictionaryapi.dev https://freedictionaryapi.com https://*.jsdelivr.net https://*.r2.dev; frame-ancestors 'none'",
 };
 
 function writeHead(res, status, extraHeaders) {
