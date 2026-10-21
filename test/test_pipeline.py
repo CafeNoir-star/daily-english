@@ -168,3 +168,26 @@ class EnrichPendingTests(PipelineTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class DayIndexTests(PipelineTestCase):
+    """规划阶段只需要日期，避免拉取整天的正文与句子数组。"""
+
+    def test_fetch_day_index_selects_only_id_and_date(self):
+        captured = {}
+
+        def fake_request_json(method, url, **kwargs):
+            captured["url"] = url
+            captured["params"] = kwargs.get("params")
+            return [{"id": 1, "date": "2026-10-20"}]
+
+        with patch.object(pipeline, "request_json", side_effect=fake_request_json):
+            rows = pipeline.fetch_day_index(auth=False)
+
+        self.assertEqual(rows, [{"id": 1, "date": "2026-10-20"}])
+        self.assertIn("daily_sentences", captured["url"])
+        self.assertEqual(captured["params"]["select"], "id,date", "规划阶段只应取 id 和 date")
+
+    def test_planning_uses_light_index(self):
+        src = Path(pipeline.__file__).read_text(encoding="utf-8")
+        self.assertIn("fetch_day_index(auth=True)", src, "主流程规划阶段应使用轻量索引")
+        self.assertIn("fetch_day_index(auth=False)", src, "匿名规划阶段应使用轻量索引")

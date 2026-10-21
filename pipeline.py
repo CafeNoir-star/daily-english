@@ -488,6 +488,21 @@ def fetch_days(auth: bool = False) -> list[dict[str, Any]]:
     return rows
 
 
+def fetch_day_index(auth: bool = False) -> list[dict[str, Any]]:
+    """规划阶段只取 id 与 date。
+
+    跨洋网络下拉取整天的 english_text + sentences（36 天约几百 KB）容易触发
+    60s 读超时；日期规划与去重只需要这两列。
+    """
+    rows = rest_get(
+        "daily_sentences",
+        {"select": "id,date", "order": "date.asc"},
+        auth=auth,
+    )
+    log(f"库里已有 {len(rows)} 天语料")
+    return rows
+
+
 def fetch_words(auth: bool = False) -> list[dict[str, Any]]:
     rows = rest_get("word_dictionary", {"select": "id,word,audio_url"}, auth=auth)
     log(f"库里已有 {len(rows)} 个生词")
@@ -1015,11 +1030,11 @@ def main() -> int:
         existing_words: list[dict[str, Any]] = []
     elif args.with_corpus:
         login()
-        existing_days = fetch_days(auth=True)
+        existing_days = fetch_day_index(auth=True)
         existing_words = fetch_words(auth=True)
     else:
         log("匿名读取语料（不需要密码，不写数据库）")
-        existing_days = fetch_days(auth=False)
+        existing_days = fetch_day_index(auth=False)
         existing_words = fetch_words(auth=False)
 
     stale = False
