@@ -365,3 +365,37 @@ CREATE TABLE public.pending_words (
 **因此**：`publishableKey` 必须留在浏览器（前端直连），把它从仓库移除没有意义——
 `app.js` 本身就是公开可下载的。若将来确有需要，只能引入平台**之外**的代理
 （Cloudflare Worker / 自建服务器），代价是多一个服务且境外节点在国内可能不可用。
+
+---
+
+## 十六、publishableKey 改为运行时下发（2026-10-21 起）
+
+**目标**：GitHub 仓库与公开可下载的静态文件里都不再出现真 key，降低"公开仓库被批量扫描"的风险。
+（前端直连 WorkBuddy 的架构不变——同源代理方案已被平台网关否决，见上一节。）
+
+### 机制
+
+```
+server.secrets.json      ← 本地文件，已 gitignore，部署时随目录上传（平台只排除 node_modules/.git）
+        ↓ 启动时读取
+GET /api/runtime-config  ← 返回 { publishableKey }，Cache-Control: no-store
+        ↓ 页面 initCloud() 时请求
+app.js                   ← PUBLIC_CONFIG.publishableKey 为空，取到后才初始化 SDK
+```
+
+平台网关要求整站（含 `/api/*`）携带 sharecode 会话：
+实测无 cookie 访问 `/api/runtime-config` 返回 **403**，所以配置接口并非完全公开。
+
+### 运维须知
+
+| 事项 | 说明 |
+|---|---|
+| 部署前提 | 工作目录必须有 `server.secrets.json`，否则接口返回 503、前端提示"云服务配置不可用" |
+| 换机器/重新 clone | 该文件不在仓库里，需要手动重建（内容：`{"wbKey": "wbpk_..."}`） |
+| 环境变量优先 | 若平台支持注入 `WB_KEY`，会覆盖文件（当前平台无此入口） |
+| 密钥泄漏后的处置 | 平台无法重置 key；只能删除应用重建（数据会丢），或接受现状 |
+
+### 残余风险（必须知情）
+
+- key 仍会出现在**浏览器 DevTools**（页面运行时取到后存在内存里）——这与"前端持有 key"等价，只是不再出现在公开仓库。
+- **旧提交（git 历史）里仍有明文 key**。GitHub 代码搜索默认只索引默认分支当前内容，但 clone 仓库仍能看到历史。如需彻底清理需要重写历史并 force push（会改写全部提交号，需单独确认）。
