@@ -117,62 +117,6 @@ test('所有 onclick 中的动态插值都经过转义', () => {
   assert.strictEqual(offenders.length, 0, '未转义：\n    ' + offenders.join('\n    '));
 });
 
-console.log('── 2. 前端 LLM 调用配额 ──');
-
-function makeQuota(store, limit, DateImpl) {
-  const fn = extractFn(appSrc, 'llmQuota');
-  assert(fn, 'app.js 中缺少函数 llmQuota');
-  const factory = new Function(
-    'localStorage', 'LLM_DAILY_LIMIT', 'Date',
-    `return function() {${fn.body}};`
-  );
-  return factory(
-    {
-      getItem: (k) => (k in store ? store[k] : null),
-      setItem: (k, v) => { store[k] = v; }
-    },
-    limit,
-    DateImpl || Date
-  );
-}
-
-test('存在每日配额常量', () => {
-  assert(/LLM_DAILY_LIMIT\s*=\s*\d+/.test(appSrc), 'app.js 未定义 LLM_DAILY_LIMIT');
-});
-
-test('配额未超限时允许调用', () => {
-  const store = {};
-  const quota = makeQuota(store, 5);
-  const st = quota();
-  assert.strictEqual(st.exceeded, false, '首次调用不应超限');
-  assert.strictEqual(st.count, 0);
-});
-
-test('达到上限后 exceeded 为真', () => {
-  const store = {};
-  const quota = makeQuota(store, 2);
-  quota().consume();
-  quota().consume();
-  const st = quota();
-  assert.strictEqual(st.count, 2, `计数应为 2，实际 ${st.count}`);
-  assert.strictEqual(st.exceeded, true, '达到上限后应标记超限');
-});
-
-test('跨天后配额自动重置', () => {
-  const store = {};
-  const Day1 = class extends Date { constructor() { super('2026-01-01T00:00:00Z'); } };
-  const Day2 = class extends Date { constructor() { super('2026-01-02T00:00:00Z'); } };
-
-  const q1 = makeQuota(store, 2, Day1);
-  q1().consume();
-  q1().consume();
-  assert.strictEqual(q1().exceeded, true, '第一天应已超限');
-
-  const q2 = makeQuota(store, 2, Day2);
-  assert.strictEqual(q2().count, 0, '跨天后计数应归零');
-  assert.strictEqual(q2().exceeded, false, '跨天后不应超限');
-});
-
 console.log('── 3. 安全响应头 ──');
 
 (async () => {

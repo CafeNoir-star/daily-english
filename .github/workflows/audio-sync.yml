@@ -72,6 +72,23 @@ jobs:
             --no-audio \
             --fail-if-stale 0
 
+      # 第二步：消费待补词队列，用 WorkBuddy LLM 补释义写入公共词库
+      # 必须放在音频同步之前，这样新增的词能同一次生成读音
+      - name: Enrich pending words
+        id: enrich
+        continue-on-error: true
+        env:
+          WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-38358.app.workbuddy.host' }}
+          WB_KEY: ${{ secrets.WB_KEY }}
+          WB_EMAIL: ${{ secrets.WB_EMAIL }}
+          WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
+        run: |
+          if [ -z "$WB_EMAIL" ] || [ -z "$WB_PASSWORD" ]; then
+            echo "::warning::未配置 WB_EMAIL / WB_PASSWORD，跳过待补词补齐"
+            exit 0
+          fi
+          python pipeline.py --enrich-pending
+
       # 第二步：匿名读语料，补齐缺失音频（不需要密码）
       - name: Sync audio
         id: sync
@@ -118,6 +135,7 @@ jobs:
             echo "### 每日同步"
             echo ""
             echo "- 语料生成：${{ steps.corpus.outcome }}"
+            echo "- 待补词补齐：${{ steps.enrich.outcome }}"
             echo "- 音频同步：${{ steps.sync.outcome }}"
             echo "- 音频文件数：$(find audio -name '*.mp3' 2>/dev/null | wc -l)"
             echo "- 音频总体积：$(du -sh audio 2>/dev/null | cut -f1)"

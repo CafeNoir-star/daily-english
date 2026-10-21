@@ -62,6 +62,7 @@ OUT_DIR = Path(os.getenv("OUT_DIR", "out"))
 
 DEFAULT_DAYS = int(os.getenv("DAYS", "30"))
 MAX_DAYS_PER_RUN = int(os.getenv("MAX_DAYS_PER_RUN", "14"))
+PENDING_BATCH = int(os.getenv("PENDING_BATCH", "50"))
 
 TZ = timezone(timedelta(hours=8))
 MANIFEST_PATH = AUDIO_DIR / "manifest.json"
@@ -213,6 +214,21 @@ def rest_insert(table: str, rows: list[dict[str, Any]]) -> None:
         headers=headers,
         json_body=rows,
         timeout=120,
+    )
+
+
+def rest_delete(table: str, filters: dict[str, str]) -> None:
+    if DRY_RUN:
+        log(f"[dry-run] 跳过删除 {table} {filters}")
+        return
+    headers = _base_headers(with_auth=True)
+    headers["Prefer"] = "return=minimal"
+    request_json(
+        "DELETE",
+        f"{WB_ENDPOINT}/.cloud/database/rest/{table}",
+        headers=headers,
+        params=filters,
+        timeout=60,
     )
 
 
@@ -757,6 +773,102 @@ def plan_dates(existing: list[dict[str, Any]], days: int) -> list[date]:
     return result
 
 
+def fetch_pending_words(limit: int = PENDING_BATCH) -> list[str]:
+    """读取待补词队列（跨用户共享，只有 word 一列）。"""
+    rows = rest_get(
+        "pending_words",
+        {"select": "word", "order": "created_at.asc", "limit": limit},
+        auth=True,
+    )
+    return [str(row["word"]).lower() for row in rows if row.get("word")]
+
+
+def parse_word_payload(raw: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """把 LLM 返回的 JSON 转成 word_dictionary 行；缺释义或重复词的条目丢弃。"""
+    if not isinstance(raw, dict):
+        return []
+    items = raw.get("results")
+    if not isinstance(items, list):
+        items = raw.get("words")
+    if not isinstance(items, list):
+        return []
+
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        word = str(item.get("word") or "").strip().lower()
+        definition = str(item.get("definition") or "").strip()
+        if not word or not definition or word in seen:
+            continue
+        seen.add(word)
+        tips = item.get("memory_tips")
+        out.append(
+            {
+                "word": word,
+                "phonetic": str(item.get("phonetic") or "").strip(),
+                "pos": str(item.get("pos") or "").strip(),
+                "definition": definition,
+                "example_sentence": str(item.get("example_sentence") or "").strip(),
+                "example_translation": str(item.get("example_translation") or "").strip(),
+                "memory_tips": tips if isinstance(tips, dict) else {},
+                "audio_url": word_audio_url(word),
+            }
+        )
+    return out
+
+
+def enrich_pending(limit: int = PENDING_BATCH) -> int:
+    """消费待补词队列：调 LLM 补释义，写入公共词库，然后出队。"""
+    words = fetch_pending_words(limit)
+    if not words:
+        log("待补队列为空，无需补齐")
+        return 0
+    log(f"待补队列 {len(words)} 个词：{', '.join(words[:12])}{' …' if len(words) > 12 else ''}")
+
+    existing = fetch_words(auth=True)
+    existing_set = {str(row["word"]).lower() for row in existing}
+    todo = [w for w in words if w not in existing_set]
+
+    written = 0
+    if todo:
+        prompt = (
+            "为下列英文单词补全词典信息，只返回 JSON："
+            '{"results":[{"word":"","phonetic":"","pos":"","definition":"中文释义",'
+            '"example_sentence":"英文例句","example_translation":"例句中文翻译",'
+            '"memory_tips":{"root_analysis":"词根分析","mnemonic":"联想记忆"}}]}。'
+            "definition 必须是中文。\n\n单词：" + ", ".join(todo)
+        )
+        raw_text = llm_stream(
+            [
+                {"role": "system", "content": "你是英汉词典编辑，只输出 JSON，不要解释。"},
+                {"role": "user", "content": prompt},
+            ],
+            max_tokens=6000,
+        )
+        entries = parse_word_payload(parse_json_object(raw_text))
+        if entries:
+            next_value = next_id(existing)
+            rows: list[dict[str, Any]] = []
+            for entry in entries:
+                entry["id"] = next_value
+                entry["difficulty_level"] = "intermediate"
+                next_value += 1
+                rows.append(entry)
+            rest_insert("word_dictionary", rows)
+            written = len(rows)
+            log(f"写入 word_dictionary：{written} 个词")
+        else:
+            warn("LLM 未返回可用释义，本次不写入")
+    else:
+        log("待补的词都已在词库中，直接出队")
+
+    rest_delete("pending_words", {"word": f"in.({','.join(words)})"})
+    log(f"从待补队列移除 {len(words)} 个词")
+    return written
+
+
 def generate_corpus(existing: list[dict[str, Any]], days: int) -> list[dict[str, Any]]:
     targets = plan_dates(existing, days)
     recent_sources: list[str] = [str(row.get("source") or "") for row in existing[-5:]]
@@ -856,6 +968,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="未来语料不足 DAYS 天时以退出码 3 结束（用于告警）",
     )
     parser.add_argument(
+        "--enrich-pending",
+        action="store_true",
+        help="消费待补词队列：调 LLM 补释义写入 word_dictionary（需要登录）",
+    )
+    parser.add_argument(
         "--from-export",
         action="store_true",
         help="从 data/export_*.json 读取内容，只生成音频（首次全量回填用）",
@@ -875,6 +992,12 @@ def main() -> int:
     log(f"每日英语流水线启动｜模式 {mode}")
     log(f"voice={TTS_VOICE}  endpoint={WB_ENDPOINT}")
     log("=" * 60)
+
+    if args.enrich_pending:
+        login()
+        count = enrich_pending()
+        log(f"待补词补齐完成：写入 {count} 个词，用时 {int(time.time() - started)}s")
+        return 0
 
     if args.from_export:
         days = load_export_days()

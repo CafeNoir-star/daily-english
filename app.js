@@ -29,7 +29,7 @@ function wordAudioFile(word) {
   const safe = String(word).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
   return `vocab_${safe}.mp3`;
 }
-let cloud = null, db = null, llm = null, auth = null;
+let cloud = null, db = null, auth = null;
 let currentUser = null;
 let todayDate = (function() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); })();
 let studyStartTime = null, studyTimerInterval = null;
@@ -39,41 +39,10 @@ let markedWords = new Set();
 let todayVocab = [];
 let speechVoices = [];
 let authMode = 'login';
-let llmModelId = null;
 let isPhaseInitialized = false; // Fix: prevent phase reset on tab switch
 let wordAudioCache = new Map(); // word -> audio_url (from dictionary API)
 
 const SRS_INTERVALS = { 1: [0, 0.02, 0.1], 2: [1, 3, 7], 3: [14, 30, 90], 4: [180, 365] };
-
-// Security: 前端调用大模型的每日上限。publishableKey 必须公开，无法阻止
-// 脚本直接调用，这里只用于约束正常用户、降低误触发的积分消耗。
-const LLM_DAILY_LIMIT = 50;
-
-// 读取/消耗当日 LLM 配额。返回对象带 consume()，写入失败时静默降级。
-function llmQuota() {
-  const KEY = 'llmDailyCount';
-  const today = new Date().toISOString().slice(0, 10);
-  let rec = {};
-  try {
-    rec = JSON.parse(localStorage.getItem(KEY) || '{}') || {};
-  } catch (e) {
-    rec = {};
-  }
-  const count = rec.date === today ? (Number(rec.count) || 0) : 0;
-  const state = {
-    today: today,
-    count: count,
-    limit: LLM_DAILY_LIMIT,
-    exceeded: count >= LLM_DAILY_LIMIT
-  };
-  state.consume = function () {
-    try {
-      localStorage.setItem(KEY, JSON.stringify({ date: today, count: count + 1 }));
-    } catch (e) { /* 存储不可用时不影响主流程 */ }
-    return state;
-  };
-  return state;
-}
 
 // Security: HTML escape function for all dynamic data inserted into innerHTML
 function esc(text) {
@@ -124,8 +93,7 @@ async function initCloud() {
       publishableKey: PUBLIC_CONFIG.publishableKey
     });
     db = cloud.database;
-    llm = cloud.llm;
-    auth = cloud.auth;
+      auth = cloud.auth;
     return true;
   } catch (e) {
     console.error('Cloud init failed:', e);
@@ -575,125 +543,35 @@ function stopPlayback() {
   stopAllAudio();
   showToast('\u5DF2\u505C\u6B62\u64AD\u653E');
 }
-
-// ========================================================================
-// LLM WORD LOOKUP - Optimized for speed
-// ========================================================================
-async function getLLMModel() {
-  if (llmModelId) return llmModelId;
-  if (!llm) return null;
+// 缺释义的词不再由前端调大模型，改为写入公共待补队列。
+// 队列只存单词本身（不含用户身份），由 GitHub Actions 每天消费并补进
+// word_dictionary，补一次所有用户都能查到。
+async function queuePendingWords(words) {
+  const rows = (words || [])
+    .map(w => String(w || '').trim().toLowerCase())
+    .filter(w => /^[a-z][a-z'-]{1,49}$/.test(w))
+    .map(w => ({ word: w }));
+  if (rows.length === 0) return 0;
   try {
-    const models = await llm.models.list();
-    const model = models.find(m => m.disabled !== true);
-    if (model) { llmModelId = model.id; return llmModelId; }
-  } catch (e) { console.error('LLM model list failed:', e); }
-  return null;
-}
-
-// Batch LLM lookup: send ALL words in ONE request, get back array of results
-async function llmLookupWordsBatch(words) {
-  // 每日配额：超出后直接返回空结果，前端会退回到「暂无释义」
-  const quota = llmQuota();
-  if (quota.exceeded) {
-    console.warn(`LLM 每日配额已用完（${quota.count}/${quota.limit}），今日不再补充释义`);
-    return words.map(w => ({ word: w, result: null, quotaExceeded: true }));
-  }
-  quota.consume();
-
-  const modelId = await getLLMModel();
-  if (!modelId) return words.map(w => ({ word: w, result: null }));
-  try {
-    let answer = '';
-    const sysPrompt = 'For each English word, return a JSON object: {"results":[{"word":"","phonetic":"","pos":"","definition":"中文释义","example_sentence":"","example_translation":"中文翻译","memory_tips":{"root_analysis":"","mnemonic":""}}]}. Definition must be in Chinese. Return ONLY the JSON.';
-    const userContent = words.join(', ');
-
-    const streamPromise = llm.chat.completions.create({
-      model: modelId,
-      messages: [
-        { role: 'system', content: sysPrompt },
-        { role: 'user', content: userContent }
-      ],
-      stream: true,
-      response_format: { type: 'json_object' },
-      temperature: 0.3
-    });
-
-    // 60s timeout - batch call needs more time
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('LLM batch timeout')), 60000));
-    const stream = await Promise.race([streamPromise, timeoutPromise]);
-
-    for await (const chunk of stream) {
-      const delta = chunk.choices[0]?.delta?.content;
-      if (delta) answer += delta;
+    const { error } = await db.from('pending_words').upsert(rows, { onConflict: 'word', ignoreDuplicates: true });
+    if (error) {
+      console.log('pending_words 入队失败:', error.message);
+      return 0;
     }
-
-    // Parse JSON
-    let parsed;
-    try {
-      parsed = JSON.parse(answer);
-    } catch (e) {
-      const jsonMatch = answer.match(/\{[\s\S]*\}/);
-      if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
-      else throw e;
-    }
-
-    // Extract results array
-    const resultsArr = parsed.results || parsed.words || (Array.isArray(parsed) ? parsed : [parsed]);
-    const resultMap = {};
-    for (const r of resultsArr) {
-      if (r.word) resultMap[r.word.toLowerCase()] = r;
-    }
-
-    // Map back to input words
-    return words.map(w => ({ word: w, result: resultMap[w.toLowerCase()] || null }));
-  } catch (e) {
-    console.error('LLM batch lookup failed:', e.message);
-    return words.map(w => ({ word: w, result: null }));
+    return rows.length;
+  } catch (err) {
+    console.log('pending_words 入队失败:', err.message);
+    return 0;
   }
 }
 
-// Enrich words via LLM, then save to word_dictionary table
-// (prepareVocabLearning already checked the table, so we skip re-querying here)
 async function enrichWordsFromDBorLLM(words) {
   if (!db) { if (!await initCloud()) return words.map(w => ({ word: w, result: null })); }
-  const results = [];
-
-  // Call LLM in ONE batch request for all words
   if (words.length > 0) {
-    const llmResults = await llmLookupWordsBatch(words);
-    for (const { word, result } of llmResults) {
-      if (result) {
-        // Attach audio_url: prefer cache, fallback to local pre-generated file path
-        let audioUrl = wordAudioCache.get(word.toLowerCase()) || '';
-        if (!audioUrl) {
-          // Assume local pre-generated file exists (server.js will have checked)
-          // Use relative path - if file doesn't exist, playback will gracefully fail
-          audioUrl = `/audio/${wordAudioFile(word)}`;
-        }
-        result.audio_url = audioUrl;
-        results.push({ word, result });
-        // Save to word_dictionary table for future use (all users benefit)
-        try {
-          await db.from('word_dictionary').upsert({
-            word: word,
-            phonetic: result.phonetic || '',
-            pos: result.pos || '',
-            definition: result.definition || '',
-            example_sentence: result.example_sentence || '',
-            example_translation: result.example_translation || '',
-            memory_tips: result.memory_tips || {},
-            audio_url: audioUrl
-          }, { onConflict: 'word' });
-        } catch (e) {
-          console.log('Failed to save to word_dictionary:', word, e.message);
-        }
-      } else {
-        results.push({ word, result: null });
-      }
-    }
+    const queued = await queuePendingWords(words);
+    if (queued > 0) console.log(`[Vocab] ${queued} 个词已加入待补队列，将在每日同步时补齐释义`);
   }
-
-  return results;
+  return words.map(w => ({ word: w, result: null }));
 }
 
 // ========================================================================

@@ -104,5 +104,67 @@ class CliTests(PipelineTestCase):
         self.assertEqual(args.fail_if_stale, 2)
 
 
+class EnrichPendingTests(PipelineTestCase):
+    """待补词队列：解析 LLM 返回、过滤无效项、CLI 开关。"""
+
+    def test_parse_word_payload_maps_fields(self):
+        raw = {
+            "results": [
+                {
+                    "word": "Beacon",
+                    "phonetic": "/ˈbiːkən/",
+                    "pos": "n.",
+                    "definition": "灯塔",
+                    "example_sentence": "A beacon guided the ship.",
+                    "example_translation": "灯塔指引着船只。",
+                    "memory_tips": {"root_analysis": "bea", "mnemonic": "灯光"},
+                }
+            ]
+        }
+        rows = pipeline.parse_word_payload(raw)
+        self.assertEqual(len(rows), 1)
+        row = rows[0]
+        self.assertEqual(row["word"], "beacon", "单词应统一小写")
+        self.assertEqual(row["definition"], "灯塔")
+        self.assertEqual(row["phonetic"], "/ˈbiːkən/")
+        self.assertEqual(row["audio_url"], "/audio/vocab_beacon.mp3")
+        self.assertEqual(row["memory_tips"]["mnemonic"], "灯光")
+
+    def test_parse_word_payload_skips_entries_without_definition(self):
+        raw = {"results": [{"word": "alpha", "definition": ""}, {"word": "", "definition": "有释义"}]}
+        self.assertEqual(pipeline.parse_word_payload(raw), [])
+
+    def test_parse_word_payload_accepts_words_key(self):
+        raw = {"words": [{"word": "loop", "definition": "循环"}]}
+        rows = pipeline.parse_word_payload(raw)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["word"], "loop")
+
+    def test_parse_word_payload_handles_garbage(self):
+        self.assertEqual(pipeline.parse_word_payload(None), [])
+        self.assertEqual(pipeline.parse_word_payload({"results": "not-a-list"}), [])
+
+    def test_fetch_pending_words_reads_queue(self):
+        pipeline.TOKEN = "test-token"
+        captured = {}
+
+        def fake_request_json(method, url, **kwargs):
+            captured["url"] = url
+            captured["params"] = kwargs.get("params")
+            return [{"word": "beacon"}, {"word": "loop"}]
+
+        with patch.object(pipeline, "request_json", side_effect=fake_request_json):
+            words = pipeline.fetch_pending_words(10)
+
+        self.assertEqual(words, ["beacon", "loop"])
+        self.assertIn("pending_words", captured["url"])
+        self.assertEqual(captured["params"]["limit"], 10)
+
+    def test_cli_accepts_enrich_pending(self):
+        with patch.object(sys, "argv", ["pipeline.py", "--enrich-pending"]):
+            args = pipeline.parse_args()
+        self.assertTrue(args.enrich_pending)
+
+
 if __name__ == "__main__":
     unittest.main()
