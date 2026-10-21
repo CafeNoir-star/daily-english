@@ -271,3 +271,17 @@ Render 适合做后台批处理（冷启动无所谓），不适合「打开即�
 - 匿名用户无法写 `daily_sentences`（返回 401 `permission denied`）。
 - 前端播放新音频不需要重新部署。
 - 语料不足时 Actions 失败告警。
+
+---
+
+## 十三、安全加固记录（2026-10-21）
+
+| 项目 | 处理 |
+|---|---|
+| 属性上下文 XSS | `app.js` 新增 `escAttr()`，替换 6 处 `onclick` / `class` 拼接 |
+| LLM 调用配额 | `LLM_DAILY_LIMIT = 30`，`llmQuota()` 在批量查词前检查 |
+| 安全响应头 | 补 `Strict-Transport-Security`、`Permissions-Policy` |
+| CI 供应链 | `actions/checkout` / `setup-python` 固定到 commit SHA |
+| 示例配置 | `.env.example` 移除真实邮箱 |
+
+回归测试：`test/security-hardening.test.js`（15 项）+ `test/security.test.js`（23 项）全部通过。
