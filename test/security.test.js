@@ -130,6 +130,31 @@ async function run() {
     assert.ok(r.status === 404, `expected 404, got ${r.status}`);
   });
 
+  await test('/server.secrets.json is never served', async () => {
+    const r = await fetch('/server.secrets.json');
+    assert.ok(r.status === 404, `expected 404, got ${r.status}`);
+  });
+
+  await test('/server.js source is never served', async () => {
+    const r = await fetch('/server.js');
+    assert.ok(r.status === 404, `expected 404, got ${r.status}`);
+  });
+
+  await test('/pipeline.py source is never served', async () => {
+    const r = await fetch('/pipeline.py');
+    assert.ok(r.status === 404, `expected 404, got ${r.status}`);
+  });
+
+  await test('/.gitignore is never served', async () => {
+    const r = await fetch('/.gitignore');
+    assert.ok(r.status === 404, `expected 404, got ${r.status}`);
+  });
+
+  await test('whitelisted config.js is served', async () => {
+    const r = await fetch('/config.js');
+    assert.ok(r.status === 200, `expected 200, got ${r.status}`);
+  });
+
   console.log('\n=== API Input Validation Tests ===');
 
   await test('invalid word rejected', async () => {

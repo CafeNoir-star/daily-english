@@ -94,7 +94,7 @@ function writeHead(res, status, extraHeaders) {
   res.writeHead(status, headers);
 }
 
-// --- Security: Blocked paths (blacklist) ---
+// --- Security: Blocked paths (blacklist, defence in depth) ---
 const BLOCKED_PATHS = [
   '/data/',
   '/docs/',
@@ -107,12 +107,41 @@ const BLOCKED_PATHS = [
   '/package-lock.json',
   '/test/',
   '/.workbuddy/',
+  '/server.secrets.json',
+  '/server.js',
+  '/pipeline.py',
+  '/tts.py',
+  '/requirements.txt',
+  '/.gitignore',
+  '/.env.example',
 ];
 
 function isPathBlocked(filePath) {
   // Normalize and check
   const normalized = path.normalize(filePath).replace(/\\/g, '/');
   return BLOCKED_PATHS.some(bp => normalized === bp || normalized.startsWith(bp));
+}
+
+// --- Security: Static allowlist ---
+// Only these local files may ever be served to a browser. Anything else with a
+// file extension returns 404 instead of being streamed from disk, so source
+// files and secrets (server.secrets.json, server.js, pipeline.py ...) can never
+// be downloaded as static assets, no matter what else lands in the directory.
+const ALLOWED_STATIC_FILES = new Set([
+  '/index.html',
+  '/app.js',
+  '/config.js',
+  '/favicon.ico',
+  '/robots.txt',
+  '/site.webmanifest',
+  '/manifest.webmanifest',
+]);
+const ALLOWED_STATIC_PREFIXES = ['/audio/'];
+
+function isStaticAllowed(filePath) {
+  const normalized = path.normalize(filePath).replace(/\\/g, '/');
+  if (ALLOWED_STATIC_FILES.has(normalized)) return true;
+  return ALLOWED_STATIC_PREFIXES.some(prefix => normalized.startsWith(prefix));
 }
 
 // --- Dictionary API fallback (free, no key needed) ---
@@ -299,6 +328,15 @@ const server = http.createServer(async (req, res) => {
 
   // Security: Check blacklist first
   if (isPathBlocked(filePath)) {
+    writeHead(res, 404, { 'Content-Type': 'text/plain' });
+    res.end('Not found');
+    return;
+  }
+
+  // Security: Allowlist gate. A request that carries a file extension must map
+  // to a known public asset; everything else is 404. Extension-less paths still
+  // fall through to the SPA fallback below (client-side routes).
+  if (path.extname(filePath) && !isStaticAllowed(filePath)) {
     writeHead(res, 404, { 'Content-Type': 'text/plain' });
     res.end('Not found');
     return;
