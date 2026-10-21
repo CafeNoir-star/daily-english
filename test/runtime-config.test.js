@@ -9,7 +9,7 @@ const { spawn } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const PORT_WITH_KEY = 3996;
 const PORT_WITHOUT_KEY = 3995;
-const TEST_KEY = 'wbpk_REDACTED';
+const TEST_KEY = 'wbpk_test_key';
 
 let passed = 0;
 let failed = 0;
