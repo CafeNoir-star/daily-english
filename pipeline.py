@@ -38,6 +38,8 @@ from typing import Any, Iterable
 import edge_tts
 import requests
 
+import sources as source_pool
+
 # ---------------------------------------------------------------------------
 # 配置
 # ---------------------------------------------------------------------------
@@ -424,6 +426,108 @@ def normalize_day(raw: dict[str, Any], day: date) -> dict[str, Any]:
         "sentences": sentences,
         "key_words": words,
     }
+
+
+# ---------------------------------------------------------------------------
+# 真源语料：从真实英文段落里摘段，LLM 只做"挑段 + 翻译 + 标注"
+# ---------------------------------------------------------------------------
+
+class CandidateRejected(Exception):
+    """该候选不可用（内容不合格 / LLM 改写 / 格式不符），应换下一条候选。"""
+
+
+def build_source_prompt(candidate: "source_pool.Candidate") -> str:
+    return f"""下面是今天从 {candidate.source} 的 RSS 里取到的一段真实英文原稿（人工撰写，未做任何改写）：
+
+标题：{candidate.title}
+链接：{candidate.link}
+
+正文：
+\"\"\"
+{candidate.text}
+\"\"\"
+
+请基于这段真实英文，产出一条精读语料：
+
+1. english_text：从上面正文里**逐字摘出连续的 3-5 句**，合计 70-110 词。
+   - 必须原样复制，一个词、一个标点都不能改；不得缩写、改写、调换顺序、合并句子。
+   - 必须是原文中**连续**的一段，不能跳句拼接。
+   - 优先选信息密度高、有具体细节（数字、机构名、动作、引语）的句子。
+   - 避开推广语（Sign up / Subscribe / Read more）、图表说明、相关文章推荐列表。
+   - 若不合适（内容敏感、句子残缺、通篇是列表），只输出 {{"skip": true}}。
+
+2. chinese_translation：与 english_text 逐句对应的自然中文翻译，不要直译腔。
+
+3. key_words：8 个值得学习的词或短语，必须都在 english_text 中出现过。每个包含：
+   word、phonetic（IPA 音标）、pos（词性缩写）、definition（中文释义）、
+   example_sentence（**直接引用 english_text 中包含该词的那个原句，逐字照抄，不要自己造句**）、
+   example_translation（该例句的中文翻译）、
+   memory_tips（对象，含 root_analysis 和 mnemonic 两个字段）。
+
+4. source_type 固定 "news"；difficulty 取 beginner / intermediate / advanced 之一。
+
+只输出一个 JSON 对象，不要 markdown 代码块，不要任何解释：
+{{"english_text":"","chinese_translation":"","source":"{candidate.source}","source_type":"news","difficulty":"intermediate","sentences":[],"key_words":[{{"word":"","phonetic":"","pos":"","definition":"","example_sentence":"","example_translation":"","memory_tips":{{"root_analysis":"","mnemonic":""}}}}]}}"""
+
+
+def generate_day_from_source(
+    day: date,
+    candidate: "source_pool.Candidate",
+    max_words: int = 135,
+) -> dict[str, Any]:
+    """从一条真实候选生成某天的语料。
+
+    与旧的 ``generate_day`` 的区别：英文不是模型写的，而是从原稿里摘的。
+    因此这里多了一道硬校验 —— 返回的 english_text 必须逐字出现在原稿中，
+    否则一律拒绝并换下一条候选，**绝不允许模型"润色"真人写的英语**。
+    """
+    raw = llm_stream(
+        [
+            {
+                "role": "system",
+                "content": (
+                    "你是英语精读内容编辑。你的任务是**摘录**而不是写作："
+                    "英文必须逐字来自用户给的原稿，一个词都不能改。只输出合法 JSON。"
+                ),
+            },
+            {"role": "user", "content": build_source_prompt(candidate)},
+        ],
+        max_tokens=8000,
+    )
+
+    data = parse_json_object(raw)
+    if not isinstance(data, dict):
+        raise CandidateRejected("LLM 返回的不是 JSON 对象")
+    if data.get("skip"):
+        raise CandidateRejected("LLM 判定该候选不适合精读")
+
+    item = normalize_day(data, day)
+
+    if not source_pool.is_verbatim(item["english_text"], candidate.text):
+        raise CandidateRejected("摘录与原稿不逐字一致（疑似改写），拒绝入库")
+
+    word_count = len(item["english_text"].split())
+    if not (55 <= word_count <= max_words):
+        raise CandidateRejected(f"词数 {word_count} 不在 55-{max_words} 区间")
+
+    if not (3 <= len(item["sentences"]) <= 6):
+        raise CandidateRejected(f"句子数 {len(item['sentences'])} 不在 3-6 区间")
+
+    # 出处强制使用真实源，不接受模型自报的报刊名
+    item["source"] = candidate.source
+    item["source_type"] = "news"
+    item["source_url"] = candidate.link
+    item["source_title"] = candidate.title
+
+    bad_examples = [
+        w["word"]
+        for w in item["key_words"]
+        if w.get("example_sentence") and not source_pool.is_verbatim(w["example_sentence"], candidate.text)
+    ]
+    if bad_examples:
+        warn(f"  {day} 有 {len(bad_examples)} 个词的例句非原文引用：{', '.join(bad_examples[:5])}")
+
+    return item
 
 
 def normalize_words(raw_words: Any, day: date) -> list[dict[str, Any]]:
@@ -884,12 +988,70 @@ def enrich_pending(limit: int = PENDING_BATCH) -> int:
     return written
 
 
-def generate_corpus(existing: list[dict[str, Any]], days: int) -> list[dict[str, Any]]:
+def _generate_one_from_feeds(
+    day: date,
+    candidates: list["source_pool.Candidate"],
+    used: set[str],
+    max_tries: int = 5,
+) -> dict[str, Any] | None:
+    """为某一天从候选池里挑一条真实段落生成语料，失败自动换下一条。"""
+    if not candidates:
+        return None
+    start = day.toordinal() % len(candidates)
+    tried = 0
+    for offset in range(len(candidates)):
+        if tried >= max_tries:
+            break
+        cand = candidates[(start + offset) % len(candidates)]
+        if cand.link in used:
+            continue
+        used.add(cand.link)
+        tried += 1
+        log(f"生成 {day} ← {cand.source} · {cand.title[:52]}")
+        try:
+            item = generate_day_from_source(day, cand)
+        except CandidateRejected as exc:
+            warn(f"  换下一条：{exc}")
+            continue
+        except Exception as exc:  # noqa: BLE001 - 单条失败不应中断整体
+            warn(f"  换下一条（异常）：{exc}")
+            continue
+        words = len(item["english_text"].split())
+        log(f"  OK  {len(item['sentences'])} 句 / {words} 词 / {len(item['key_words'])} 生词 / 逐字校验通过")
+        return item
+    warn(f"  {day} 用尽候选仍无可用段落，跳过")
+    return None
+
+
+def generate_corpus(
+    existing: list[dict[str, Any]],
+    days: int,
+    source_mode: str = "feeds",
+) -> list[dict[str, Any]]:
     targets = plan_dates(existing, days)
     recent_sources: list[str] = [str(row.get("source") or "") for row in existing[-5:]]
     generated: list[dict[str, Any]] = []
 
+    candidates: list[source_pool.Candidate] = []
+    if source_mode == "feeds":
+        log("抓取真实英文源（公开 RSS）…")
+        candidates = source_pool.collect_candidates(log=log)
+        log(f"可用候选共 {len(candidates)} 条")
+        if not candidates:
+            warn("所有真实源都不可达或候选全被过滤，本次不生成语料（不降级为 AI 写作）")
+            return []
+    else:
+        log("使用 LLM 生成模式（--corpus-source llm，出处为模型自报，不具备可核对性）")
+
+    used: set[str] = set()
+
     for index, day in enumerate(targets):
+        if source_mode == "feeds":
+            item = _generate_one_from_feeds(day, candidates, used)
+            if item:
+                generated.append(item)
+            continue
+
         topic = TOPICS[(len(existing) + index) % len(TOPICS)]
         log(f"生成 {day}（{topic}）")
         for attempt in range(1, 4):
@@ -976,6 +1138,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--force-audio", action="store_true", help="强制重生成所有音频")
     parser.add_argument("--dry-run", action="store_true", help="不写数据库")
     parser.add_argument(
+        "--corpus-source",
+        choices=["feeds", "llm"],
+        default="feeds",
+        help="语料来源：feeds=从公开 RSS 摘录真实段落（默认，出处可核对）；llm=模型生成",
+    )
+    parser.add_argument(
         "--fail-if-stale",
         type=int,
         default=0,
@@ -1046,7 +1214,7 @@ def main() -> int:
 
     new_days: list[dict[str, Any]] = []
     if args.with_corpus and not args.backfill and not args.no_corpus:
-        new_days = generate_corpus(existing_days, args.days)
+        new_days = generate_corpus(existing_days, args.days, source_mode=args.corpus_source)
         if not new_days:
             log("本次没有新增语料（缓冲区已覆盖）")
         else:

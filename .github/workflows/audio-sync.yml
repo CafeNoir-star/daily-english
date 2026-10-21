@@ -18,6 +18,10 @@ on:
         description: "未来语料至少提前多少天（不足则告警）"
         required: false
         default: "2"
+      corpus_source:
+        description: "语料来源：feeds=真实 RSS 摘录（默认），llm=模型生成"
+        required: false
+        default: "feeds"
 
 permissions:
   contents: write
@@ -48,7 +52,23 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # 第一步：用 WorkBuddy LLM 生成语料并写入云库（消耗 WorkBuddy 积分）
+      # 抓取前先确认真实源可达。不通也不中断——Generate corpus 会自己逐源降级，
+      # 这里只是把"到底是网络问题还是内容全被过滤"提前区分开，便于排障。
+      - name: Probe RSS reachability
+        id: probe
+        continue-on-error: true
+        run: |
+          for u in \
+            https://www.theguardian.com/uk/business/rss \
+            https://www.theguardian.com/uk/technology/rss \
+            https://feeds.bbci.co.uk/news/business/rss.xml
+          do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' -m 20 \
+              -A 'DailyEnglishLearningBot/1.0 (personal study; low volume)' "$u" 2>/dev/null || echo ERR)
+            echo "$u -> $code"
+          done
+
+      # 第一步：从公开 RSS 摘录真实英文段落并写入云库（消耗 WorkBuddy 积分做翻译标注）
       # 需要 WB_EMAIL / WB_PASSWORD；未配置时自动跳过，只做音频同步。
       - name: Generate corpus
         id: corpus
@@ -69,6 +89,7 @@ jobs:
           python pipeline.py \
             --with-corpus \
             --days "${{ github.event.inputs.days || '30' }}" \
+            --corpus-source "${{ github.event.inputs.corpus_source || 'feeds' }}" \
             --no-audio \
             --fail-if-stale 0
 
@@ -134,6 +155,8 @@ jobs:
           {
             echo "### 每日同步"
             echo ""
+            echo "- 源可达性探测：${{ steps.probe.outcome }}"
+            echo "- 语料来源：${{ github.event.inputs.corpus_source || 'feeds' }}（feeds=真实 RSS 摘录）"
             echo "- 语料生成：${{ steps.corpus.outcome }}"
             echo "- 待补词补齐：${{ steps.enrich.outcome }}"
             echo "- 音频同步：${{ steps.sync.outcome }}"
