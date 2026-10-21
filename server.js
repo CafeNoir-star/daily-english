@@ -372,6 +372,44 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // TEMP 诊断路由：只调用 httpbin.org 回显沙箱出口实际发出的请求头（不含真实密钥）
+  if (url.pathname === '/api/proxy-echo') {
+    const payload = JSON.stringify({ probe: 'wb-egress' });
+    const echoReq = https.request(
+      {
+        hostname: 'httpbin.org',
+        port: 443,
+        path: '/anything/wb-echo',
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'content-length': Buffer.byteLength(payload),
+          'x-wb-webapp-access-key': 'wbpk_REDACTED',
+          'x-custom-probe': 'probe-1',
+          origin: SITE_ORIGIN || 'https://unset',
+          referer: (SITE_ORIGIN || 'https://unset') + '/',
+          'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131.0 Safari/537.36',
+        },
+        timeout: 20000,
+      },
+      (echoRes) => {
+        let body = '';
+        echoRes.on('data', (d) => (body += d));
+        echoRes.on('end', () => {
+          writeHead(res, 200, { 'Content-Type': 'application/json' });
+          res.end(body);
+        });
+      }
+    );
+    echoReq.on('timeout', () => echoReq.destroy(new Error('echo timeout')));
+    echoReq.on('error', (e) => {
+      writeHead(res, 502, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: e.message }));
+    });
+    echoReq.end(payload);
+    return;
+  }
+
   // API routes
   if (url.pathname.startsWith('/api/')) {
     if (!checkRateLimit(ip)) {
