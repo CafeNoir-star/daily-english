@@ -26,6 +26,10 @@ on:
         description: "覆盖历史语料（重做窗口内最旧的一批，每次至多 14 天）"
         type: boolean
         default: false
+      max_days:
+        description: "本次最多处理多少天（覆盖模式可先填 1 做小样验证）"
+        required: false
+        default: "30"
 
 permissions:
   contents: write
@@ -83,7 +87,7 @@ jobs:
           WB_EMAIL: ${{ secrets.WB_EMAIL }}
           WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
           # 日常只缺 1 天，用不到这个上限；覆盖历史时靠它一次跑完 30 天
-          MAX_DAYS_PER_RUN: "30"
+          MAX_DAYS_PER_RUN: ${{ github.event.inputs.max_days || '30' }}
         run: |
           # 只输出长度，不输出值；用于判断 Secret 是否真的注入
           echo "WB_KEY len=${#WB_KEY} | WB_EMAIL len=${#WB_EMAIL} | WB_PASSWORD len=${#WB_PASSWORD}"

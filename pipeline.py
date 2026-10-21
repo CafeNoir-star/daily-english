@@ -888,21 +888,14 @@ def plan_dates(existing: list[dict[str, Any]], days: int, refresh: bool = False)
     window = [today + timedelta(days=offset) for offset in range((target_end - today).days + 1)]
 
     if refresh:
-        window_set = {day.isoformat() for day in window}
-        pending = [
-            (int(row["id"]), str(row["date"]))
-            for row in existing
-            if str(row.get("date")) in window_set and str(row.get("id", "")).isdigit()
-        ]
-        pending.sort()  # id 升序：最老的排前面
-        if not pending:
-            log("覆盖模式下窗口内没有可覆盖的日期")
-            return []
-        picked = [date.fromisoformat(d) for _, d in pending[:MAX_DAYS_PER_RUN]]
-        log(
-            f"覆盖模式：本次重做 {len(picked)} 天：{picked[0]} ~ {picked[-1]}"
-            f"（窗口内共 {len(pending)} 天待覆盖）"
-        )
+        # 覆盖模式不依赖"哪些天已重做过"的持久标记：每次直接重做整个窗口
+        # （窗口通常就等于 MAX_DAYS_PER_RUN）。用 UPDATE 覆盖已存在的行，
+        # 而不是先 DELETE 再 INSERT —— daily_sentences 只有 INSERT/UPDATE/SELECT
+        # 三条 RLS 策略，没有 DELETE 策略，删除会被静默过滤成"删 0 行"。
+        picked = window[:MAX_DAYS_PER_RUN]
+        leftover = len(window) - len(picked)
+        tail = f"；窗口共 {len(window)} 天，剩余 {leftover} 天本次未覆盖" if leftover > 0 else ""
+        log(f"覆盖模式：本次重做 {len(picked)} 天：{picked[0]} ~ {picked[-1]}（以 UPDATE 覆盖{tail}）")
         return picked
 
     missing = [day for day in window if day not in have]
@@ -919,16 +912,37 @@ def plan_dates(existing: list[dict[str, Any]], days: int, refresh: bool = False)
     return result
 
 
-def drop_days(days_to_drop: list[dict[str, Any]]) -> int:
-    """删除指定日期的旧语料（覆盖模式专用）。"""
-    dates = sorted({str(row["date"]) for row in days_to_drop if row.get("date")})
-    if not dates:
-        return 0
-    for start in range(0, len(dates), 40):
-        chunk = dates[start : start + 40]
-        rest_delete("daily_sentences", {"date": f"in.({','.join(chunk)})"})
-    log(f"已删除 {len(dates)} 天旧语料：{dates[0]} ~ {dates[-1]}")
-    return len(dates)
+def upsert_days(days: list[dict[str, Any]], existing: list[dict[str, Any]]) -> tuple[int, int]:
+    """覆盖模式写库：已存在的日期用 UPDATE 改写，缺的用 INSERT 补上。
+
+    不用 DELETE + INSERT：daily_sentences 没有 DELETE 的 RLS 策略，
+    删除会被静默过滤（返回成功但删 0 行）；而 UPDATE 能覆盖同样多的字段，
+    还不会产生"删掉还没插入"的空窗。
+    """
+    existing_dates = {row["date"] for row in existing}
+    updated = 0
+    for day in days:
+        if day["date"] not in existing_dates:
+            continue
+        rest_update(
+            "daily_sentences",
+            {"date": day["date"]},
+            {
+                "english_text": day["english_text"],
+                "chinese_translation": day["chinese_translation"],
+                "source": day["source"],
+                "source_type": day["source_type"],
+                "difficulty": day["difficulty"],
+                "sentences": day["sentences"],
+            },
+        )
+        updated += 1
+
+    to_insert = [day for day in days if day["date"] not in existing_dates]
+    inserted = insert_days(to_insert, existing) if to_insert else 0
+    if updated:
+        log(f"覆盖已有语料：{updated} 天（UPDATE）")
+    return updated, inserted
 
 
 def fetch_pending_words(limit: int = PENDING_BATCH) -> list[str]:
@@ -1279,10 +1293,9 @@ def main() -> int:
             log("本次没有新增语料（缓冲区已覆盖）")
         else:
             if args.refresh_corpus and not DRY_RUN:
-                drop_days(new_days)
-                # 删完后重新取索引，保证 insert_days 的 id 分配与库内一致
-                existing_days = fetch_day_index(auth=True)
-            insert_days(new_days, existing_days)
+                upsert_days(new_days, existing_days)
+            else:
+                insert_days(new_days, existing_days)
             insert_words(new_days, existing_words)
     elif not args.with_corpus:
         log("跳过语料生成（由 WorkBuddy 定时任务负责）")
