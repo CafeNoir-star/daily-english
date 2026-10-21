@@ -47,7 +47,7 @@ const SRS_INTERVALS = { 1: [0, 0.02, 0.1], 2: [1, 3, 7], 3: [14, 30, 90], 4: [18
 
 // Security: 前端调用大模型的每日上限。publishableKey 必须公开，无法阻止
 // 脚本直接调用，这里只用于约束正常用户、降低误触发的积分消耗。
-const LLM_DAILY_LIMIT = 30;
+const LLM_DAILY_LIMIT = 50;
 
 // 读取/消耗当日 LLM 配额。返回对象带 consume()，写入失败时静默降级。
 function llmQuota() {

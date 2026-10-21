@@ -279,7 +279,7 @@ Render 适合做后台批处理（冷启动无所谓），不适合「打开即�
 | 项目 | 处理 |
 |---|---|
 | 属性上下文 XSS | `app.js` 新增 `escAttr()`，替换 6 处 `onclick` / `class` 拼接 |
-| LLM 调用配额 | `LLM_DAILY_LIMIT = 30`，`llmQuota()` 在批量查词前检查 |
+| LLM 调用配额 | `LLM_DAILY_LIMIT = 50`，`llmQuota()` 在批量查词前检查 |
 | 安全响应头 | 补 `Strict-Transport-Security`、`Permissions-Policy` |
 | CI 供应链 | `actions/checkout` / `setup-python` 固定到 commit SHA |
 | 示例配置 | `.env.example` 移除真实邮箱 |
