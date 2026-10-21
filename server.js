@@ -5,6 +5,21 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
+// 真实 publishableKey 只存在服务端：优先环境变量，其次部署时上传的本地文件
+// （server.secrets.json 已在 .gitignore，不进仓库；部署按目录上传）
+function loadSecrets() {
+  try {
+    const secretsPath = process.env.WB_SECRETS_FILE || path.join(__dirname, 'server.secrets.json');
+    const parsed = JSON.parse(fs.readFileSync(secretsPath, 'utf8'));
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+const SECRETS = loadSecrets();
+const WB_KEY = String(process.env.WB_KEY || SECRETS.wbKey || '').trim();
+
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
@@ -219,6 +234,18 @@ const server = http.createServer(async (req, res) => {
   }
 
   // API routes
+  // 运行时配置：向页面下发 publishableKey（仓库与静态文件里都不出现真 key）
+  if (url.pathname === '/api/runtime-config') {
+    if (!WB_KEY) {
+      writeHead(res, 503, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ error: 'runtime config not available' }));
+      return;
+    }
+    writeHead(res, 200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ publishableKey: WB_KEY }));
+    return;
+  }
+
   if (url.pathname.startsWith('/api/')) {
     if (!checkRateLimit(ip)) {
       writeHead(res, 429, { 'Content-Type': 'application/json' });

@@ -1,11 +1,31 @@
 // ========================================================================
 // CONFIG
 // ========================================================================
+// 真实 publishableKey 不再写进仓库：页面加载后从本站 /api/runtime-config 取。
+// 这样 GitHub 上的代码、以及公开可下载的 app.js 里都不会出现可被扫走的 key。
 const PUBLIC_CONFIG = {
   endpoint: "https://daily-english-38358.app.workbuddy.host",
   oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
-  publishableKey: "wbpk_REDACTED"
+  publishableKey: ""
 };
+
+// 取运行时配置（只在本站域内有效，且受平台 sharecode 会话保护）
+async function ensureRuntimeConfig(fetchImpl) {
+  if (PUBLIC_CONFIG.publishableKey) return true;
+  const doFetch = fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  if (!doFetch) return false;
+  try {
+    const res = await doFetch('/api/runtime-config', { cache: 'no-store' });
+    if (!res || !res.ok) return false;
+    const data = await res.json();
+    const key = data && typeof data.publishableKey === 'string' ? data.publishableKey.trim() : '';
+    if (!key.startsWith('wbpk_')) return false;
+    PUBLIC_CONFIG.publishableKey = key;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 // Cloud 端点：留空直连 WorkBuddy；Render 部署时在 config.js 里设 "same-origin" 走本站反代
 const CLOUD_ENDPOINT = (function resolveCloudEndpoint() {
@@ -87,6 +107,11 @@ function toggleTheme() {
 async function initCloud() {
   if (cloud) return true;
   try {
+    if (!await ensureRuntimeConfig()) {
+      console.error('Cloud init failed: runtime config unavailable');
+      showToast('\u4E91\u670D\u52A1\u914D\u7F6E\u4E0D\u53EF\u7528');
+      return false;
+    }
     cloud = WorkBuddyCloud.createWorkBuddyCloud({
       endpoint: CLOUD_ENDPOINT,
       oauthRelayBaseUrl: PUBLIC_CONFIG.oauthRelayBaseUrl,
