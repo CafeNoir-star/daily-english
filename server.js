@@ -164,7 +164,9 @@ function proxyCloud(req, res, url, ip) {
     'x-wb-webapp-access-key': WB_KEY,
     accept: req.headers.accept || 'application/json',
   };
-  if (SITE_ORIGIN) {
+  // auth 接口（signin 等）依赖 Origin 生成 JWT 的 azp，必须补；
+  // 数据库接口走服务端模式（不带 Origin）——平台机房内带 Origin 会被判 invalid_grant
+  if (SITE_ORIGIN && upstreamPath.toLowerCase().startsWith('/.cloud/auth')) {
     headers.origin = SITE_ORIGIN;
     headers.referer = SITE_ORIGIN + '/';
   }

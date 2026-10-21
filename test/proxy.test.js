@@ -197,11 +197,13 @@ async function run() {
       assert.strictEqual(seen.key, REAL_KEY, `上游收到 ${seen.key}`);
     });
 
-    await test('上游收到正确的 Origin 与 Referer', async () => {
-      const r = await request(APP_PORT, '/wb-api/.cloud/auth/v1/signin', { method: 'POST', body: '{}' });
-      const seen = JSON.parse(r.body).seen;
-      assert.strictEqual(seen.origin, SITE_ORIGIN);
-      assert.strictEqual(seen.referer, SITE_ORIGIN + '/');
+    await test('auth 转发带 Origin/Referer，database 转发不带', async () => {
+      const auth = await request(APP_PORT, '/wb-api/.cloud/auth/v1/signin', { method: 'POST', body: '{}' });
+      const authSeen = JSON.parse(auth.body).seen;
+      assert.strictEqual(authSeen.origin, SITE_ORIGIN, 'auth 必须补 Origin');
+      const db = await request(APP_PORT, '/wb-api/.cloud/database/rest/daily_sentences?select=date');
+      const dbSeen = JSON.parse(db.body).seen;
+      assert.strictEqual(dbSeen.origin, '', 'database 不应携带 Origin');
     });
 
     await test('登录态 Authorization 头原样透传', async () => {
