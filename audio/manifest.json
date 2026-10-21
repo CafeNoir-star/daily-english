@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-21T06:53:02+08:00",
+  "generated_at": "2026-10-21T14:06:00+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -2613,6 +2613,11 @@
       "bytes": 9648,
       "text": "reserved"
     },
+    "vocab_resilience.mp3": {
+      "h": "d5e7b9069fe0825b",
+      "bytes": 11232,
+      "text": "resilience"
+    },
     "vocab_restriction.mp3": {
       "h": "993b33945189cffa",
       "bytes": 11232,
@@ -2657,6 +2662,11 @@
       "h": "c29dac5a5a8c62fe",
       "bytes": 11232,
       "text": "scroll"
+    },
+    "vocab_serendipity.mp3": {
+      "h": "c2ff7fb2c6b82c2a",
+      "bytes": 11232,
+      "text": "serendipity"
     },
     "vocab_setback.mp3": {
       "h": "a11c2299e538e90b",
