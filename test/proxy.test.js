@@ -121,6 +121,7 @@ function startUpstream() {
             origin: req.headers.origin || '',
             authorization: req.headers.authorization || '',
             referer: req.headers.referer || '',
+            cookie: req.headers.cookie || '',
           },
         })
       );
@@ -197,13 +198,16 @@ async function run() {
       assert.strictEqual(seen.key, REAL_KEY, `上游收到 ${seen.key}`);
     });
 
-    await test('auth 转发带 Origin/Referer，database 转发不带', async () => {
+    await test('转发模拟同源浏览器：Origin/Referer/cookie 均到达上游', async () => {
+      const db = await request(APP_PORT, '/wb-api/.cloud/database/rest/daily_sentences?select=date', {
+        headers: { cookie: 'wb_sharecode=test-cookie' },
+      });
+      const seen = JSON.parse(db.body).seen;
+      assert.strictEqual(seen.origin, SITE_ORIGIN, 'database 也应携带 Origin（浏览器模式）');
+      assert.strictEqual(seen.cookie, 'wb_sharecode=test-cookie', '会话 cookie 应透传');
       const auth = await request(APP_PORT, '/wb-api/.cloud/auth/v1/signin', { method: 'POST', body: '{}' });
       const authSeen = JSON.parse(auth.body).seen;
       assert.strictEqual(authSeen.origin, SITE_ORIGIN, 'auth 必须补 Origin');
-      const db = await request(APP_PORT, '/wb-api/.cloud/database/rest/daily_sentences?select=date');
-      const dbSeen = JSON.parse(db.body).seen;
-      assert.strictEqual(dbSeen.origin, '', 'database 不应携带 Origin');
     });
 
     await test('登录态 Authorization 头原样透传', async () => {

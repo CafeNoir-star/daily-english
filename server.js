@@ -164,12 +164,20 @@ function proxyCloud(req, res, url, ip) {
     'x-wb-webapp-access-key': WB_KEY,
     accept: req.headers.accept || 'application/json',
   };
-  // auth 接口（signin 等）依赖 Origin 生成 JWT 的 azp，必须补；
-  // 数据库接口走服务端模式（不带 Origin）——平台机房内带 Origin 会被判 invalid_grant
-  if (SITE_ORIGIN && upstreamPath.toLowerCase().startsWith('/.cloud/auth')) {
+  // 完整模拟同源浏览器请求：网关对内部来源的裸服务端请求会判 invalid_grant，
+  // 只有带着 Origin/Referer/浏览器特征头/会话 cookie 的请求才按"浏览器模式"放行
+  if (SITE_ORIGIN) {
     headers.origin = SITE_ORIGIN;
     headers.referer = SITE_ORIGIN + '/';
   }
+  headers['sec-fetch-site'] = 'same-origin';
+  headers['sec-fetch-mode'] = 'cors';
+  headers['sec-fetch-dest'] = 'empty';
+  headers['accept-language'] = req.headers['accept-language'] || 'zh-CN,zh;q=0.9,en;q=0.8';
+  headers['user-agent'] =
+    req.headers['user-agent'] ||
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+  if (req.headers.cookie) headers.cookie = req.headers.cookie;
   for (const name of ['authorization', 'content-type', 'prefer', 'accept-profile', 'content-profile', 'range', 'if-none-match']) {
     if (req.headers[name]) headers[name] = req.headers[name];
   }
