@@ -21,4 +21,4 @@ data/export_dictation_history.json
 .wbapp_*.genie
 
 # 安全审计报告：含未修复漏洞细节，不推公开仓库
-docs/security-audit-report.md
+docs/security-*.md
