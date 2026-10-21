@@ -2,6 +2,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const dns = require('dns');
 
 const PORT = process.env.PORT || 3000;
 
@@ -105,6 +106,45 @@ function checkProxyRateLimit(ip) {
   return true;
 }
 
+// 平台内网可能把站点域名解析到内部入口（对 /.cloud 走另一套鉴权），
+// 因此代理用公网 DoH 解析并直连公网 IP，SNI 与 Host 仍用原域名
+const upstreamAddrCache = new Map();
+
+function dohResolve(hostname) {
+  return new Promise((resolve) => {
+    const req = https.get(
+      `https://223.5.5.5/resolve?name=${encodeURIComponent(hostname)}&type=A`,
+      { timeout: 8000 },
+      (res) => {
+        let body = '';
+        res.on('data', (d) => (body += d));
+        res.on('end', () => {
+          try {
+            const answers = (JSON.parse(body).Answer || []).filter((a) => a.type === 1);
+            resolve(answers.length ? answers[answers.length - 1].data : null);
+          } catch (e) {
+            resolve(null);
+          }
+        });
+      }
+    );
+    req.on('timeout', () => req.destroy(new Error('doh timeout')));
+    req.on('error', () => resolve(null));
+  });
+}
+
+async function resolveUpstreamHost(hostname) {
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) return null;
+  const cached = upstreamAddrCache.get(hostname);
+  if (cached && cached.expires > Date.now()) return cached.ip;
+  let ip = await dohResolve(hostname);
+  if (!ip) {
+    ip = await new Promise((r) => dns.lookup(hostname, (err, addr) => r(err ? null : addr)));
+  }
+  if (ip) upstreamAddrCache.set(hostname, { ip, expires: Date.now() + 10 * 60 * 1000 });
+  return ip;
+}
+
 // 返回可转发的上游路径；null 表示拒绝
 function resolveProxyPath(pathname) {
   if (!pathname.startsWith(PROXY_PREFIX + '/')) return null;
@@ -128,7 +168,7 @@ function jsonError(res, status, message) {
   res.end(JSON.stringify({ error: message }));
 }
 
-function proxyCloud(req, res, url, ip) {
+async function proxyCloud(req, res, url, ip) {
   const upstreamPath = resolveProxyPath(url.pathname);
   if (!upstreamPath) {
     jsonError(res, 403, 'path not allowed');
@@ -159,6 +199,16 @@ function proxyCloud(req, res, url, ip) {
   }
   const lib = target.protocol === 'https:' ? https : http;
 
+  let connectHost = target.hostname;
+  let servername;
+  if (target.protocol === 'https:') {
+    const resolved = await resolveUpstreamHost(target.hostname);
+    if (resolved && resolved !== target.hostname) {
+      connectHost = resolved;
+      servername = target.hostname; // TLS SNI 与证书校验仍用原域名
+    }
+  }
+
   const headers = {
     host: target.host,
     'x-wb-webapp-access-key': WB_KEY,
@@ -186,12 +236,13 @@ function proxyCloud(req, res, url, ip) {
   const upstreamReq = lib.request(
     {
       protocol: target.protocol,
-      hostname: target.hostname,
+      hostname: connectHost,
       port: target.port,
       path: target.pathname + target.search,
       method: req.method,
       headers,
       timeout: 30000,
+      ...(servername ? { servername } : {}),
     },
     (upstreamRes) => {
       const outHeaders = {};
@@ -376,12 +427,23 @@ const server = http.createServer(async (req, res) => {
 
   // 同源云代理：/wb-api/* → WorkBuddy .cloud（真 key 仅在此注入）
   if (url.pathname === PROXY_PREFIX || url.pathname.startsWith(PROXY_PREFIX + '/')) {
-    proxyCloud(req, res, url, ip);
+    proxyCloud(req, res, url, ip).catch(() => {
+      if (!res.headersSent) jsonError(res, 500, 'proxy error');
+    });
     return;
   }
 
-  // TEMP 诊断路由：只调用 httpbin.org 回显沙箱出口实际发出的请求头（不含真实密钥）
+  // TEMP 诊断路由：回显沙箱出口请求头 + DNS 解析对比（不含真实密钥）
   if (url.pathname === '/api/proxy-echo') {
+    const host = (() => {
+      try {
+        return new URL(WB_UPSTREAM || 'https://x').hostname;
+      } catch (e) {
+        return 'daily-english-38358.app.workbuddy.host';
+      }
+    })();
+    const systemAddr = await new Promise((r) => dns.lookup(host, (e, a) => r(e ? null : a)));
+    const dohAddr = await dohResolve(host);
     const payload = JSON.stringify({ probe: 'wb-egress' });
     const echoReq = https.request(
       {
@@ -405,14 +467,20 @@ const server = http.createServer(async (req, res) => {
         echoRes.on('data', (d) => (body += d));
         echoRes.on('end', () => {
           writeHead(res, 200, { 'Content-Type': 'application/json' });
-          res.end(body);
+          let echo = null;
+          try {
+            echo = JSON.parse(body);
+          } catch (e) {
+            echo = { raw: body.slice(0, 300) };
+          }
+          res.end(JSON.stringify({ dns: { host, system: systemAddr, doh: dohAddr }, echo }, null, 2));
         });
       }
     );
     echoReq.on('timeout', () => echoReq.destroy(new Error('echo timeout')));
     echoReq.on('error', (e) => {
       writeHead(res, 502, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: e.message }));
+      res.end(JSON.stringify({ error: e.message, dns: { host, system: systemAddr, doh: dohAddr } }));
     });
     echoReq.end(payload);
     return;
