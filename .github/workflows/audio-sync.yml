@@ -37,7 +37,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -82,6 +82,8 @@ jobs:
           WB_KEY: ${{ secrets.WB_KEY }}
           WB_EMAIL: ${{ secrets.WB_EMAIL }}
           WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
+          # 日常只缺 1 天，用不到这个上限；覆盖历史时靠它一次跑完 30 天
+          MAX_DAYS_PER_RUN: "30"
         run: |
           # 只输出长度，不输出值；用于判断 Secret 是否真的注入
           echo "WB_KEY len=${#WB_KEY} | WB_EMAIL len=${#WB_EMAIL} | WB_PASSWORD len=${#WB_PASSWORD}"
