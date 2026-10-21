@@ -43,6 +43,20 @@ class CleanFragmentTests(unittest.TestCase):
         raw = "<style>.a{color:red}</style><p>Real text here.</p><script>x=1</script>"
         self.assertEqual(sources.clean_fragment(raw), "Real text here.")
 
+    def test_removes_space_before_punctuation(self):
+        """标签剥离会留下 'asset .'，标点前空格是明显的机器痕迹。"""
+        raw = "<p>is seen as its greatest asset<a href='#'>.</a> But funding</p>"
+        self.assertEqual(
+            sources.clean_fragment(raw),
+            "is seen as its greatest asset. But funding",
+        )
+
+    def test_keeps_decimal_and_percent(self):
+        self.assertEqual(
+            sources.clean_fragment("<p>Inflation hit 3.5% in October.</p>"),
+            "Inflation hit 3.5% in October.",
+        )
+
     def test_empty_input(self):
         self.assertEqual(sources.clean_fragment(""), "")
         self.assertEqual(sources.clean_fragment(None), "")

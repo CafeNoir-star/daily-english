@@ -101,7 +101,11 @@ def clean_fragment(fragment: str) -> str:
     text = re.sub(r"(?s)<[^>]+>", " ", text)
     text = html.unescape(text)
     text = text.replace("\u200b", "").replace("\ufeff", "").replace("\xa0", " ")
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
+    # 标签剥离后会留下"asset ."这种标点前空格。中文读者一眼就看出是机器处理的，
+    # 而这段文字要当作"真人写的英语"给人看，必须抹掉。
+    text = re.sub(r"\s+([,.;:!?])", r"\1", text)
+    return text
 
 
 # RSS 摘要末尾常挂着站内导航语，混进精读段落会很难看（"…had thrusters. Continue
