@@ -117,9 +117,12 @@
 
 ```
 endpoint: https://daily-english-38358.app.workbuddy.host
-publishableKey: wbpk_REDACTED
+publishableKey: 不写入仓库 —— 由服务端 GET /api/runtime-config 运行时下发
 oauthRelayBaseUrl: https://www.workbuddy.cn/v2/as/genie-baas/oauth
 ```
+
+真实 key 只存放在 `server.secrets.json`（已 gitignore，部署时随目录上传，不进 Git）。
+换机器或重新 clone 后需手动重建该文件，否则站点提示「云服务配置不可用」。
 
 ---
 
