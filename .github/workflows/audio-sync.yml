@@ -136,6 +136,7 @@ jobs:
           python pipeline.py --fail-if-stale "${{ github.event.inputs.stale_days || '2' }}" $EXTRA
 
       - name: Commit audio
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -159,6 +160,27 @@ jobs:
           done
           echo "::error::连续 3 次推送失败，请检查分支保护规则或并发运行"
           exit 1
+
+      # jsDelivr 按 URL 缓存 12h：覆盖语料后同名 mp3 内容变了，CDN 仍返回旧文件，
+      # 结果是页面显示新句子、播放出来还是旧音频。这里只清本次提交涉及的 mp3，
+      # 避免几百个请求；purge 对 Cloudflare 节点（cdn.jsdelivr.net）有效。
+      - name: Purge CDN cache
+        if: steps.commit.outcome == 'success'
+        continue-on-error: true
+        run: |
+          if ! git log -1 --pretty=%s | grep -q '^chore(audio)'; then
+            echo "最近一次提交不是音频提交，跳过清理"
+            exit 0
+          fi
+          changed=$(git show --name-only --pretty=format: HEAD -- 'audio/*.mp3' | sed '/^$/d')
+          if [ -z "$changed" ]; then
+            echo "本次没有音频变更"
+            exit 0
+          fi
+          echo "待清理 $(printf '%s\n' "$changed" | wc -l) 个音频文件"
+          printf '%s\n' "$changed" | xargs -r -P 8 -I{} \
+            curl -s -m 15 -o /dev/null "https://purge.jsdelivr.net/gh/${GITHUB_REPOSITORY}@main/{}"
+          echo "清理请求已发送（Cloudflare 节点）"
 
       - name: Summary
         if: always()
