@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-21T14:50:33+08:00",
+  "generated_at": "2026-10-21T15:56:06+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1088,6 +1088,66 @@
       "bytes": 38448,
       "text": "She realized that meaningful travel is less about seeing places and more about connecting with people."
     },
+    "2026-11-20_full.mp3": {
+      "h": "42f0627132a8f221",
+      "bytes": 193392,
+      "text": "Patterns of antibodies in people's blood could predict the onset of inflammatory bowel disease (IBD) a decade before dia"
+    },
+    "2026-11-20_s0.mp3": {
+      "h": "618ec3b8d858b71e",
+      "bytes": 73728,
+      "text": "Patterns of antibodies in people's blood could predict the onset of inflammatory bowel disease (IBD) a decade before dia"
+    },
+    "2026-11-20_s1.mp3": {
+      "h": "bfdfe71280661f2e",
+      "bytes": 59328,
+      "text": "Crohn's disease and ulcerative colitis, the two main forms of IBD, are typically treated only after symptoms appear, whe"
+    },
+    "2026-11-20_s2.mp3": {
+      "h": "0f7eae5df3ac4043",
+      "bytes": 61632,
+      "text": "But scientists found that the immune system sends warning signals up to a decade before diagnosis, paving the way for po"
+    },
+    "2026-11-21_full.mp3": {
+      "h": "b51d8c3dfa1904bf",
+      "bytes": 170208,
+      "text": "Elon Musk has revealed Tesla’s latest model, which he claims will be the world’s first flying car, using technology from"
+    },
+    "2026-11-21_s0.mp3": {
+      "h": "86b921018332add3",
+      "bytes": 68976,
+      "text": "Elon Musk has revealed Tesla’s latest model, which he claims will be the world’s first flying car, using technology from"
+    },
+    "2026-11-21_s1.mp3": {
+      "h": "f272fb96a75d6a3f",
+      "bytes": 90720,
+      "text": "The billionaire, who hosted a demonstration of the Tesla Roadster 2 at the SpaceX rocket development and testing facilit"
+    },
+    "2026-11-21_s2.mp3": {
+      "h": "ac2059561b2ee4ff",
+      "bytes": 11808,
+      "text": "Continue reading..."
+    },
+    "2026-11-22_full.mp3": {
+      "h": "38c5745d3056763c",
+      "bytes": 197280,
+      "text": "Colorado officials have tracked herds of elk, bears, pronghorn and even northern leopard frogs ambling across its new wi"
+    },
+    "2026-11-22_s0.mp3": {
+      "h": "f56d6c223612b67f",
+      "bytes": 52992,
+      "text": "Colorado officials have tracked herds of elk, bears, pronghorn and even northern leopard frogs ambling across its new wi"
+    },
+    "2026-11-22_s1.mp3": {
+      "h": "46c0a4528ffec90f",
+      "bytes": 74880,
+      "text": "According to a newly released report, the overpass, which acts as a bridge over a busy stretch of interstate, has helped"
+    },
+    "2026-11-22_s2.mp3": {
+      "h": "2fe0f3eeed516c3e",
+      "bytes": 70848,
+      "text": "The overpass is the centerpiece of a larger system built by the state to assist wildlife crossing the highway, which als"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 10080,
@@ -1218,6 +1278,11 @@
       "bytes": 9936,
       "text": "advice"
     },
+    "vocab_aerospace.mp3": {
+      "h": "c6670de6f04d439e",
+      "bytes": 11232,
+      "text": "aerospace"
+    },
     "vocab_affair.mp3": {
       "h": "883bac1f7b9dc9d2",
       "bytes": 9504,
@@ -1328,6 +1393,11 @@
       "bytes": 8352,
       "text": "am"
     },
+    "vocab_ambling.mp3": {
+      "h": "ebddd163423ee14f",
+      "bytes": 11232,
+      "text": "ambling"
+    },
     "vocab_american.mp3": {
       "h": "f81c394aa9dc2861",
       "bytes": 10368,
@@ -1367,6 +1437,11 @@
       "h": "b7c8ffb8fbc67c17",
       "bytes": 9504,
       "text": "another"
+    },
+    "vocab_antibody.mp3": {
+      "h": "5b0d4be101e82a40",
+      "bytes": 11232,
+      "text": "antibody"
     },
     "vocab_any.mp3": {
       "h": "c5fe0200d1c7a513",
@@ -1588,6 +1663,11 @@
       "bytes": 8496,
       "text": "bill"
     },
+    "vocab_billionaire.mp3": {
+      "h": "9c8bb3911e33c0b9",
+      "bytes": 11232,
+      "text": "billionaire"
+    },
     "vocab_biodiversity.mp3": {
       "h": "2265c60667e82462",
       "bytes": 11808,
@@ -1673,6 +1753,11 @@
       "bytes": 9504,
       "text": "caution"
     },
+    "vocab_centerpiece.mp3": {
+      "h": "7477630fc498ed33",
+      "bytes": 11376,
+      "text": "centerpiece"
+    },
     "vocab_ceramicist.mp3": {
       "h": "f8a7f241471b99be",
       "bytes": 11664,
@@ -1688,6 +1773,11 @@
       "bytes": 9648,
       "text": "chronic"
     },
+    "vocab_claim.mp3": {
+      "h": "013872e31d06557b",
+      "bytes": 11232,
+      "text": "claim"
+    },
     "vocab_clarify.mp3": {
       "h": "ef8fe782bf949865",
       "bytes": 11232,
@@ -1698,6 +1788,11 @@
       "bytes": 10368,
       "text": "cognitive"
     },
+    "vocab_collisions.mp3": {
+      "h": "2181a1aa97a38218",
+      "bytes": 11232,
+      "text": "collisions"
+    },
     "vocab_communicative.mp3": {
       "h": "2b875c31bc4ab87d",
       "bytes": 11520,
@@ -1707,6 +1802,11 @@
       "h": "6d5c9dab960e525e",
       "bytes": 10512,
       "text": "complement"
+    },
+    "vocab_completion.mp3": {
+      "h": "cadc91415a09569d",
+      "bytes": 11232,
+      "text": "completion"
     },
     "vocab_conceive.mp3": {
       "h": "30d5be889f2c385e",
@@ -1808,10 +1908,20 @@
       "bytes": 9936,
       "text": "despair"
     },
+    "vocab_detection.mp3": {
+      "h": "f4f3d323e670c925",
+      "bytes": 11232,
+      "text": "detection"
+    },
     "vocab_diabetes.mp3": {
       "h": "5b2c70e98303c0de",
       "bytes": 11088,
       "text": "diabetes"
+    },
+    "vocab_diagnosis.mp3": {
+      "h": "fe134dc58ea9b9a8",
+      "bytes": 11952,
+      "text": "diagnosis"
     },
     "vocab_displaced.mp3": {
       "h": "4f1ac135de6b92e8",
@@ -1928,6 +2038,11 @@
       "bytes": 9792,
       "text": "extinct"
     },
+    "vocab_facility.mp3": {
+      "h": "fa9025259c8733bf",
+      "bytes": 11232,
+      "text": "facility"
+    },
     "vocab_fascinating.mp3": {
       "h": "f9c83941c51bdbe7",
       "bytes": 10656,
@@ -1937,6 +2052,11 @@
       "h": "b9a3a6db7a4012b1",
       "bytes": 9216,
       "text": "fatal"
+    },
+    "vocab_fencing.mp3": {
+      "h": "b5d9eb8c1c8894ec",
+      "bytes": 11232,
+      "text": "fencing"
     },
     "vocab_fight.mp3": {
       "h": "517bd000b74cbc11",
@@ -2148,6 +2268,11 @@
       "bytes": 9936,
       "text": "grateful"
     },
+    "vocab_gut.mp3": {
+      "h": "823c1e79fcc29f80",
+      "bytes": 11232,
+      "text": "gut"
+    },
     "vocab_habitat.mp3": {
       "h": "1da0e9a6c6b0d50d",
       "bytes": 10656,
@@ -2192,6 +2317,11 @@
       "h": "74314fc0903eb7e2",
       "bytes": 9360,
       "text": "helps"
+    },
+    "vocab_herds.mp3": {
+      "h": "3f4a07e2ea09f339",
+      "bytes": 11232,
+      "text": "herds"
     },
     "vocab_here.mp3": {
       "h": "0154c0dabe7145db",
@@ -2298,6 +2428,11 @@
       "bytes": 8064,
       "text": "if"
     },
+    "vocab_immune.mp3": {
+      "h": "86bac50e25a1ccb7",
+      "bytes": 11232,
+      "text": "immune"
+    },
     "vocab_impact.mp3": {
       "h": "a9a581005e9634da",
       "bytes": 9936,
@@ -2398,6 +2533,11 @@
       "bytes": 11232,
       "text": "judgment"
     },
+    "vocab_let.mp3": {
+      "h": "0262f9bb6ecbef4e",
+      "bytes": 11232,
+      "text": "let"
+    },
     "vocab_lifelong.mp3": {
       "h": "e6b9d446f8afc7d2",
       "bytes": 10368,
@@ -2463,6 +2603,11 @@
       "bytes": 11376,
       "text": "nevertheless"
     },
+    "vocab_noise.mp3": {
+      "h": "9424ac79de34c97c",
+      "bytes": 11232,
+      "text": "noise"
+    },
     "vocab_noticeably.mp3": {
       "h": "9e47c29a76ba9dc6",
       "bytes": 11232,
@@ -2472,6 +2617,16 @@
       "h": "9161c5f792868455",
       "bytes": 10512,
       "text": "nourishment"
+    },
+    "vocab_onset.mp3": {
+      "h": "34a673491870a27b",
+      "bytes": 11232,
+      "text": "onset"
+    },
+    "vocab_opinions.mp3": {
+      "h": "215c96dad532d5b8",
+      "bytes": 11232,
+      "text": "opinions"
     },
     "vocab_opportunity.mp3": {
       "h": "198e7188b0b1feb2",
@@ -2497,6 +2652,16 @@
       "h": "1b8ee344f03e5e40",
       "bytes": 10080,
       "text": "overlook"
+    },
+    "vocab_overpass.mp3": {
+      "h": "bf6b72f602deb3cd",
+      "bytes": 11232,
+      "text": "overpass"
+    },
+    "vocab_pave_the_way_for.mp3": {
+      "h": "316d23671e6dd52f",
+      "bytes": 12240,
+      "text": "pave the way for"
     },
     "vocab_pedestrian.mp3": {
       "h": "fa95ea715aa6ca95",
@@ -2593,6 +2758,11 @@
       "bytes": 12240,
       "text": "reconstruction"
     },
+    "vocab_record.mp3": {
+      "h": "275a700078f03f25",
+      "bytes": 11232,
+      "text": "record"
+    },
     "vocab_regular.mp3": {
       "h": "5f51efbecdb644c4",
       "bytes": 9936,
@@ -2627,6 +2797,11 @@
       "h": "d4a9a3df89b87885",
       "bytes": 11232,
       "text": "rethink"
+    },
+    "vocab_reveal.mp3": {
+      "h": "658c8286c17e4026",
+      "bytes": 11232,
+      "text": "reveal"
     },
     "vocab_revealed.mp3": {
       "h": "489074d28197cf1e",
@@ -2733,6 +2908,11 @@
       "bytes": 9216,
       "text": "still"
     },
+    "vocab_stretch.mp3": {
+      "h": "14431dad2755f89d",
+      "bytes": 11232,
+      "text": "stretch"
+    },
     "vocab_substantial.mp3": {
       "h": "c93d705189e161d5",
       "bytes": 11520,
@@ -2768,15 +2948,30 @@
       "bytes": 10800,
       "text": "symbolic"
     },
+    "vocab_symptom.mp3": {
+      "h": "3e15bf38ad06bd1c",
+      "bytes": 11232,
+      "text": "symptom"
+    },
     "vocab_that.mp3": {
       "h": "33b82201081ec7c4",
       "bytes": 8928,
       "text": "that"
     },
+    "vocab_thinking.mp3": {
+      "h": "beac9eac1cee74c3",
+      "bytes": 11232,
+      "text": "thinking"
+    },
     "vocab_three.mp3": {
       "h": "b802f384302cb24f",
       "bytes": 8352,
       "text": "three"
+    },
+    "vocab_thruster.mp3": {
+      "h": "09d73ac6fbcd67fd",
+      "bytes": 11232,
+      "text": "thruster"
     },
     "vocab_tourist_attraction.mp3": {
       "h": "e0263e292b9f12d9",
@@ -2807,6 +3002,11 @@
       "h": "e6d307367af53829",
       "bytes": 8784,
       "text": "trap"
+    },
+    "vocab_trapped.mp3": {
+      "h": "59f2f19eba8a32fe",
+      "bytes": 11232,
+      "text": "trapped"
     },
     "vocab_unemployed.mp3": {
       "h": "c49aa3ebeec85955",
@@ -2852,6 +3052,11 @@
       "h": "36e83e3080c38d7d",
       "bytes": 10368,
       "text": "vulnerable"
+    },
+    "vocab_waste.mp3": {
+      "h": "3fcdcb3d0e685f28",
+      "bytes": 11232,
+      "text": "waste"
     },
     "vocab_whatever.mp3": {
       "h": "d869db7fe62fb07c",
