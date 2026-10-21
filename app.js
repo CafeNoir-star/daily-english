@@ -44,6 +44,19 @@ function audioSrc(name) {
   return AUDIO_BASE ? `${AUDIO_BASE}/${relative}` : `audio/${relative}`;
 }
 
+// 音频候选地址：优先 CDN，CDN 失败时回退同源 /audio/（部署包里也有一份）
+function audioCandidates(name, base) {
+  if (!name) return [];
+  const value = String(name);
+  if (/^(https?:)?\/\//.test(value) || value.startsWith('data:')) return [value];
+  const relative = value.replace(/^\/?audio\//, '');
+  const list = [];
+  const prefix = String(base || '').replace(/\/+$/, '');
+  if (prefix) list.push(prefix + '/' + relative);
+  list.push('/audio/' + relative);
+  return list;
+}
+
 // 生词音频文件名（与 pipeline.py 的 safe_word 保持一致）
 function wordAudioFile(word) {
   const safe = String(word).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
@@ -350,6 +363,25 @@ function preloadWordAudio(word, audioUrl) {
   }
 }
 
+// 依次尝试候选地址播放，全部失败才回调 onFail
+function playCandidates(candidates, rate, onDone, onFail) {
+  const list = (candidates || []).filter(Boolean);
+  let idx = 0;
+  const tryNext = () => {
+    if (idx >= list.length) { currentAudioElement = null; if (onFail) onFail(); return; }
+    const audio = new Audio(list[idx++]);
+    audio.preload = 'auto';
+    audio.playbackRate = rate;
+    currentAudioElement = audio;
+    let settled = false;
+    const finish = () => { if (settled) return; settled = true; currentAudioElement = null; if (onDone) onDone(); };
+    audio.onended = finish;
+    audio.onerror = () => { if (!settled) tryNext(); };
+    audio.play().catch(() => { if (!settled) tryNext(); });
+  };
+  tryNext();
+}
+
 // Internal speak - does NOT reset isPlayingAll (used by playAllSentences chain)
 function speakInternal(text, rate, onend) {
   if (!text) return;
@@ -368,27 +400,13 @@ function speakInternal(text, rate, onend) {
   if (todayData && todayData.sentences) {
     const sentIdx = todayData.sentences.indexOf(text);
     if (sentIdx >= 0) {
-      let audio = sentenceAudioCache[sentIdx] || new Audio(audioSrc(`${todayData.date}_s${sentIdx}.mp3`));
-      audio.currentTime = 0;
-      currentAudioElement = audio;
-      audio.addEventListener('loadedmetadata', () => { audio.playbackRate = r; });
-      audio.playbackRate = r;
-      audio.onended = () => { currentAudioElement = null; if (onend) onend(); };
-      audio.onerror = () => { currentAudioElement = null; if (onend) onend(); };
-      audio.play().catch(() => { currentAudioElement = null; if (onend) onend(); });
+      playCandidates(audioCandidates(`${todayData.date}_s${sentIdx}.mp3`, AUDIO_BASE), r, onend, onend);
       return;
     }
   }
   // Full text audio
   if (todayData && text === todayData.english_text) {
-    let audio = sentenceAudioCache[-1] || new Audio(audioSrc(`${todayData.date}_full.mp3`));
-    audio.currentTime = 0;
-    currentAudioElement = audio;
-    audio.addEventListener('loadedmetadata', () => { audio.playbackRate = r; });
-    audio.playbackRate = r;
-    audio.onended = () => { currentAudioElement = null; if (onend) onend(); };
-    audio.onerror = () => { currentAudioElement = null; if (onend) onend(); };
-    audio.play().catch(() => { currentAudioElement = null; if (onend) onend(); });
+    playCandidates(audioCandidates(`${todayData.date}_full.mp3`, AUDIO_BASE), r, onend, onend);
     return;
   }
 
@@ -398,18 +416,7 @@ function speakInternal(text, rate, onend) {
     const cachedUrl = getWordAudioUrl(text);
     if (cachedUrl) {
       // Use preloaded Audio object if available (instant playback)
-      const wordLower = text.trim().toLowerCase();
-      let audio = wordAudioObjectCache[wordLower];
-      if (audio) {
-        audio.currentTime = 0;
-        currentAudioElement = audio;
-        audio.playbackRate = r;
-        audio.onended = () => { currentAudioElement = null; if (onend) onend(); };
-        audio.onerror = () => { currentAudioElement = null; if (onend) onend(); };
-        audio.play().catch(() => { currentAudioElement = null; if (onend) onend(); });
-      } else {
-        playOnlineAudio(cachedUrl, r, onend, text);
-      }
+      playCandidates(audioCandidates(cachedUrl, AUDIO_BASE), r, onend, () => showNoAudio(text));
       return;
     }
     // Step 2: Cache miss - async query word_dictionary table
@@ -423,38 +430,9 @@ function speakInternal(text, rate, onend) {
 
 // Play audio from an online URL (dictionary API) - reuse preloaded Audio if available
 function playOnlineAudio(url, rate, onend, fallbackText) {
-  try {
-    url = audioSrc(url);
-    if (!url) {
-      showNoAudio(fallbackText);
-      if (onend) onend();
-      return;
-    }
-    // Try to reuse preloaded Audio object for word audio
-    let audio = null;
-    if (fallbackText && /^[a-zA-Z]+$/.test(fallbackText.trim())) {
-      const wordLower = fallbackText.trim().toLowerCase();
-      audio = wordAudioObjectCache[wordLower];
-    }
-    if (!audio) {
-      audio = new Audio(url);
-      audio.preload = 'auto';
-      // Cache for future use
-      if (fallbackText && /^[a-zA-Z]+$/.test(fallbackText.trim())) {
-        wordAudioObjectCache[fallbackText.trim().toLowerCase()] = audio;
-      }
-    }
-    audio.currentTime = 0;
-    currentAudioElement = audio;
-    audio.addEventListener('loadedmetadata', () => { audio.playbackRate = rate; });
-    audio.playbackRate = rate;
-    audio.onended = () => { currentAudioElement = null; if (onend) onend(); };
-    audio.onerror = () => { currentAudioElement = null; showNoAudio(fallbackText); if (onend) onend(); };
-    audio.play().catch(() => { currentAudioElement = null; showNoAudio(fallbackText); if (onend) onend(); });
-  } catch (e) {
-    showNoAudio(fallbackText);
-    if (onend) onend();
-  }
+  const candidates = audioCandidates(url, AUDIO_BASE);
+  if (candidates.length === 0) { showNoAudio(fallbackText); if (onend) onend(); return; }
+  playCandidates(candidates, rate, onend, () => { showNoAudio(fallbackText); if (onend) onend(); });
 }
 
 // No audio available - notify user
@@ -479,6 +457,15 @@ function speak(text, rate, onend) {
   stopAllAudio();
   speakInternal(text, rate, onend);
 }
+
+// 朗读按钮统一用 data-say 传文本，事件委托处理；
+// 避免把句子拼进 onclick（撇号会破坏 JS 语法，点击直接抛错）
+document.addEventListener('click', function (event) {
+  const el = event.target && event.target.closest ? event.target.closest('[data-say]') : null;
+  if (!el) return;
+  event.preventDefault();
+  speak(el.getAttribute('data-say'));
+});
 
 // Get audio path for sentences only (words use word_dictionary table)
 function getAudioPath(text) {
@@ -698,7 +685,7 @@ function renderBlindListen() {
 
 function renderReadPhase() {
   const sents = todayData.sentences || [];
-  return `<div class="card"><div class="card-title" style="margin-bottom:16px;">\u9636\u6BB52 \u00B7 \u7CBE\u8BFB</div><p style="color:var(--text-secondary);margin-bottom:20px;font-size:15px;">\u9605\u8BFB\u82F1\u6587\u539F\u6587\uFF0C\u70B9\u51FB\u4E0D\u8BA4\u8BC6\u7684\u5355\u8BCD\u6807\u8BB0\u4E3A\u751F\u8BCD\uFF08\u9EC4\u8272\u9AD8\u4EAE\uFF09\u3002\u6807\u8BB0\u5B8C\u6210\u540E\u8FDB\u5165\u751F\u8BCD\u5B66\u4E60\u9636\u6BB5\u3002</p>${sents.map((s, i) => `<div class="sentence-block"><div class="sentence-en" id="sent-${i}">${s.split(/\s+/).map(w => `<span class="word" onclick="toggleWordMark(this)">${esc(w)}</span>`).join(' ')}</div><div class="sentence-zh">${esc(getSentenceTranslation(i))}</div><div class="sentence-actions"><button class="btn-icon" onclick="speak('${escAttr(s)}')">\uD83D\uDD0A \u6717\u8BFB\u672C\u53E5</button></div></div>`).join('')}<div class="phase-actions"><button class="btn btn-secondary" onclick="prevPhase()">\u2190 \u8FD4\u56DE\u76F2\u542C</button><button class="btn btn-success" onclick="prepareVocabLearning()">\u8FDB\u5165\u751F\u8BCD\u5B66\u4E60 \u2192</button></div></div>`;
+  return `<div class="card"><div class="card-title" style="margin-bottom:16px;">\u9636\u6BB52 \u00B7 \u7CBE\u8BFB</div><p style="color:var(--text-secondary);margin-bottom:20px;font-size:15px;">\u9605\u8BFB\u82F1\u6587\u539F\u6587\uFF0C\u70B9\u51FB\u4E0D\u8BA4\u8BC6\u7684\u5355\u8BCD\u6807\u8BB0\u4E3A\u751F\u8BCD\uFF08\u9EC4\u8272\u9AD8\u4EAE\uFF09\u3002\u6807\u8BB0\u5B8C\u6210\u540E\u8FDB\u5165\u751F\u8BCD\u5B66\u4E60\u9636\u6BB5\u3002</p>${sents.map((s, i) => `<div class="sentence-block"><div class="sentence-en" id="sent-${i}">${s.split(/\s+/).map(w => `<span class="word" onclick="toggleWordMark(this)">${esc(w)}</span>`).join(' ')}</div><div class="sentence-zh">${esc(getSentenceTranslation(i))}</div><div class="sentence-actions"><button class="btn-icon" data-say="${escAttr(s)}">\uD83D\uDD0A \u6717\u8BFB\u672C\u53E5</button></div></div>`).join('')}<div class="phase-actions"><button class="btn btn-secondary" onclick="prevPhase()">\u2190 \u8FD4\u56DE\u76F2\u542C</button><button class="btn btn-success" onclick="prepareVocabLearning()">\u8FDB\u5165\u751F\u8BCD\u5B66\u4E60 \u2192</button></div></div>`;
 }
 
 function getSentenceTranslation(idx) {
@@ -841,7 +828,7 @@ async function prepareVocabLearning() {
           const idx = todayVocab.findIndex(v => v.word.toLowerCase() === word.toLowerCase());
           if (idx >= 0) {
             todayVocab[idx].needEnrich = false;
-            todayVocab[idx].enrichFailed = true;
+            todayVocab[idx].needEnrich = true;
           }
         }
       }
@@ -894,22 +881,18 @@ function renderVocabLearning() {
     if (v.definition) {
       defHtml = `<div class="vocab-learning-def">${esc(v.definition)}</div>`;
     } else if (v.needEnrich) {
-      defHtml = `<div class="vocab-learning-def" style="color:var(--text-muted);">\uD83D\uDD04 \u91CA\u4E49\u52A0\u8F7D\u4E2D\u2026\u2026</div>`;
-    } else if (v.enrichFailed) {
-      defHtml = `<div class="vocab-learning-def" style="color:var(--text-muted);">\u6682\u65E0\u91CA\u4E49\uFF08AI\u8865\u5145\u5931\u8D25\uFF09</div>`;
+      defHtml = `<div class="vocab-learning-def" style="color:var(--text-muted);">\uD83E\uDD16 API \u8865\u5145\u4E2D\u2026</div>`;
     } else {
       defHtml = `<div class="vocab-learning-def" style="color:var(--text-muted);">\u6682\u65E0\u91CA\u4E49</div>`;
     }
     // Show enrichment status badge on card
     let statusBadge = '';
     if (v.needEnrich) {
-      statusBadge = `<span style="font-size:12px;color:var(--accent-blue);margin-left:8px;">\uD83D\uDD04 AI\u8865\u5145\u4E2D</span>`;
-    } else if (v.enrichFailed) {
-      statusBadge = `<span style="font-size:12px;color:var(--accent-red);margin-left:8px;">\u26A0 \u8865\u5145\u5931\u8D25</span>`;
+      statusBadge = `<span style="font-size:12px;color:var(--accent-blue);margin-left:8px;">\uD83E\uDD16 API \u8865\u5145\u4E2D</span>`;
     } else if (v.enriched) {
       statusBadge = `<span style="font-size:12px;color:var(--accent-green);margin-left:8px;">\u2705 \u5DF2\u8865\u5145</span>`;
     }
-    return `<div class="vocab-learning-card" id="vlearn-${i}"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;"><div><span class="vocab-learning-word">${esc(v.word)}</span>${statusBadge}${v.phonetic ? `<span class="vocab-learning-phonetic">${esc(v.phonetic)}</span>` : ''}${v.pos ? `<span class="vocab-pos">${esc(v.pos)}</span>` : ''}</div><button class="btn-icon" onclick="speak('${escAttr(v.word)}')">\uD83D\uDD0A \u53D1\u97F3</button></div><div>${defHtml}${v.example_sentence ? `<div class="vocab-learning-example">&quot;${esc(v.example_sentence)}&quot;<br><span style="color:var(--text-muted);">${esc(v.example_translation)}</span></div>` : ''}<div class="vocab-learning-tips"><div class="tip-row"><span class="tip-label">\u8BCD\u6839:</span> ${tips.root_analysis ? esc(tips.root_analysis) : '<span style="color:var(--text-muted);">\u6682\u65E0</span>'}</div><div class="tip-row"><span class="tip-label">\u8054\u60F3:</span> ${tips.mnemonic ? esc(tips.mnemonic) : '<span style="color:var(--text-muted);">\u6682\u65E0</span>'}</div></div></div><div class="vocab-card-actions"><button class="btn-danger-sm" onclick="removeVocabFromLearning(${i})">\u2716 \u79FB\u9664</button></div></div>`;
+    return `<div class="vocab-learning-card" id="vlearn-${i}"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;"><div><span class="vocab-learning-word">${esc(v.word)}</span>${statusBadge}${v.phonetic ? `<span class="vocab-learning-phonetic">${esc(v.phonetic)}</span>` : ''}${v.pos ? `<span class="vocab-pos">${esc(v.pos)}</span>` : ''}</div><button class="btn-icon" data-say="${escAttr(v.word)}">\uD83D\uDD0A \u53D1\u97F3</button></div><div>${defHtml}${v.example_sentence ? `<div class="vocab-learning-example">&quot;${esc(v.example_sentence)}&quot;<br><span style="color:var(--text-muted);">${esc(v.example_translation)}</span></div>` : ''}<div class="vocab-learning-tips"><div class="tip-row"><span class="tip-label">\u8BCD\u6839:</span> ${tips.root_analysis ? esc(tips.root_analysis) : '<span style="color:var(--text-muted);">\u6682\u65E0</span>'}</div><div class="tip-row"><span class="tip-label">\u8054\u60F3:</span> ${tips.mnemonic ? esc(tips.mnemonic) : '<span style="color:var(--text-muted);">\u6682\u65E0</span>'}</div></div></div><div class="vocab-card-actions"><button class="btn-danger-sm" onclick="removeVocabFromLearning(${i})">\u2716 \u79FB\u9664</button></div></div>`;
   }).join('')}<div class="phase-actions"><button class="btn btn-secondary" onclick="prevPhase()">\u2190 \u8FD4\u56DE\u7CBE\u8BFB</button><button class="btn btn-success" onclick="saveVocabAndNext()">\u4FDD\u5B58\u5230\u751F\u8BCD\u672C\uFF0C\u8FDB\u5165\u8DDF\u8BFB \u2192</button></div></div>`;
 }
 
@@ -1050,43 +1033,81 @@ function goToPhase(idx) {
 }
 async function updateStudyPhases() { const p = []; for (let i = 0; i <= currentPhase; i++) p.push(i); await dbUpdate('study_log', { completed_phases: JSON.stringify(p) }, { date: todayDate }); }
 
-// ===== TIMER =====
+// ===== TIMER（只累计本页面可见时的时长） =====
 let durationSaveInterval = null;
+const ACTIVE_TIME_KEY = 'studyActiveSeconds';
+let activeClock = { seconds: 0, date: null };
 
-// Initialize timer immediately on app show - async, doesn't block UI
-async function initStudyTimer() {
-  if (!db) { if (!await initCloud()) return; }
-  // Show 00:00 immediately to avoid blank
-  const el = document.getElementById('timerDisplay');
-  if (el) el.textContent = '00:00';
-  // Try to restore start_time from DB
+function loadActiveClock() {
   try {
-    const logs = await dbSelect('study_log', '*', { date: todayDate });
-    if (logs.length > 0 && logs[0].start_time) {
-      studyStartTime = new Date(logs[0].start_time);
-    } else {
-      studyStartTime = new Date();
-      await dbInsert('study_log', { date: todayDate, start_time: studyStartTime.toISOString(), study_duration: 0, completed_phases: JSON.stringify([]) });
+    const raw = JSON.parse(localStorage.getItem(ACTIVE_TIME_KEY) || 'null');
+    if (raw && raw.date === todayDate && Number.isFinite(raw.seconds) && raw.seconds >= 0) {
+      activeClock = { seconds: Math.floor(raw.seconds), date: raw.date };
+      return;
     }
-  } catch (e) {
-    studyStartTime = new Date();
+  } catch (e) {}
+  activeClock = { seconds: 0, date: todayDate };
+}
+
+function saveActiveClock() {
+  try {
+    localStorage.setItem(ACTIVE_TIME_KEY, JSON.stringify({ date: activeClock.date || todayDate, seconds: activeClock.seconds }));
+  } catch (e) {}
+}
+
+// 只在页面可见时累加，切到后台/关闭标签页不计时
+function tickActive(state, visible, step) {
+  if (visible) state.seconds += (step == null ? 1 : step);
+  return state.seconds;
+}
+
+function isPageVisible() {
+  return typeof document !== 'undefined' && document.visibilityState === 'visible' && !document.hidden;
+}
+
+async function initStudyTimer() {
+  if (!db) { await initCloud(); }
+  loadActiveClock();
+  const el = document.getElementById('timerDisplay');
+  if (el) el.textContent = formatDuration(activeClock.seconds);
+  if (db) {
+    try {
+      const logs = await dbSelect('study_log', '*', { date: todayDate });
+      if (!logs.length) {
+        await dbInsert('study_log', {
+          date: todayDate,
+          start_time: new Date().toISOString(),
+          study_duration: activeClock.seconds,
+          completed_phases: JSON.stringify([])
+        });
+      }
+    } catch (e) {}
   }
-  // Immediately update display with restored time
-  if (el) el.textContent = formatDuration(getStudyDuration());
   startTimer();
 }
 
 function startTimer() {
   if (studyTimerInterval) clearInterval(studyTimerInterval);
-  // Update immediately, then every second
-  const update = () => { const el = document.getElementById('timerDisplay'); if (el) el.textContent = formatDuration(getStudyDuration()); };
+  const update = () => {
+    const el = document.getElementById('timerDisplay');
+    if (el) el.textContent = formatDuration(activeClock.seconds);
+  };
   update();
-  studyTimerInterval = setInterval(update, 1000);
-  // Auto-save study_duration to DB every 30 seconds
+  studyTimerInterval = setInterval(() => {
+    tickActive(activeClock, isPageVisible());
+    update();
+  }, 1000);
+  document.addEventListener('visibilitychange', () => { saveActiveClock(); update(); });
+  window.addEventListener('pagehide', saveActiveClock);
   if (durationSaveInterval) clearInterval(durationSaveInterval);
-  durationSaveInterval = setInterval(() => { if (db) dbUpdate('study_log', { study_duration: getStudyDuration() }, { date: todayDate }); }, 30000);
+  durationSaveInterval = setInterval(() => {
+    saveActiveClock();
+    if (db) dbUpdate('study_log', { study_duration: activeClock.seconds }, { date: todayDate });
+  }, 30000);
 }
-function getStudyDuration() { return studyStartTime ? Math.floor((new Date() - studyStartTime) / 1000) : 0; }
+
+function getStudyDuration() { return activeClock.seconds; }
+
 function formatDuration(s) { return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
 
 // ===== VOCAB MODULE (no synonyms/antonyms/collocations) =====
@@ -1102,7 +1123,7 @@ async function loadVocab() {
   document.getElementById('vocabList').innerHTML = vocab.map(v => {
     let tips = {};
     try { tips = typeof v.memory_tips === 'string' ? JSON.parse(v.memory_tips) : v.memory_tips || {}; } catch(e) {}
-    return `<div class="vocab-item"><div class="vocab-header"><div class="vocab-word">${esc(v.word)}${v.phonetic ? `<span class="vocab-phonetic">${esc(v.phonetic)}</span>` : ''}${v.pos ? `<span class="vocab-pos">${esc(v.pos)}</span>` : ''}</div><div style="display:flex;align-items:center;gap:8px;"><span class="vocab-status ${escAttr(v.status)}">${statusLabel(v.status)}</span><button class="btn-icon" onclick="speak('${escAttr(v.word)}')">\uD83D\uDD0A</button><button class="btn-danger-sm" onclick="removeVocabFromList(${escAttr(v.id)})">\u2716 \u79FB\u9664</button></div></div><div class="vocab-body">${v.definition ? `<div class="definition">${esc(v.definition)}</div>` : '<div class="definition" style="color:var(--text-muted);">\u6682\u65E0\u91CA\u4E49</div>'}${v.example_sentence ? `<div class="example">&quot;${esc(v.example_sentence)}&quot;</div>` : ''}${v.example_translation ? `<div style="color:var(--text-muted);">${esc(v.example_translation)}</div>` : ''}${tips.root_analysis || tips.mnemonic ? `<div class="vocab-tips">${tips.root_analysis ? `<div class="tip-row"><span class="tip-label">\u8BCD\u6839:</span> ${esc(tips.root_analysis)}</div>` : ''}${tips.mnemonic ? `<div class="tip-row"><span class="tip-label">\u8054\u60F3:</span> ${esc(tips.mnemonic)}</div>` : ''}</div>` : ''}</div></div>`;
+    return `<div class="vocab-item"><div class="vocab-header"><div class="vocab-word">${esc(v.word)}${v.phonetic ? `<span class="vocab-phonetic">${esc(v.phonetic)}</span>` : ''}${v.pos ? `<span class="vocab-pos">${esc(v.pos)}</span>` : ''}</div><div style="display:flex;align-items:center;gap:8px;"><span class="vocab-status ${escAttr(v.status)}">${statusLabel(v.status)}</span><button class="btn-icon" data-say="${escAttr(v.word)}">\uD83D\uDD0A</button><button class="btn-danger-sm" onclick="removeVocabFromList(${escAttr(v.id)})">\u2716 \u79FB\u9664</button></div></div><div class="vocab-body">${v.definition ? `<div class="definition">${esc(v.definition)}</div>` : '<div class="definition" style="color:var(--text-muted);">\u6682\u65E0\u91CA\u4E49</div>'}${v.example_sentence ? `<div class="example">&quot;${esc(v.example_sentence)}&quot;</div>` : ''}${v.example_translation ? `<div style="color:var(--text-muted);">${esc(v.example_translation)}</div>` : ''}${tips.root_analysis || tips.mnemonic ? `<div class="vocab-tips">${tips.root_analysis ? `<div class="tip-row"><span class="tip-label">\u8BCD\u6839:</span> ${esc(tips.root_analysis)}</div>` : ''}${tips.mnemonic ? `<div class="tip-row"><span class="tip-label">\u8054\u60F3:</span> ${esc(tips.mnemonic)}</div>` : ''}</div>` : ''}</div></div>`;
   }).join('');
 }
 
@@ -1131,7 +1152,7 @@ function renderReview() {
   currentReviewWord = reviewQueue[reviewIdx];
   let tips = {};
   try { tips = typeof currentReviewWord.memory_tips === 'string' ? JSON.parse(currentReviewWord.memory_tips) : currentReviewWord.memory_tips || {}; } catch(e) {}
-  c.innerHTML = `<div class="card"><div class="card-header"><div class="card-title">SRS \u95F4\u9694\u590D\u4E60</div><div class="card-meta">${reviewIdx+1} / ${reviewQueue.length}</div></div><div class="review-progress">${reviewQueue.map((_, i) => `<div class="review-dot ${i < reviewIdx ? 'done' : ''} ${i === reviewIdx ? 'current' : ''}"></div>`).join('')}</div><div class="review-card"><div style="margin-bottom:12px;"><span class="vocab-status ${escAttr(currentReviewWord.status)}">${statusLabel(currentReviewWord.status)}</span><span style="font-size:13px;color:var(--text-muted);margin-left:8px;">Level ${esc(currentReviewWord.srs_level)} \u00B7 \u5DF2\u590D\u4E60${esc(currentReviewWord.review_count)}\u6B21</span></div><div class="word-display">${esc(currentReviewWord.word)}</div>${currentReviewWord.phonetic ? `<div class="phonetic-display">${esc(currentReviewWord.phonetic)}</div>` : ''}<button class="btn-icon" onclick="speak('${escAttr(currentReviewWord.word)}')">\uD83D\uDD0A \u53D1\u97F3</button><div class="reveal-area" id="revealArea" style="display:none;"><div class="definition-display">${currentReviewWord.pos ? `<span style="color:var(--text-muted);">(${esc(currentReviewWord.pos)})</span> ` : ''}${esc(currentReviewWord.definition) || '\u6682\u65E0\u91CA\u4E49'}</div>${currentReviewWord.example_sentence ? `<div class="example-display">&quot;${esc(currentReviewWord.example_sentence)}&quot;</div>` : ''}${tips.root_analysis ? `<div style="margin-top:8px;font-size:14px;color:var(--accent-purple);">\uD83D\uDCA1 ${esc(tips.root_analysis)}</div>` : ''}${tips.mnemonic ? `<div style="font-size:14px;color:var(--accent-purple);">\uD83E\uDDE0 ${esc(tips.mnemonic)}</div>` : ''}</div><div id="revealBtn" style="margin-top:20px;"><button class="btn btn-secondary" onclick="revealAnswer()">\u70B9\u51FB\u663E\u793A\u7B54\u6848</button></div><div id="reviewButtons" style="display:none;"><div style="margin-bottom:12px;color:var(--text-secondary);font-size:15px;">\u4F60\u8BB0\u5F97\u8FD9\u4E2A\u8BCD\u5417\uFF1F\u8BDA\u5B9E\u81EA\u8BC4\u53EF\u4EE5\u4F18\u5316\u590D\u4E60\u95F4\u9694\u3002</div><div class="review-buttons"><button class="review-btn forgot" onclick="reviewAnswer('forgotten')">\uD83D\uDE2E \u5FD8\u4E86</button><button class="review-btn fuzzy" onclick="reviewAnswer('fuzzy')">\uD83D\uDE10 \u6A21\u7CCA</button><button class="review-btn remembered" onclick="reviewAnswer('remembered')">\uD83D\uDE0A \u8BB0\u4F4F\u4E86</button></div></div></div></div>`;
+  c.innerHTML = `<div class="card"><div class="card-header"><div class="card-title">SRS \u95F4\u9694\u590D\u4E60</div><div class="card-meta">${reviewIdx+1} / ${reviewQueue.length}</div></div><div class="review-progress">${reviewQueue.map((_, i) => `<div class="review-dot ${i < reviewIdx ? 'done' : ''} ${i === reviewIdx ? 'current' : ''}"></div>`).join('')}</div><div class="review-card"><div style="margin-bottom:12px;"><span class="vocab-status ${escAttr(currentReviewWord.status)}">${statusLabel(currentReviewWord.status)}</span><span style="font-size:13px;color:var(--text-muted);margin-left:8px;">Level ${esc(currentReviewWord.srs_level)} \u00B7 \u5DF2\u590D\u4E60${esc(currentReviewWord.review_count)}\u6B21</span></div><div class="word-display">${esc(currentReviewWord.word)}</div>${currentReviewWord.phonetic ? `<div class="phonetic-display">${esc(currentReviewWord.phonetic)}</div>` : ''}<button class="btn-icon" data-say="${escAttr(currentReviewWord.word)}">\uD83D\uDD0A \u53D1\u97F3</button><div class="reveal-area" id="revealArea" style="display:none;"><div class="definition-display">${currentReviewWord.pos ? `<span style="color:var(--text-muted);">(${esc(currentReviewWord.pos)})</span> ` : ''}${esc(currentReviewWord.definition) || '\u6682\u65E0\u91CA\u4E49'}</div>${currentReviewWord.example_sentence ? `<div class="example-display">&quot;${esc(currentReviewWord.example_sentence)}&quot;</div>` : ''}${tips.root_analysis ? `<div style="margin-top:8px;font-size:14px;color:var(--accent-purple);">\uD83D\uDCA1 ${esc(tips.root_analysis)}</div>` : ''}${tips.mnemonic ? `<div style="font-size:14px;color:var(--accent-purple);">\uD83E\uDDE0 ${esc(tips.mnemonic)}</div>` : ''}</div><div id="revealBtn" style="margin-top:20px;"><button class="btn btn-secondary" onclick="revealAnswer()">\u70B9\u51FB\u663E\u793A\u7B54\u6848</button></div><div id="reviewButtons" style="display:none;"><div style="margin-bottom:12px;color:var(--text-secondary);font-size:15px;">\u4F60\u8BB0\u5F97\u8FD9\u4E2A\u8BCD\u5417\uFF1F\u8BDA\u5B9E\u81EA\u8BC4\u53EF\u4EE5\u4F18\u5316\u590D\u4E60\u95F4\u9694\u3002</div><div class="review-buttons"><button class="review-btn forgot" onclick="reviewAnswer('forgotten')">\uD83D\uDE2E \u5FD8\u4E86</button><button class="review-btn fuzzy" onclick="reviewAnswer('fuzzy')">\uD83D\uDE10 \u6A21\u7CCA</button><button class="review-btn remembered" onclick="reviewAnswer('remembered')">\uD83D\uDE0A \u8BB0\u4F4F\u4E86</button></div></div></div></div>`;
 }
 
 function revealAnswer() { document.getElementById('revealArea').style.display = 'block'; document.getElementById('revealBtn').style.display = 'none'; document.getElementById('reviewButtons').style.display = 'block'; }
