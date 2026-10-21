@@ -165,6 +165,23 @@ class ParseFeedTests(unittest.TestCase):
         self.assertEqual(cand.words, len(ORIGINAL.split()))
 
 
+class StripTailTests(unittest.TestCase):
+    def test_strips_continue_reading(self):
+        raw = "The car could go from 0 to 60mph in under a second. Continue reading..."
+        self.assertEqual(
+            sources.strip_tail(raw),
+            "The car could go from 0 to 60mph in under a second.",
+        )
+
+    def test_strips_read_more_and_full_story(self):
+        self.assertEqual(sources.strip_tail("Body text. Read more…"), "Body text.")
+        self.assertEqual(sources.strip_tail("Body text. Read the full story..."), "Body text.")
+
+    def test_keeps_normal_text(self):
+        text = "Officials said the overpass cut collisions by 91%."
+        self.assertEqual(sources.strip_tail(text), text)
+
+
 class FetchFailureTests(unittest.TestCase):
     def test_bad_xml_returns_error_not_raise(self):
         items, error = sources.fetch_feed("https://example.invalid/rss", "X", timeout=1)

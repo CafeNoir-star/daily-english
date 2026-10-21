@@ -22,6 +22,10 @@ on:
         description: "语料来源：feeds=真实 RSS 摘录（默认），llm=模型生成"
         required: false
         default: "feeds"
+      refresh_corpus:
+        description: "覆盖历史语料（重做窗口内最旧的一批，每次至多 14 天）"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -90,6 +94,7 @@ jobs:
             --with-corpus \
             --days "${{ github.event.inputs.days || '30' }}" \
             --corpus-source "${{ github.event.inputs.corpus_source || 'feeds' }}" \
+            ${{ github.event.inputs.refresh_corpus == 'true' && '--refresh-corpus' || '' }} \
             --no-audio \
             --fail-if-stale 0
 

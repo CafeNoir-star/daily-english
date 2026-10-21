@@ -26,6 +26,11 @@ USER_AGENT = "DailyEnglishLearningBot/1.0 (personal study; low volume)"
 # 主源：Guardian 的职场/科技/科学板块，恰好是"外企沟通"人群最常读的题材。
 # Guardian 的 RSS <description> 直接给出正文开头 3-5 段（500-1100 字符），
 # 不需要再抓文章页，这是选它作主源的关键原因。
+#
+# 为什么没有第二家：实测 BBC(52/52)、Ars Technica(20/20)、MIT News(50/50)、
+# The Conversation(50/50) 的 description 都只有 100-200 字符（一两句导语），
+# ScienceDaily、Phys.org 也只有零星几条够长。Guardian 的全文式摘要是个特例。
+# 因此冗余靠"同一家的更多板块"来堆，而不是引入第二个只会贡献 0 条的源。
 FEEDS: tuple[dict[str, str], ...] = (
     {"source": "The Guardian", "url": "https://www.theguardian.com/uk/business/rss"},
     {"source": "The Guardian", "url": "https://www.theguardian.com/uk/technology/rss"},
@@ -33,9 +38,10 @@ FEEDS: tuple[dict[str, str], ...] = (
     {"source": "The Guardian", "url": "https://www.theguardian.com/environment/rss"},
     {"source": "The Guardian", "url": "https://www.theguardian.com/education/rss"},
     {"source": "The Guardian", "url": "https://www.theguardian.com/society/rss"},
-    # 备源：万一 Guardian 整体不可达，BBC 商业版仍能兜住（其 description 较短，
-    # 只能提供 1-2 句，因此仅作为兜底，优先级低于 Guardian）。
-    {"source": "BBC News", "url": "https://feeds.bbci.co.uk/news/business/rss.xml"},
+    {"source": "The Guardian", "url": "https://www.theguardian.com/money/rss"},
+    {"source": "The Guardian", "url": "https://www.theguardian.com/media/rss"},
+    {"source": "The Guardian", "url": "https://www.theguardian.com/books/rss"},
+    {"source": "The Guardian", "url": "https://www.theguardian.com/global-development/rss"},
 )
 
 # 硬红线：出现即整条丢弃（暴力/伤亡/性/自残/灾难/疫情）。
@@ -98,6 +104,24 @@ def clean_fragment(fragment: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+# RSS 摘要末尾常挂着站内导航语，混进精读段落会很难看（"…had thrusters. Continue
+# reading..."），在清洗阶段就直接切掉，而不是指望 LLM 每次都记得排除。
+TAIL_NOISE = (
+    re.compile(r"\s*Continue reading(\.\.\.|…)?\s*$", re.IGNORECASE),
+    re.compile(r"\s*Read more(\.\.\.|…)?\s*$", re.IGNORECASE),
+    re.compile(r"\s*Read the full (story|article)(\.\.\.|…)?\s*$", re.IGNORECASE),
+    re.compile(r"\s*Sign up (to|for) .*$", re.IGNORECASE),
+)
+
+
+def strip_tail(text: str) -> str:
+    """去掉摘要末尾的站内导航语。"""
+    out = text
+    for pattern in TAIL_NOISE:
+        out = pattern.sub("", out)
+    return out.strip()
+
+
 def normalize_for_match(text: str) -> str:
     """归一化用于逐字比对：只抹平标点与空白差异，不动任何字母。"""
     text = (text or "")
@@ -157,7 +181,7 @@ def parse_feed(xml_bytes: bytes, source: str) -> list[dict[str, str]]:
                 "title": clean_fragment(node.findtext("title") or ""),
                 "link": (node.findtext("link") or "").strip(),
                 "published": (node.findtext("pubDate") or "").strip(),
-                "text": clean_fragment(node.findtext("description") or ""),
+                "text": strip_tail(clean_fragment(node.findtext("description") or "")),
             }
         )
     return items

@@ -391,18 +391,21 @@ def normalize_day(raw: dict[str, Any], day: date) -> dict[str, Any]:
         raise ValueError(f"{day} 英文正文过短（{len(english)} 字符）")
 
     sentences = raw.get("sentences")
-    if not isinstance(sentences, list) or len(sentences) < 3:
+    if not isinstance(sentences, list) or len(sentences) < 2:
         sentences = split_sentences(english)
     sentences = [normalize_ws(str(item)) for item in sentences if normalize_ws(str(item))]
 
     if normalize_ws(" ".join(sentences)) != english:
         sentences = split_sentences(english)
-    if len(sentences) < 3:
+    # 真实新闻里常有 30-40 词的长句，两句话就到 80 词，卡 3 句会把好素材挡掉
+    if len(sentences) < 2:
         raise ValueError(f"{day} 句子拆分失败（{len(sentences)} 句）")
 
     translation = normalize_ws(str(raw.get("chinese_translation") or ""))
     if not translation:
         raise ValueError(f"{day} 缺少中文翻译")
+    # 模型爱在中文之间换行，normalize_ws 会把换行变成空格（"前十 年"），这里再收一次
+    translation = re.sub(r"(?<=[\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])", "", translation)
     if not re.search(r"[\u4e00-\u9fff]", translation):
         raise ValueError(f"{day} 中文翻译不含中文字符（疑似编码问题）")
 
@@ -449,11 +452,11 @@ def build_source_prompt(candidate: "source_pool.Candidate") -> str:
 
 请基于这段真实英文，产出一条精读语料：
 
-1. english_text：从上面正文里**逐字摘出连续的 3-5 句**，合计 70-110 词。
+1. english_text：从上面正文里**逐字摘出连续的 2-5 句**，合计 70-110 词。
    - 必须原样复制，一个词、一个标点都不能改；不得缩写、改写、调换顺序、合并句子。
    - 必须是原文中**连续**的一段，不能跳句拼接。
    - 优先选信息密度高、有具体细节（数字、机构名、动作、引语）的句子。
-   - 避开推广语（Sign up / Subscribe / Read more）、图表说明、相关文章推荐列表。
+   - 避开推广语（Sign up / Subscribe / Read more / Continue reading）、图表说明、相关文章推荐列表。
    - 若不合适（内容敏感、句子残缺、通篇是列表），只输出 {{"skip": true}}。
 
 2. chinese_translation：与 english_text 逐句对应的自然中文翻译，不要直译腔。
@@ -510,8 +513,8 @@ def generate_day_from_source(
     if not (55 <= word_count <= max_words):
         raise CandidateRejected(f"词数 {word_count} 不在 55-{max_words} 区间")
 
-    if not (3 <= len(item["sentences"]) <= 6):
-        raise CandidateRejected(f"句子数 {len(item['sentences'])} 不在 3-6 区间")
+    if not (2 <= len(item["sentences"]) <= 6):
+        raise CandidateRejected(f"句子数 {len(item['sentences'])} 不在 2-6 区间")
 
     # 出处强制使用真实源，不接受模型自报的报刊名
     item["source"] = candidate.source
@@ -866,8 +869,13 @@ async def run_tts(tasks: list[tuple[str, str]], force: bool = False) -> dict[str
 # ---------------------------------------------------------------------------
 
 
-def plan_dates(existing: list[dict[str, Any]], days: int) -> list[date]:
-    """保持未来 N 天的滚动缓冲：补齐窗口内所有缺口，不无限往后堆。"""
+def plan_dates(existing: list[dict[str, Any]], days: int, refresh: bool = False) -> list[date]:
+    """保持未来 N 天的滚动缓冲：补齐窗口内所有缺口，不无限往后堆。
+
+    ``refresh=True`` 时改为"覆盖模式"：每次重做窗口内**最旧的**一批日期
+    （按 id 排序，id 小 = 插入早 = 老数据）。覆盖后这些日期会以新 id 重新插入，
+    因此连续多次运行能一轮轮把历史旧语料换掉，而不会反复重做同一批。
+    """
     today = datetime.now(TZ).date()
     have: set[date] = set()
     for row in existing:
@@ -878,6 +886,25 @@ def plan_dates(existing: list[dict[str, Any]], days: int) -> list[date]:
 
     target_end = today + timedelta(days=max(1, days) - 1)
     window = [today + timedelta(days=offset) for offset in range((target_end - today).days + 1)]
+
+    if refresh:
+        window_set = {day.isoformat() for day in window}
+        pending = [
+            (int(row["id"]), str(row["date"]))
+            for row in existing
+            if str(row.get("date")) in window_set and str(row.get("id", "")).isdigit()
+        ]
+        pending.sort()  # id 升序：最老的排前面
+        if not pending:
+            log("覆盖模式下窗口内没有可覆盖的日期")
+            return []
+        picked = [date.fromisoformat(d) for _, d in pending[:MAX_DAYS_PER_RUN]]
+        log(
+            f"覆盖模式：本次重做 {len(picked)} 天：{picked[0]} ~ {picked[-1]}"
+            f"（窗口内共 {len(pending)} 天待覆盖）"
+        )
+        return picked
+
     missing = [day for day in window if day not in have]
 
     if not missing:
@@ -890,6 +917,18 @@ def plan_dates(existing: list[dict[str, Any]], days: int) -> list[date]:
         f"{result[0]} ~ {result[-1]}（缓冲目标 {target_end}）"
     )
     return result
+
+
+def drop_days(days_to_drop: list[dict[str, Any]]) -> int:
+    """删除指定日期的旧语料（覆盖模式专用）。"""
+    dates = sorted({str(row["date"]) for row in days_to_drop if row.get("date")})
+    if not dates:
+        return 0
+    for start in range(0, len(dates), 40):
+        chunk = dates[start : start + 40]
+        rest_delete("daily_sentences", {"date": f"in.({','.join(chunk)})"})
+    log(f"已删除 {len(dates)} 天旧语料：{dates[0]} ~ {dates[-1]}")
+    return len(dates)
 
 
 def fetch_pending_words(limit: int = PENDING_BATCH) -> list[str]:
@@ -957,7 +996,17 @@ def enrich_pending(limit: int = PENDING_BATCH) -> int:
             '{"results":[{"word":"","phonetic":"","pos":"","definition":"中文释义",'
             '"example_sentence":"英文例句","example_translation":"例句中文翻译",'
             '"memory_tips":{"root_analysis":"词根分析","mnemonic":"联想记忆"}}]}。'
-            "definition 必须是中文。\n\n单词：" + ", ".join(todo)
+            "definition 必须是中文。\n\n"
+            "例句要求（很重要，决定内容好坏）：\n"
+            "1. 12-20 词，必须带具体场景（具体的人/地点/时间/物品），让人能在脑子里看见画面；\n"
+            "2. 语域贴近日常口语或职场英语，像真人在邮件、会议、聊天里会说出口的话；\n"
+            "3. 严禁教材体和空泛议论。以下这类句子一律不要：\n"
+            "   「Every individual can contribute to a better future.」\n"
+            "   「It plays a vital role in our daily lives.」\n"
+            "   「We should pay more attention to ...」\n"
+            "   「In today's fast-paced world, ...」\n"
+            "4. 不要在例句里解释这个词，也不要把词义重复一遍。\n\n"
+            "单词：" + ", ".join(todo)
         )
         raw_text = llm_stream(
             [
@@ -1027,8 +1076,9 @@ def generate_corpus(
     existing: list[dict[str, Any]],
     days: int,
     source_mode: str = "feeds",
+    refresh: bool = False,
 ) -> list[dict[str, Any]]:
-    targets = plan_dates(existing, days)
+    targets = plan_dates(existing, days, refresh=refresh)
     recent_sources: list[str] = [str(row.get("source") or "") for row in existing[-5:]]
     generated: list[dict[str, Any]] = []
 
@@ -1144,6 +1194,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="语料来源：feeds=从公开 RSS 摘录真实段落（默认，出处可核对）；llm=模型生成",
     )
     parser.add_argument(
+        "--refresh-corpus",
+        action="store_true",
+        help="覆盖模式：重做窗口内最旧的一批日期（每次至多 MAX_DAYS_PER_RUN 天），用于替换历史旧语料",
+    )
+    parser.add_argument(
         "--fail-if-stale",
         type=int,
         default=0,
@@ -1214,10 +1269,19 @@ def main() -> int:
 
     new_days: list[dict[str, Any]] = []
     if args.with_corpus and not args.backfill and not args.no_corpus:
-        new_days = generate_corpus(existing_days, args.days, source_mode=args.corpus_source)
+        new_days = generate_corpus(
+            existing_days,
+            args.days,
+            source_mode=args.corpus_source,
+            refresh=args.refresh_corpus,
+        )
         if not new_days:
             log("本次没有新增语料（缓冲区已覆盖）")
         else:
+            if args.refresh_corpus and not DRY_RUN:
+                drop_days(new_days)
+                # 删完后重新取索引，保证 insert_days 的 id 分配与库内一致
+                existing_days = fetch_day_index(auth=True)
             insert_days(new_days, existing_days)
             insert_words(new_days, existing_words)
     elif not args.with_corpus:
