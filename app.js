@@ -1,17 +1,22 @@
 // ========================================================================
 // CONFIG
 // ========================================================================
+// 前端不再持有真实 publishableKey：请求发到同源 /wb-api，由服务端注入真 key。
+// publishableKey 字段仅是 SDK 要求的占位串（必须以 wbpk_ 开头），无任何权限。
 const PUBLIC_CONFIG = {
-  endpoint: "https://daily-english-38358.app.workbuddy.host",
+  proxyPath: "/wb-api",
   oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
   publishableKey: "wbpk_REDACTED"
 };
 
-// Cloud 端点：留空直连 WorkBuddy；Render 部署时在 config.js 里设 "same-origin" 走本站反代
+// Cloud 端点：默认同源代理；只有显式在 config.js 里给 cloudEndpoint 配置完整
+// URL 时才直连其他端点（一般不需要）
 const CLOUD_ENDPOINT = (function resolveCloudEndpoint() {
   const raw = (window.APP_CONFIG && window.APP_CONFIG.cloudEndpoint) || '';
-  if (raw === 'same-origin') return window.location.origin;
-  return raw || PUBLIC_CONFIG.endpoint;
+  if (raw === 'same-origin' || raw === '') {
+    return window.location.origin + PUBLIC_CONFIG.proxyPath;
+  }
+  return raw;
 })();
 
 // 音频 CDN 前缀（config.js 可覆盖；留空则使用站点同目录 audio/）

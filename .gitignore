@@ -22,3 +22,6 @@ data/export_dictation_history.json
 
 # 安全审计报告：含未修复漏洞细节，不推公开仓库
 docs/security-*.md
+
+# 服务端密钥（真实 publishableKey，只随部署上传、不进 Git）
+server.secrets.json

@@ -4,9 +4,9 @@
 //   - jsDelivr：https://cdn.jsdelivr.net/gh/<owner>/<repo>@main/audio/
 //   - 对象存储：https://audio.example.com/
 // cloudEndpoint：WorkBuddy Cloud 端点
-//   - 留空：直连 WorkBuddy（WorkBuddy Sites 部署时用这个）
-//   - "same-origin"：走本站 /.cloud 反向代理（Render / 自建服务器时用这个）
+//   - "same-origin"（默认）：走本站 /wb-api 同源代理，真实 key 只在服务端
+//   - 完整 URL：直连该端点（一般不需要）
 window.APP_CONFIG = {
   audioBase: "https://gcore.jsdelivr.net/gh/CafeNoir-star/daily-english@main/audio/",
-  cloudEndpoint: ""
+  cloudEndpoint: "same-origin"
 };

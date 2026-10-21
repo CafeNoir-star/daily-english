@@ -51,6 +51,9 @@ setInterval(() => {
   for (const [ip, entry] of rateLimit) {
     if (now > entry.resetTime) rateLimit.delete(ip);
   }
+  for (const [ip, entry] of proxyRateLimit) {
+    if (now > entry.resetTime) proxyRateLimit.delete(ip);
+  }
 }, 5 * 60 * 1000);
 
 // --- Security: Extract real client IP safely ---
@@ -62,6 +65,149 @@ function getClientIP(req) {
     if (firstIP) return firstIP;
   }
   return req.socket.remoteAddress || 'unknown';
+}
+
+// --- Cloud 同源代理：真实 publishableKey 只存在于服务端 ---
+// 浏览器只带一个占位串访问 /wb-api/*，由这里注入真 key 并转发到 WorkBuddy。
+// 大模型接口一律拒绝，因此公开的前端代码即使被读走也无法调用 LLM。
+const PROXY_PREFIX = '/wb-api';
+const PROXY_ALLOWED = ['/.cloud/database/rest', '/.cloud/auth'];
+const PROXY_BLOCKED = ['/.cloud/llm'];
+const PROXY_MAX_BODY = 1024 * 1024;
+const PROXY_RATE_MAX = 600;
+const proxyRateLimit = new Map();
+
+function loadSecrets() {
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, 'server.secrets.json'), 'utf8');
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+const SECRETS = loadSecrets();
+const WB_KEY = String(process.env.WB_KEY || SECRETS.wbKey || '').trim();
+const WB_UPSTREAM = String(process.env.WB_ENDPOINT || SECRETS.endpoint || '').replace(/\/+$/, '');
+const SITE_ORIGIN = String(process.env.WB_SITE_ORIGIN || SECRETS.siteOrigin || '').replace(/\/+$/, '');
+
+function checkProxyRateLimit(ip) {
+  const now = Date.now();
+  const entry = proxyRateLimit.get(ip);
+  if (!entry || now > entry.resetTime) {
+    if (proxyRateLimit.size >= RATE_LIMIT_MAP_MAX) proxyRateLimit.clear();
+    proxyRateLimit.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  if (entry.count >= PROXY_RATE_MAX) return false;
+  entry.count++;
+  return true;
+}
+
+// 返回可转发的上游路径；null 表示拒绝
+function resolveProxyPath(pathname) {
+  if (!pathname.startsWith(PROXY_PREFIX + '/')) return null;
+  const rest = pathname.slice(PROXY_PREFIX.length);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(rest);
+  } catch (e) {
+    return null;
+  }
+  if (!decoded.startsWith('/')) return null;
+  if (decoded.includes('..') || decoded.includes('\0') || decoded.includes('\\')) return null;
+  const lower = decoded.toLowerCase();
+  if (PROXY_BLOCKED.some((p) => lower.startsWith(p))) return null;
+  if (!PROXY_ALLOWED.some((p) => lower.startsWith(p))) return null;
+  return rest;
+}
+
+function jsonError(res, status, message) {
+  writeHead(res, status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+  res.end(JSON.stringify({ error: message }));
+}
+
+function proxyCloud(req, res, url, ip) {
+  const upstreamPath = resolveProxyPath(url.pathname);
+  if (!upstreamPath) {
+    jsonError(res, 403, 'path not allowed');
+    return;
+  }
+  if (!WB_KEY || !WB_UPSTREAM) {
+    jsonError(res, 503, 'cloud proxy not configured');
+    return;
+  }
+  if (!checkProxyRateLimit(ip)) {
+    jsonError(res, 429, 'too many requests');
+    return;
+  }
+
+  const declaredLength = Number(req.headers['content-length'] || 0);
+  if (declaredLength > PROXY_MAX_BODY) {
+    jsonError(res, 413, 'payload too large');
+    req.resume();
+    return;
+  }
+
+  let target;
+  try {
+    target = new URL(WB_UPSTREAM + upstreamPath + url.search);
+  } catch (e) {
+    jsonError(res, 400, 'bad request path');
+    return;
+  }
+  const lib = target.protocol === 'https:' ? https : http;
+
+  const headers = {
+    host: target.host,
+    'x-wb-webapp-access-key': WB_KEY,
+    accept: req.headers.accept || 'application/json',
+  };
+  if (SITE_ORIGIN) {
+    headers.origin = SITE_ORIGIN;
+    headers.referer = SITE_ORIGIN + '/';
+  }
+  for (const name of ['authorization', 'content-type', 'prefer', 'accept-profile', 'content-profile', 'range', 'if-none-match']) {
+    if (req.headers[name]) headers[name] = req.headers[name];
+  }
+  if (declaredLength) headers['content-length'] = String(declaredLength);
+
+  const upstreamReq = lib.request(
+    {
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port,
+      path: target.pathname + target.search,
+      method: req.method,
+      headers,
+      timeout: 30000,
+    },
+    (upstreamRes) => {
+      const outHeaders = {};
+      for (const [k, v] of Object.entries(upstreamRes.headers)) {
+        if (['connection', 'transfer-encoding', 'keep-alive', 'content-length'].includes(k)) continue;
+        outHeaders[k] = v;
+      }
+      writeHead(res, upstreamRes.statusCode || 502, outHeaders);
+      upstreamRes.pipe(res);
+    }
+  );
+
+  let received = 0;
+  upstreamReq.on('timeout', () => upstreamReq.destroy(new Error('upstream timeout')));
+  upstreamReq.on('error', () => {
+    if (!res.headersSent) jsonError(res, 502, 'upstream unreachable');
+  });
+
+  req.on('data', (chunk) => {
+    received += chunk.length;
+    if (received > PROXY_MAX_BODY) {
+      upstreamReq.destroy();
+      if (!res.headersSent) jsonError(res, 413, 'payload too large');
+    }
+  });
+  req.pipe(upstreamReq);
 }
 
 // --- Security: Security headers for all responses ---
@@ -215,6 +361,12 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/health') {
     writeHead(res, 200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     res.end(JSON.stringify({ ok: true, ts: Date.now() }));
+    return;
+  }
+
+  // 同源云代理：/wb-api/* → WorkBuddy .cloud（真 key 仅在此注入）
+  if (url.pathname === PROXY_PREFIX || url.pathname.startsWith(PROXY_PREFIX + '/')) {
+    proxyCloud(req, res, url, ip);
     return;
   }
 
