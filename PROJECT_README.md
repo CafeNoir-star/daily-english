@@ -4,7 +4,7 @@
 
 一个英语学习网站，包含盲听、精读、生词学习、跟读、默写、复盘六个学习阶段。支持用户标记生词、AI 补充释义、定时生成新语料。
 
-**线上地址**：https://daily-english-38358.app.workbuddy.host/?sharecode=REDACTED_SHARECODE
+**线上地址**：https://daily-english-38358.app.workbuddy.host/（访问码 sharecode 私下分发，不写入仓库）
 **WorkBuddy 应用 ID**：wbapp_e6Oe7it7Pjh6aPbJsV77LA
 
 ---
@@ -77,7 +77,7 @@
 - `difficulty` text（beginner/intermediate/advanced）
 - `sentences` jsonb（拆分的单句数组）
 - `created_at` timestamptz
-- RLS：anon / authenticated 可读；仅 owner 账号（uid `OWNER_UID`）可 INSERT / UPDATE
+- RLS：anon / authenticated 可读；仅 owner 账号（uid 见部署环境）可 INSERT / UPDATE
 
 ### word_dictionary（词典表，310 条）
 - `id` bigint PK

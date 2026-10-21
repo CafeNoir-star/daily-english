@@ -80,14 +80,14 @@ GitHub → Settings → Secrets and variables → Actions → Secrets。
 
 ### 2. 数据库权限（RLS）
 
-| 表 | 匿名 | 登录用户 | 你的账号（uid `OWNER_UID`） |
+| 表 | 匿名 | 登录用户 | 你的账号（uid 你的 owner uid） |
 |---|---|---|---|
 | `daily_sentences` | 只读 | 只读 | 只读 + 插入 + 更新 |
 | `word_dictionary` | 只读 | 只读 | 只读 + 写 |
 | `vocabulary` / `study_log` / `dictation_history` / `user_profiles` | 无 | 仅自己的行 | 仅自己的行 |
 
 策略名：`daily_sentences_owner_insert`、`daily_sentences_owner_update`、
-`word_dictionary_owner_write`，条件均为 `auth.uid() = 'OWNER_UID'`。
+`word_dictionary_owner_write`，条件均为 `auth.uid() = '<owner uid>'`。
 
 即使密码泄露，攻击者也**只能写这两张内容表**，碰不到你的生词本和学习记录。
 
@@ -170,7 +170,7 @@ Settings → Secrets and variables → Actions：
 | 类型 | 名称 | 值 |
 |---|---|---|
 | Secret | `WB_KEY` | `app.js` 里 `publishableKey` 那串 `wbpk_...` |
-| Secret | `WB_EMAIL` | `your@email.com` |
+| Secret | `WB_EMAIL` | 你的邮箱 |
 | Secret | `WB_PASSWORD` | WorkBuddy 登录密码 |
 | Variable | `WB_ENDPOINT` | `https://daily-english-38358.app.workbuddy.host` |
 

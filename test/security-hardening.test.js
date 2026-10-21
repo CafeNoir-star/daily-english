@@ -152,7 +152,7 @@ console.log('── 3. 安全响应头 ──');
 
   test('.env.example 不含真实邮箱', () => {
     const env = fs.readFileSync(path.join(ROOT, '.env.example'), 'utf8');
-    assert(!/noir_cafe@163\.com/.test(env), '.env.example 仍含真实邮箱');
+    assert(/WB_EMAIL=(your@email\.com|you@example\.com)/.test(env), '.env.example 的 WB_EMAIL 必须是占位符');
   });
 
   console.log(`\n==== Results: ${passed} passed, ${failed} failed ====`);
