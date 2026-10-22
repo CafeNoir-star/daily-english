@@ -30,6 +30,10 @@ on:
         description: "本次最多处理多少天（覆盖模式可先填 1 做小样验证）"
         required: false
         default: "30"
+      refresh_dates:
+        description: "只重做指定日期（逗号分隔，如 2026-10-22,2026-11-06），留空则按窗口规划"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -88,6 +92,7 @@ jobs:
           WB_PASSWORD: ${{ secrets.WB_PASSWORD }}
           # 日常只缺 1 天，用不到这个上限；覆盖历史时靠它一次跑完 30 天
           MAX_DAYS_PER_RUN: ${{ github.event.inputs.max_days || '30' }}
+          REFRESH_DATES: ${{ github.event.inputs.refresh_dates }}
         run: |
           # 只输出长度，不输出值；用于判断 Secret 是否真的注入
           echo "WB_KEY len=${#WB_KEY} | WB_EMAIL len=${#WB_EMAIL} | WB_PASSWORD len=${#WB_PASSWORD}"
@@ -96,10 +101,16 @@ jobs:
             echo "::warning::请检查 Settings → Secrets and variables → Actions → Repository secrets 中是否存在这两个名字"
             exit 0
           fi
+          EXTRA=""
+          if [ -n "$REFRESH_DATES" ]; then
+            EXTRA="--refresh-dates $REFRESH_DATES"
+            echo "指定重做日期：$REFRESH_DATES"
+          fi
           python pipeline.py \
             --with-corpus \
             --days "${{ github.event.inputs.days || '30' }}" \
             --corpus-source "${{ github.event.inputs.corpus_source || 'feeds' }}" \
+            $EXTRA \
             ${{ github.event.inputs.refresh_corpus == 'true' && '--refresh-corpus' || '' }} \
             --no-audio \
             --fail-if-stale 0

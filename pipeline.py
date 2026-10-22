@@ -474,7 +474,14 @@ def build_source_prompt(candidate: "source_pool.Candidate") -> str:
    - 必须是原文中**连续**的一段，不能跳句拼接。
    - 优先选信息密度高、有具体细节（数字、机构名、动作、引语）的句子。
    - 避开推广语（Sign up / Subscribe / Read more / Continue reading）、图表说明、相关文章推荐列表。
-   - 若不合适（内容敏感、句子残缺、通篇是列表），只输出 {{"skip": true}}。
+   - **内容红线，命中任何一条就只输出 {{"skip": true}}**：
+     · 战争、冲突、恐袭；地震/洪水/疫情等灾难的亲历或伤亡描述
+     · 难民、逃亡、避难、迫害经历
+     · 第一人称的创伤叙述（"I was forced to flee…"、"I lost…" 这类）
+     · 死亡、自杀、暴力犯罪、虐待、重病与临终
+     · 涉华政治议题；其他国家的领土/地缘争端（中东、俄乌、缅甸等）
+     · 种族、宗教、性别争议
+     判断标准很简单：**这段文字适合拿去和外国同事闲聊吗**？如果不适合，就 skip。
 
 2. chinese_translation：与 english_text 逐句对应的自然中文翻译，不要直译腔。
 
@@ -1108,8 +1115,13 @@ def generate_corpus(
     days: int,
     source_mode: str = "feeds",
     refresh: bool = False,
+    refresh_dates: list[date] | None = None,
 ) -> list[dict[str, Any]]:
-    targets = plan_dates(existing, days, refresh=refresh)
+    if refresh_dates:
+        targets = refresh_dates
+        log(f"指定覆盖 {len(targets)} 天：{', '.join(d.isoformat() for d in targets)}")
+    else:
+        targets = plan_dates(existing, days, refresh=refresh)
     recent_sources: list[str] = [str(row.get("source") or "") for row in existing[-5:]]
     generated: list[dict[str, Any]] = []
 
@@ -1230,6 +1242,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="覆盖模式：重做窗口内最旧的一批日期（每次至多 MAX_DAYS_PER_RUN 天），用于替换历史旧语料",
     )
     parser.add_argument(
+        "--refresh-dates",
+        default="",
+        metavar="D1,D2",
+        help="只重做指定日期（逗号分隔，如 2026-10-22,2026-11-06），用于替换某几天内容不合格的语料",
+    )
+    parser.add_argument(
         "--fail-if-stale",
         type=int,
         default=0,
@@ -1300,16 +1318,29 @@ def main() -> int:
 
     new_days: list[dict[str, Any]] = []
     if args.with_corpus and not args.backfill and not args.no_corpus:
+        refresh_dates: list[date] = []
+        if args.refresh_dates:
+            for chunk in args.refresh_dates.split(","):
+                chunk = chunk.strip()
+                if not chunk:
+                    continue
+                try:
+                    refresh_dates.append(date.fromisoformat(chunk))
+                except ValueError:
+                    die(f"--refresh-dates 里的日期格式不对：{chunk}")
+
         new_days = generate_corpus(
             existing_days,
             args.days,
             source_mode=args.corpus_source,
             refresh=args.refresh_corpus,
+            refresh_dates=refresh_dates,
         )
         if not new_days:
             log("本次没有新增语料（缓冲区已覆盖）")
         else:
-            if args.refresh_corpus and not DRY_RUN:
+            # refresh_dates 指定的日期一定已存在，也要走 UPDATE
+            if (args.refresh_corpus or refresh_dates) and not DRY_RUN:
                 upsert_days(new_days, existing_days)
             else:
                 insert_days(new_days, existing_days)

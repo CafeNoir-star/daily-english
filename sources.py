@@ -44,7 +44,7 @@ FEEDS: tuple[dict[str, str], ...] = (
     {"source": "The Guardian", "url": "https://www.theguardian.com/global-development/rss"},
 )
 
-# 硬红线：出现即整条丢弃（暴力/伤亡/性/自残/灾难/疫情）。
+# 硬红线：出现即整条丢弃（暴力/伤亡/性/自残/灾难/疫情/创伤叙述）。
 # 用词边界匹配，避免 "deadline" 被 "dead" 误伤。
 HARD_BLOCK = (
     "suicide", "suicidal", "self-harm", "self harm",
@@ -59,12 +59,24 @@ HARD_BLOCK = (
     "plane crash", "crash killed", "earthquake", "tsunami", "famine",
     "epidemic", "outbreak", "ebola", "pandemic", "vaccine scare",
     "war", "wars", "airstrike", "air strike", "missile", "troops", "militant",
+    # 难民/逃亡/迫害：这条是 2026-10-22 漏网的教训——那篇第一人称叙述里
+    # 一个 war/killed 都没有，讲的是"我 13 岁被迫逃离家园"，靠上面的词根本拦不住。
+    "flee", "fled", "fleeing", "refugee", "refugees", "asylum", "asylum seeker",
+    "displaced", "persecution", "persecuted", "exile", "deported", "deportation",
+    # 灾难/创伤：不适合当轻松场景的学习素材，读着压抑
+    "catastrophe", "catastrophic", "devastating", "devastated", "disaster",
+    "tragedy", "tragic", "trauma", "traumatic", "grief", "grieving",
+    "mourn", "mourning", "starvation", "malnutrition",
 )
 
 # 中国相关一律跳过：这是给中文用户看的语料，不碰任何涉华政治议题。
+# 此外整个地缘政治争端区域也避开——分享给外企同事时，这些话题只会引起争论。
 POLITICS_BLOCK = (
     "china", "chinese", "beijing", "taiwan", "hong kong", "xinjiang", "tibet",
     "xi jinping", "communist party",
+    "myanmar", "rohingya", "rakhine", "ukraine", "russia", "russian",
+    "israel", "israeli", "gaza", "palestin", "syria", "afghanistan",
+    "iran", "iraq", "yemen", "sudan", "somalia", "congo",
 )
 
 # 推广/导航语，出现在 RSS 摘要里会污染正文，命中则整条丢弃。

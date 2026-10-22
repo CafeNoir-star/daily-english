@@ -136,6 +136,45 @@ class RejectionTests(unittest.TestCase):
         text = self.LONG + " Sign up to our daily newsletter for more."
         self.assertIn("noise", sources.rejection_reason("t", text))
 
+    def test_refugee_first_person_narrative_rejected(self):
+        """2026-10-22 漏网的真实案例：全文没有 war/killed，靠这两个词拦不住。"""
+        text = (
+            "Nine years ago, I was forced to flee my home in Maungdaw township, Rakhine "
+            "state, Myanmar. I was 13 years old. I remember how quickly an average day "
+            "turned into a day when life felt extinguished, leaving behind the place where "
+            "I grew up with my family. Even now, when I go to sleep, what comes into my "
+            "mind is the memory of that journey, the fear of not knowing what awaited me. "
+            "It took three days to reach refuge."
+        )
+        reason = sources.rejection_reason("A refugee's story", text)
+        assert reason is not None, "难民第一人称叙述必须被拦下"
+        assert "blocked" in reason or "politics" in reason, f"应命中红线，实际 {reason}"
+
+    def test_flee_alone_rejected(self):
+        text = self.LONG + " Thousands were forced to flee the region overnight."
+        self.assertIn("blocked", sources.rejection_reason("t", text))
+
+    def test_geopolitical_region_rejected(self):
+        text = self.LONG + " The agreement covers rebuilding work in Ukraine."
+        self.assertIn("politics", sources.rejection_reason("t", text))
+
+    def test_climate_catastrophe_language_rejected(self):
+        text = self.LONG + " Scientists warn of a climate catastrophe within decades."
+        self.assertIn("blocked", sources.rejection_reason("t", text))
+
+    def test_normal_business_news_not_rejected(self):
+        """10-24 那种能源商业新闻只是提了一句 election manifesto，不该被误伤。"""
+        text = (
+            "The UK government has approved the controversial Jackdaw gasfield in the North "
+            "Sea, a widely expected move that will nonetheless dismay environmental "
+            "campaigners and a number of Labour MPs. While Labour's 2024 election manifesto "
+            "committed to a ban on new drilling licences in the North Sea, the companies "
+            "behind Jackdaw and the Rosebank oilfield project, which is being decided on "
+            "separately, have sought environmental approval for existing licences. Analysts "
+            "said the decision would keep household energy bills stable into next winter."
+        )
+        assert sources.rejection_reason("UK approves Jackdaw gasfield", text) is None
+
     def test_too_few_sentences_rejected(self):
         text = "x" * 400
         self.assertEqual(sources.rejection_reason("t", text), "too-few-sentences")
