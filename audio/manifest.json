@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-22T10:54:35+08:00",
+  "generated_at": "2026-10-22T11:05:17+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -215,22 +215,22 @@
     },
     "2026-10-22_full.mp3": {
       "h": "889f50c332dc7ba0",
-      "bytes": 195984,
+      "bytes": 190317,
       "text": "A tiny alga has helped show how memories, feelings and behaviour form in our brains, in research by three scientists awa"
     },
     "2026-10-22_s0.mp3": {
       "h": "56ec6ad8f5aed676",
-      "bytes": 67968,
+      "bytes": 62301,
       "text": "A tiny alga has helped show how memories, feelings and behaviour form in our brains, in research by three scientists awa"
     },
     "2026-10-22_s1.mp3": {
       "h": "a0e8f66b8c82f4b0",
-      "bytes": 58608,
+      "bytes": 52941,
       "text": "Chlamydomonas is a one-celled alga that swims towards light using a light-sensing protein called channelrhodopsin, remar"
     },
     "2026-10-22_s2.mp3": {
       "h": "d89cc5f4f1f6b5e9",
-      "bytes": 70704,
+      "bytes": 65037,
       "text": "When the channelrhodopsin detects light, electrically charged ions rush into the cell from outside, triggering an electr"
     },
     "2026-10-22_s3.mp3": {
