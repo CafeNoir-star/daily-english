@@ -795,11 +795,20 @@ def save_manifest(files: dict[str, Any]) -> None:
 
 
 def build_audio_tasks(
-    days: list[dict[str, Any]], words: list[dict[str, Any]]
+    days: list[dict[str, Any]],
+    words: list[dict[str, Any]],
+    only_dates: set[str] | None = None,
 ) -> list[tuple[str, str]]:
+    """构建 TTS 任务列表。
+
+    ``only_dates`` 非空时只处理这几天的句子音频，并跳过单词音频 ——
+    用于"先重建一天做小样验证，没问题再跑全量"。
+    """
     tasks: dict[str, str] = {}
 
     for day in days:
+        if only_dates is not None and str(day.get("date")) not in only_dates:
+            continue
         sentences = day.get("sentences") or []
         if isinstance(sentences, str):
             try:
@@ -812,8 +821,10 @@ def build_audio_tasks(
         if day.get("english_text"):
             tasks[f"{day['date']}_full.mp3"] = day["english_text"]
 
-    for word in words:
-        tasks.setdefault(word_audio_name(word["word"]), word["word"])
+    # 单词音频与日期无关，限定日期重做时不该被牵连
+    if only_dates is None:
+        for word in words:
+            tasks.setdefault(word_audio_name(word["word"]), word["word"])
 
     return [(text, name) for name, text in tasks.items()]
 
@@ -1348,6 +1359,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="只重做指定日期（逗号分隔，如 2026-10-22,2026-11-06），用于替换某几天内容不合格的语料",
     )
     parser.add_argument(
+        "--audio-dates",
+        default="",
+        metavar="D1,D2",
+        help="只重建这几天的句子音频（配合 --force-audio 做小样验证，跳过单词音频）",
+    )
+    parser.add_argument(
         "--fail-if-stale",
         type=int,
         default=0,
@@ -1373,6 +1390,8 @@ def main() -> int:
     args = parse_args()
     DRY_RUN = args.dry_run
     started = time.time()
+    # 限定重建某几天的音频（配合 --force-audio 做小样，确认无误再跑全量）
+    audio_dates = {d.strip() for d in (args.audio_dates or "").split(",") if d.strip()} or None
     mode = "A（生成语料 + 写库）" if args.with_corpus else "B（只读语料 + 生成音频）"
 
     log("=" * 60)
@@ -1472,7 +1491,9 @@ def main() -> int:
                         all_words.append({"word": word["word"], "audio_url": ""})
                         known_words.add(word["word"].lower())
 
-        tasks = build_audio_tasks(all_days, all_words)
+        tasks = build_audio_tasks(all_days, all_words, only_dates=audio_dates)
+        if audio_dates:
+            log(f"只重建指定日期的音频：{', '.join(sorted(audio_dates))}（共 {len(tasks)} 个文件）")
         stats = asyncio.run(run_tts(tasks, force=args.force_audio))
         log(
             f"音频完成：新增 {stats['generated']}，跳过 {stats['skipped']}，"

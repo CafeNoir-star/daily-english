@@ -34,6 +34,10 @@ on:
         description: "只重做指定日期（逗号分隔，如 2026-10-22,2026-11-06），留空则按窗口规划"
         required: false
         default: ""
+      audio_dates:
+        description: "只重建这几天的音频（逗号分隔，配合强制重生成做小样验证）"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -155,10 +159,15 @@ jobs:
         env:
           WB_ENDPOINT: ${{ vars.WB_ENDPOINT || 'https://daily-english-38358.app.workbuddy.host' }}
           WB_KEY: ${{ secrets.WB_KEY }}
+          AUDIO_DATES: ${{ github.event.inputs.audio_dates }}
         run: |
           EXTRA=""
           if [ "${{ github.event.inputs.force_audio }}" = "true" ]; then
             EXTRA="--force-audio"
+          fi
+          if [ -n "$AUDIO_DATES" ]; then
+            EXTRA="$EXTRA --audio-dates $AUDIO_DATES"
+            echo "只重建这些日期的音频：$AUDIO_DATES"
           fi
           python pipeline.py --fail-if-stale "${{ github.event.inputs.stale_days || '2' }}" $EXTRA
 

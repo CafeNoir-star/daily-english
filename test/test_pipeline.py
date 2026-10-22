@@ -242,3 +242,46 @@ class UpsertDaysTests(unittest.TestCase):
         with patch.object(pipeline, "rest_update", side_effect=boom):
             with self.assertRaises(RuntimeError):
                 pipeline.upsert_days([self.DAY], [{"date": "2026-10-21"}])
+
+
+class BuildAudioTasksTests(unittest.TestCase):
+    """小样验证用：只重建指定日期的音频，别动全库。"""
+
+    DAYS = [
+        {"date": "2026-10-21", "sentences": ["A one.", "A two."], "english_text": "A one. A two."},
+        {"date": "2026-10-22", "sentences": ["B one."], "english_text": "B one."},
+    ]
+    WORDS = [{"word": "hello"}, {"word": "world"}]
+
+    def test_builds_everything_by_default(self):
+        tasks = pipeline.build_audio_tasks(self.DAYS, self.WORDS)
+        names = {name for _, name in tasks}
+        self.assertIn("2026-10-21_s0.mp3", names)
+        self.assertIn("2026-10-21_full.mp3", names)
+        self.assertIn("2026-10-22_s0.mp3", names)
+        self.assertIn(pipeline.word_audio_name("hello"), names)
+
+    def test_only_dates_limits_to_that_day(self):
+        tasks = pipeline.build_audio_tasks(self.DAYS, self.WORDS, only_dates={"2026-10-22"})
+        names = {name for _, name in tasks}
+        self.assertEqual(
+            names,
+            {"2026-10-22_s0.mp3", "2026-10-22_full.mp3"},
+            f"只应生成指定日期的句子音频，实际 {sorted(names)}",
+        )
+
+    def test_only_dates_skips_word_audio(self):
+        """单词音频与日期无关，小样重建时不该被牵连重做。"""
+        tasks = pipeline.build_audio_tasks(self.DAYS, self.WORDS, only_dates={"2026-10-21"})
+        names = {name for _, name in tasks}
+        self.assertNotIn(pipeline.word_audio_name("hello"), names)
+        self.assertIn("2026-10-21_s0.mp3", names)
+
+    def test_unknown_date_yields_nothing(self):
+        tasks = pipeline.build_audio_tasks(self.DAYS, self.WORDS, only_dates={"2020-01-01"})
+        self.assertEqual(tasks, [])
+
+    def test_text_is_carried_for_tts(self):
+        tasks = pipeline.build_audio_tasks(self.DAYS, self.WORDS, only_dates={"2026-10-22"})
+        mapping = {name: text for text, name in tasks}
+        self.assertEqual(mapping["2026-10-22_s0.mp3"], "B one.")
