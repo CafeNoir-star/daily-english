@@ -153,8 +153,9 @@ class LosslessTrimTests(unittest.TestCase):
         self.assertTrue(ok)
         self.assertIn("libmp3lame", " ".join(captured["cmd"]), "拿不到时长时回退到重编码方案")
 
-    def test_keeps_enough_margin_to_avoid_clipping_speech(self):
-        """实测头静音 190-210ms、尾静音 880-900ms；切点必须留余量。"""
+    def test_cut_point_never_truncates_speech(self):
+        """实测尾静音最早从结尾前 880ms 开始；切点必须落在语音结束之后，
+        否则会把最后一个词切掉。同时头部切点不能越过实测头静音长度（190ms）。"""
         captured = {}
 
         def fake_run(cmd, **kwargs):
@@ -169,9 +170,17 @@ class LosslessTrimTests(unittest.TestCase):
         cmd = captured["cmd"]
         ss = float(cmd[cmd.index("-ss") + 1])
         keep = float(cmd[cmd.index("-t") + 1])
-        self.assertLess(ss, 0.19, f"头部切点 {ss}s 太靠后，可能切到语音")
-        covered = ss + keep
-        self.assertLessEqual(covered, 12.0 - 0.80, f"尾部只预留了 {12.0 - covered:.2f}s 静音，实测尾静音 0.88-0.90s，会切到语音")
+        cut_end = ss + keep
+        duration = 12.0
+
+        self.assertLess(ss, 0.19, f"头部切点 {ss}s 越过了实测头静音 190ms，会切到语音开头")
+        speech_end = duration - 0.88  # 尾静音最早可能从这里开始
+        self.assertGreaterEqual(
+            cut_end,
+            speech_end - 0.001,
+            f"尾部切点 {cut_end:.2f}s 早于语音结束点 {speech_end:.2f}s，会把最后一个词切掉",
+        )
+        self.assertLess(cut_end, duration, "切点不能超过音频总长")
 
 
 if __name__ == "__main__":

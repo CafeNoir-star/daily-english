@@ -68,10 +68,11 @@ FFPROBE_BIN = os.getenv("FFPROBE_BIN", "ffprobe")
 TRIM_KEEP_SILENCE = os.getenv("TRIM_KEEP_SILENCE", "0.05")
 TRIM_THRESHOLD = os.getenv("TRIM_THRESHOLD", "-50dB")
 TTS_BITRATE = os.getenv("TTS_BITRATE", "48k")
-# 无损切帧的切点。实测头静音 190-210ms、尾静音 880-900ms，
-# 这里头部切 150ms、尾部留 850ms，两边都留余量，宁可少裁也不要切到语音。
+# 无损切帧的切点。实测头静音 190-210ms、尾静音 880-900ms。
+# 头部切 150ms 留余量；尾部只切到 600ms（即保留约 300ms 静音当"呼吸"），
+# 让句子之间不是贴死，但也不会回到原来 0.9 秒的拖沓。
 TRIM_HEAD_OFFSET = float(os.getenv("TRIM_HEAD_OFFSET", "0.15"))
-TRIM_TAIL_OFFSET = float(os.getenv("TRIM_TAIL_OFFSET", "0.85"))
+TRIM_TAIL_OFFSET = float(os.getenv("TRIM_TAIL_OFFSET", "0.6"))
 # 设 TRIM_SILENCE=0 可临时关闭裁剪（本机没 ffmpeg 调试时用）
 TRIM_ENABLED = os.getenv("TRIM_SILENCE", "1") not in {"0", "false", "False"}
 
