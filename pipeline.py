@@ -29,6 +29,8 @@ import hashlib
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import time
 from datetime import date, datetime, timedelta, timezone
@@ -57,6 +59,16 @@ TTS_VOICE = os.getenv("TTS_VOICE", "en-US-JennyNeural")
 TTS_RATE = os.getenv("TTS_RATE", "+0%")
 TTS_CONCURRENCY = int(os.getenv("TTS_CONCURRENCY", "3"))
 TTS_RETRIES = int(os.getenv("TTS_RETRIES", "4"))
+
+# edge-tts 产出的 mp3 尾部带约 0.9 秒静音、头部约 0.2 秒（实测 3 个文件都是这个量级），
+# 连着播时两句之间会有 1.1 秒空白，听感就是"停顿有点长"。
+# 生成后用 ffmpeg 裁掉首尾静音，各保留 50ms 以免衔接太突兀。
+FFMPEG_BIN = os.getenv("FFMPEG_BIN", "ffmpeg")
+TRIM_KEEP_SILENCE = os.getenv("TRIM_KEEP_SILENCE", "0.05")
+TRIM_THRESHOLD = os.getenv("TRIM_THRESHOLD", "-50dB")
+TTS_BITRATE = os.getenv("TTS_BITRATE", "48k")
+# 设 TRIM_SILENCE=0 可临时关闭裁剪（本机没 ffmpeg 调试时用）
+TRIM_ENABLED = os.getenv("TRIM_SILENCE", "1") not in {"0", "false", "False"}
 
 AUDIO_DIR = Path(os.getenv("AUDIO_DIR", "audio"))
 AUDIO_BASE = os.getenv("AUDIO_BASE", "").strip()
@@ -801,6 +813,45 @@ def build_audio_tasks(
     return [(text, name) for name, text in tasks.items()]
 
 
+def trim_silence(path: Path) -> bool:
+    """裁掉 mp3 首尾静音，就地替换。返回是否真的裁剪了。
+
+    没装 ffmpeg、或 ffmpeg 报错时返回 False 并保留原文件 —— 裁剪是听感优化，
+    不应该让整批音频生成失败。失败时也不会留下 .trim.mp3 垃圾文件。
+    """
+    binary = shutil.which(FFMPEG_BIN)
+    if not binary:
+        return False
+
+    out = path.with_suffix(".trim.mp3")
+    keep = TRIM_KEEP_SILENCE
+    threshold = TRIM_THRESHOLD
+    # 尾部静音要靠 areverse 翻转后再裁一次，否则只处理了开头
+    one_side = f"silenceremove=start_periods=1:start_threshold={threshold}:start_silence={keep}"
+    chain = f"{one_side},areverse,{one_side},areverse"
+    cmd = [
+        binary, "-y", "-hide_banner", "-loglevel", "error",
+        "-i", str(path),
+        "-af", chain,
+        "-c:a", "libmp3lame",  # 裁剪必须重编码，显式指定编码器与码率，避免默认码率压坏音质
+        "-b:a", TTS_BITRATE,
+        str(out),
+    ]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, timeout=90)
+        if proc.returncode != 0 or not out.exists() or out.stat().st_size < 500:
+            out.unlink(missing_ok=True)
+            detail = (proc.stderr or b"")[:120].decode("utf-8", "ignore")
+            warn(f"  裁静音失败，保留原文件：{detail}")
+            return False
+        out.replace(path)
+        return True
+    except Exception as exc:  # noqa: BLE001 - 裁剪失败不能影响音频生成
+        out.unlink(missing_ok=True)
+        warn(f"  裁静音异常，保留原文件：{exc}")
+        return False
+
+
 async def synthesize_one(text: str, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -809,6 +860,9 @@ async def synthesize_one(text: str, path: Path) -> None:
     if not tmp.exists() or tmp.stat().st_size < 500:
         tmp.unlink(missing_ok=True)
         raise RuntimeError("empty audio")
+    if TRIM_ENABLED:
+        # subprocess 是阻塞调用，放到线程里避免堵住事件循环（并发 3 时会明显串行化）
+        await asyncio.to_thread(trim_silence, tmp)
     tmp.replace(path)
 
 

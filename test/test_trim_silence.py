@@ -1,0 +1,107 @@
+# -*- coding: utf-8 -*-
+"""音频裁静音的单元测试（不依赖本机是否装了 ffmpeg，用 mock 验证行为）。
+
+背景：edge-tts 产出的 mp3 尾部带约 0.9 秒静音，加上下一句开头 0.2 秒，
+     两句之间会有 1.1 秒空白。生成后用 ffmpeg 裁掉首尾静音。
+
+运行：
+    python -m unittest discover -s test -p "test_trim_silence.py" -v
+"""
+
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+import pipeline  # noqa: E402
+
+
+class TrimSilenceTests(unittest.TestCase):
+    def setUp(self):
+        self.tmpdir = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmpdir.name) / "clip.mp3"
+        self.path.write_bytes(b"\xff\xfb" + b"\x00" * 2000)  # 假装是一段音频
+
+    def tearDown(self):
+        self.tmpdir.cleanup()
+
+    def test_returns_false_when_ffmpeg_missing(self):
+        """没装 ffmpeg 时不能报错，要安静地保留原文件（裁剪只是优化）。"""
+        with patch.object(pipeline.shutil, "which", return_value=None):
+            ok = pipeline.trim_silence(self.path)
+        self.assertFalse(ok)
+        self.assertTrue(self.path.exists(), "原文件必须保留")
+
+    def test_skips_work_when_ffmpeg_missing(self):
+        with patch.object(pipeline.shutil, "which", return_value=None):
+            with patch.object(pipeline.subprocess, "run") as run:
+                pipeline.trim_silence(self.path)
+        run.assert_not_called()
+
+    def test_replaces_file_on_success(self):
+        def fake_run(cmd, **kwargs):
+            # ffmpeg 会把结果写到 -i 之后指定的输出路径（最后一个参数）
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 600)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                ok = pipeline.trim_silence(self.path)
+
+        self.assertTrue(ok)
+        self.assertLess(self.path.stat().st_size, 2100, "应把裁剪后的文件替换回去")
+        leftovers = list(Path(self.tmpdir.name).glob("*.trim.mp3"))
+        self.assertEqual(leftovers, [], "临时文件必须清理干净")
+
+    def test_keeps_original_when_ffmpeg_fails(self):
+        before = self.path.read_bytes()
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", return_value=MagicMock(returncode=1, stderr=b"boom")):
+                ok = pipeline.trim_silence(self.path)
+
+        self.assertFalse(ok)
+        self.assertEqual(self.path.read_bytes(), before, "失败时不能动原文件")
+        self.assertEqual(list(Path(self.tmpdir.name).glob("*.trim.mp3")), [], "失败也要清理临时文件")
+
+    def test_filter_trims_both_ends(self):
+        """尾部静音要靠 areverse 翻转后再裁，否则只裁了开头。"""
+        captured = {}
+
+        def fake_run(cmd, **kwargs):
+            captured["cmd"] = cmd
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 600)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                pipeline.trim_silence(self.path)
+
+        joined = " ".join(captured["cmd"])
+        self.assertIn("silenceremove", joined)
+        self.assertEqual(joined.count("areverse"), 2, "首尾都要处理：裁头 + 翻转裁尾 + 翻回")
+        self.assertIn("-50dB", joined)
+        self.assertIn("libmp3lame", joined, "裁完要重新编码成 mp3")
+
+    def test_output_bitrate_preserved(self):
+        captured = {}
+
+        def fake_run(cmd, **kwargs):
+            captured["cmd"] = cmd
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 600)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                pipeline.trim_silence(self.path)
+
+        cmd = captured["cmd"]
+        self.assertIn("-b:a", cmd, "需要显式指定码率，避免 ffmpeg 默认码率把音质压坏")
+        idx = cmd.index("-b:a")
+        self.assertTrue(cmd[idx + 1].endswith("k"), f"码率格式应为 48k，实际 {cmd[idx + 1]}")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

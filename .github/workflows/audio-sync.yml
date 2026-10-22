@@ -79,6 +79,8 @@ jobs:
               -A 'DailyEnglishLearningBot/1.0 (personal study; low volume)' "$u" 2>/dev/null || echo ERR)
             echo "$u -> $code"
           done
+          # 裁静音依赖 ffmpeg；Ubuntu runner 预装，这里打一行版本便于排查
+          echo "ffmpeg: $(ffmpeg -version 2>/dev/null | head -1 || echo 'NOT FOUND')"
 
       # 第一步：从公开 RSS 摘录真实英文段落并写入云库（消耗 WorkBuddy 积分做翻译标注）
       # 需要 WB_EMAIL / WB_PASSWORD；未配置时自动跳过，只做音频同步。
