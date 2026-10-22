@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-22T10:02:15+08:00",
+  "generated_at": "2026-10-22T10:54:35+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -3388,6 +3388,11 @@
       "bytes": 10656,
       "text": "invigorate"
     },
+    "vocab_ion.mp3": {
+      "h": "bbb286479461a1d5",
+      "bytes": 11232,
+      "text": "ion"
+    },
     "vocab_irony.mp3": {
       "h": "5f55c737fd48f856",
       "bytes": 11232,
@@ -3597,6 +3602,11 @@
       "h": "5f191134dde6f71f",
       "bytes": 11232,
       "text": "motivation"
+    },
+    "vocab_motor.mp3": {
+      "h": "32405e889a51a69c",
+      "bytes": 11232,
+      "text": "motor"
     },
     "vocab_mover_and_shaker.mp3": {
       "h": "3d6dbb48d2ec8c8f",
