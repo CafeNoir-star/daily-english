@@ -118,12 +118,15 @@ function toggleTheme() {
 // CLOUD INIT
 // ========================================================================
 async function initCloud() {
-  if (cloud) return true;
+  if (cloud && auth) return true;
   try {
     if (!await ensureRuntimeConfig()) {
       console.error('Cloud init failed: runtime config unavailable');
       showToast('\u4E91\u670D\u52A1\u914D\u7F6E\u4E0D\u53EF\u7528');
       return false;
+    }
+    if (typeof WorkBuddyCloud === 'undefined' || !WorkBuddyCloud.createWorkBuddyCloud) {
+      throw new Error('Cloud SDK not loaded (vendor/workbuddy-cloud-sdk.js)');
     }
     cloud = WorkBuddyCloud.createWorkBuddyCloud({
       endpoint: CLOUD_ENDPOINT,
@@ -131,11 +134,14 @@ async function initCloud() {
       publishableKey: PUBLIC_CONFIG.publishableKey
     });
     db = cloud.database;
-      auth = cloud.auth;
+    auth = cloud.auth;
+    if (!auth) throw new Error('Cloud SDK returned no auth module');
     return true;
   } catch (e) {
     console.error('Cloud init failed:', e);
-    showToast('\u4E91\u670D\u52A1\u8FDE\u63A5\u5931\u8D25');
+    // 复位：留着半初始化的 cloud 会让下次调用直接 return true，auth 却仍是 null
+    cloud = null; db = null; auth = null;
+    showToast('\u4E91\u670D\u52A1\u8FDE\u63A5\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7F51\u7EDC\u540E\u91CD\u8BD5');
     return false;
   }
 }
@@ -213,6 +219,30 @@ async function handleAuth() {
   if (!email || !email.includes('@')) { errEl.textContent = '\u8BF7\u8F93\u5165\u6709\u6548\u7684\u90AE\u7BB1'; return; }
   if (!password || password.length < 6) { errEl.textContent = '\u5BC6\u7801\u81F3\u5C116\u4F4D'; return; }
   if (authMode === 'register' && !username) { errEl.textContent = '\u8BF7\u8F93\u5165\u7528\u6237\u540D'; return; }
+
+  // 换台电脑首次打开时，云 SDK 可能还没就绪（或刚被网络问题打断）。
+  // 这里先把云服务拉起来，否则 auth 为 null，点登录会抛
+  // "Cannot read properties of null (reading 'signInWithPassword')"。
+  if (!auth) {
+    const submitBtn = document.getElementById('authSubmit');
+    errEl.textContent = '\u6B63\u5728\u8FDE\u63A5\u4E91\u670D\u52A1\u2026';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '\u8FDE\u63A5\u4E2D...'; }
+    const ready = await initCloud();
+    if (!ready || !auth) {
+      errEl.textContent = '\u4E91\u670D\u52A1\u8FDE\u63A5\u5931\u8D25\uFF1A\u8BF7\u786E\u8BA4\u80FD\u6B63\u5E38\u6253\u5F00\u672C\u7AD9\uFF0C\u7136\u540E\u5237\u65B0\u9875\u9762\u91CD\u8BD5';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = authMode === 'login' ? '\u767B\u5F55' : '\u6CE8\u518C';
+      }
+      return;
+    }
+    errEl.textContent = '';
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = authMode === 'login' ? '\u767B\u5F55' : '\u6CE8\u518C';
+    }
+  }
+
   const btn = document.getElementById('authSubmit');
   btn.disabled = true; btn.textContent = '\u5904\u7406\u4E2D...';
   try {

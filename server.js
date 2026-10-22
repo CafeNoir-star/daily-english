@@ -136,7 +136,7 @@ const ALLOWED_STATIC_FILES = new Set([
   '/site.webmanifest',
   '/manifest.webmanifest',
 ]);
-const ALLOWED_STATIC_PREFIXES = ['/audio/'];
+const ALLOWED_STATIC_PREFIXES = ['/audio/', '/vendor/'];
 
 function isStaticAllowed(filePath) {
   const normalized = path.normalize(filePath).replace(/\\/g, '/');

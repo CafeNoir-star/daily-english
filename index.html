@@ -332,8 +332,12 @@ body {
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<!-- 云 SDK 走同源（vendor/），不再从 jsDelivr 加载：
+     之前用 CDN 时，网络拉不到 jsDelivr 的机器上 SDK 根本没加载，
+     点登录就会报 Cannot read properties of null (reading 'signInWithPassword')。
+     来源：@tencent-ai/workbuddy-cloud-sdk@0.1.4-dev.ca27990.202610161713，71.9KB，自包含无外部依赖。 -->
+<script src="vendor/workbuddy-cloud-sdk.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=20261021h"></script>
+<script src="app.js?v=20261022a"></script>
 </body>
 </html>
