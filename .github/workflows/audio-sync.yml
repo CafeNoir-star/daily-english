@@ -64,6 +64,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 裁静音依赖 ffmpeg。ubuntu-latest 镜像并不保证自带，实测确实没有，
+      # 所以显式安装（幂等：已存在就跳过）。ffprobe 随 ffmpeg 一起装上。
+      - name: Ensure ffmpeg
+        run: |
+          if command -v ffmpeg >/dev/null 2>&1; then
+            echo "已预装：$(ffmpeg -version 2>&1 | head -1)"
+          else
+            echo "未预装，开始安装"
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version 2>&1 | head -1
+          ffprobe -version 2>&1 | head -1
+
       # 抓取前先确认真实源可达。不通也不中断——Generate corpus 会自己逐源降级，
       # 这里只是把"到底是网络问题还是内容全被过滤"提前区分开，便于排障。
       - name: Probe RSS reachability
@@ -79,8 +93,8 @@ jobs:
               -A 'DailyEnglishLearningBot/1.0 (personal study; low volume)' "$u" 2>/dev/null || echo ERR)
             echo "$u -> $code"
           done
-          # 裁静音依赖 ffmpeg；Ubuntu runner 预装，这里打一行版本便于排查
-          echo "ffmpeg: $(ffmpeg -version 2>/dev/null | head -1 || echo 'NOT FOUND')"
+          # 裁静音依赖 ffmpeg；上面 Ensure ffmpeg 步骤会装好，这里打一行确认
+          echo "ffmpeg: $(command -v ffmpeg || echo 'NOT FOUND')"
 
       # 第一步：从公开 RSS 摘录真实英文段落并写入云库（消耗 WorkBuddy 积分做翻译标注）
       # 需要 WB_EMAIL / WB_PASSWORD；未配置时自动跳过，只做音频同步。
