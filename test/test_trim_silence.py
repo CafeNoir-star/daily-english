@@ -103,5 +103,76 @@ class TrimSilenceTests(unittest.TestCase):
         self.assertTrue(cmd[idx + 1].endswith("k"), f"码率格式应为 48k，实际 {cmd[idx + 1]}")
 
 
+class LosslessTrimTests(unittest.TestCase):
+    """首选无损方案：按 mp3 帧切分（-c copy），不重编码，音质一个比特都不动。"""
+
+    def setUp(self):
+        self.tmpdir = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmpdir.name) / "clip.mp3"
+        self.path.write_bytes(b"\xff\xfb" + b"\x00" * 2000)
+        patcher = patch.object(pipeline, "probe_duration", return_value=12.0)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def tearDown(self):
+        self.tmpdir.cleanup()
+
+    def test_uses_stream_copy_when_ffprobe_available(self):
+        captured = {}
+
+        def fake_run(cmd, **kwargs):
+            captured["cmd"] = cmd
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 1200)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                ok = pipeline.trim_silence(self.path)
+
+        self.assertTrue(ok)
+        cmd = captured["cmd"]
+        joined = " ".join(cmd)
+        self.assertIn("-c copy", joined, "无损方案应使用流复制，不能重新编码")
+        self.assertNotIn("libmp3lame", joined, "走流复制时不应出现编码器")
+        self.assertIn("-ss", cmd, "需要偏移切掉头部静音")
+        self.assertIn("-t", cmd, "需要指定保留时长以切掉尾部静音")
+
+    def test_falls_back_to_reencode_when_duration_unknown(self):
+        captured = {}
+
+        def fake_run(cmd, **kwargs):
+            captured["cmd"] = cmd
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 600)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline, "probe_duration", return_value=None):
+            with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+                with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                    ok = pipeline.trim_silence(self.path)
+
+        self.assertTrue(ok)
+        self.assertIn("libmp3lame", " ".join(captured["cmd"]), "拿不到时长时回退到重编码方案")
+
+    def test_keeps_enough_margin_to_avoid_clipping_speech(self):
+        """实测头静音 190-210ms、尾静音 880-900ms；切点必须留余量。"""
+        captured = {}
+
+        def fake_run(cmd, **kwargs):
+            captured["cmd"] = cmd
+            Path(cmd[-1]).write_bytes(b"\xff\xfb" + b"\x00" * 1200)
+            return MagicMock(returncode=0, stderr=b"")
+
+        with patch.object(pipeline.shutil, "which", return_value="/usr/bin/ffmpeg"):
+            with patch.object(pipeline.subprocess, "run", side_effect=fake_run):
+                pipeline.trim_silence(self.path)
+
+        cmd = captured["cmd"]
+        ss = float(cmd[cmd.index("-ss") + 1])
+        keep = float(cmd[cmd.index("-t") + 1])
+        self.assertLess(ss, 0.19, f"头部切点 {ss}s 太靠后，可能切到语音")
+        covered = ss + keep
+        self.assertLessEqual(covered, 12.0 - 0.80, f"尾部只预留了 {12.0 - covered:.2f}s 静音，实测尾静音 0.88-0.90s，会切到语音")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

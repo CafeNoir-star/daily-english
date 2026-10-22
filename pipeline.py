@@ -64,9 +64,14 @@ TTS_RETRIES = int(os.getenv("TTS_RETRIES", "4"))
 # 连着播时两句之间会有 1.1 秒空白，听感就是"停顿有点长"。
 # 生成后用 ffmpeg 裁掉首尾静音，各保留 50ms 以免衔接太突兀。
 FFMPEG_BIN = os.getenv("FFMPEG_BIN", "ffmpeg")
+FFPROBE_BIN = os.getenv("FFPROBE_BIN", "ffprobe")
 TRIM_KEEP_SILENCE = os.getenv("TRIM_KEEP_SILENCE", "0.05")
 TRIM_THRESHOLD = os.getenv("TRIM_THRESHOLD", "-50dB")
 TTS_BITRATE = os.getenv("TTS_BITRATE", "48k")
+# 无损切帧的切点。实测头静音 190-210ms、尾静音 880-900ms，
+# 这里头部切 150ms、尾部留 850ms，两边都留余量，宁可少裁也不要切到语音。
+TRIM_HEAD_OFFSET = float(os.getenv("TRIM_HEAD_OFFSET", "0.15"))
+TRIM_TAIL_OFFSET = float(os.getenv("TRIM_TAIL_OFFSET", "0.85"))
 # 设 TRIM_SILENCE=0 可临时关闭裁剪（本机没 ffmpeg 调试时用）
 TRIM_ENABLED = os.getenv("TRIM_SILENCE", "1") not in {"0", "false", "False"}
 
@@ -813,30 +818,71 @@ def build_audio_tasks(
     return [(text, name) for name, text in tasks.items()]
 
 
+def probe_duration(path: Path) -> float | None:
+    """读取音频时长（秒）。拿不到就返回 None，由调用方决定降级策略。"""
+    binary = shutil.which(FFPROBE_BIN)
+    if not binary:
+        return None
+    try:
+        proc = subprocess.run(
+            [
+                binary, "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=nw=1:nk=1",
+                str(path),
+            ],
+            capture_output=True,
+            timeout=30,
+        )
+        if proc.returncode != 0:
+            return None
+        return float(proc.stdout.decode("utf-8", "ignore").strip())
+    except Exception:  # noqa: BLE001 - 探测失败按未知处理
+        return None
+
+
 def trim_silence(path: Path) -> bool:
     """裁掉 mp3 首尾静音，就地替换。返回是否真的裁剪了。
 
+    **优先无损**：mp3 是独立帧结构，用 ``-ss/-t/-c copy`` 按帧切分即可，
+    音频数据一个比特都不动（不重编码 = 没有二次压缩损失）。
+    只有拿不到时长时才回退到重编码方案。
+
     没装 ffmpeg、或 ffmpeg 报错时返回 False 并保留原文件 —— 裁剪是听感优化，
-    不应该让整批音频生成失败。失败时也不会留下 .trim.mp3 垃圾文件。
+    不应该让整批音频生成失败，也不会留下 .trim.mp3 垃圾文件。
     """
     binary = shutil.which(FFMPEG_BIN)
     if not binary:
         return False
 
     out = path.with_suffix(".trim.mp3")
-    keep = TRIM_KEEP_SILENCE
-    threshold = TRIM_THRESHOLD
-    # 尾部静音要靠 areverse 翻转后再裁一次，否则只处理了开头
-    one_side = f"silenceremove=start_periods=1:start_threshold={threshold}:start_silence={keep}"
-    chain = f"{one_side},areverse,{one_side},areverse"
-    cmd = [
-        binary, "-y", "-hide_banner", "-loglevel", "error",
-        "-i", str(path),
-        "-af", chain,
-        "-c:a", "libmp3lame",  # 裁剪必须重编码，显式指定编码器与码率，避免默认码率压坏音质
-        "-b:a", TTS_BITRATE,
-        str(out),
-    ]
+    duration = probe_duration(path)
+    lossless = bool(duration and duration > TRIM_HEAD_OFFSET + TRIM_TAIL_OFFSET + 1.0)
+
+    if lossless:
+        keep = duration - TRIM_HEAD_OFFSET - TRIM_TAIL_OFFSET
+        cmd = [
+            binary, "-y", "-hide_banner", "-loglevel", "error",
+            "-ss", f"{TRIM_HEAD_OFFSET:.2f}",
+            "-i", str(path),
+            "-t", f"{keep:.2f}",
+            "-c", "copy",  # 流复制：不解码不重编码，音质零损失
+            str(out),
+        ]
+    else:
+        keep_silence = TRIM_KEEP_SILENCE
+        threshold = TRIM_THRESHOLD
+        one_side = f"silenceremove=start_periods=1:start_threshold={threshold}:start_silence={keep_silence}"
+        chain = f"{one_side},areverse,{one_side},areverse"
+        cmd = [
+            binary, "-y", "-hide_banner", "-loglevel", "error",
+            "-i", str(path),
+            "-af", chain,
+            "-c:a", "libmp3lame",
+            "-b:a", TTS_BITRATE,
+            str(out),
+        ]
+
     try:
         proc = subprocess.run(cmd, capture_output=True, timeout=90)
         if proc.returncode != 0 or not out.exists() or out.stat().st_size < 500:
