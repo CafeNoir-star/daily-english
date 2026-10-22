@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-22T07:09:05+08:00",
+  "generated_at": "2026-10-22T10:02:15+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -214,24 +214,24 @@
       "text": "They somehow already know what you truly want to become."
     },
     "2026-10-22_full.mp3": {
-      "h": "91b55db261505ef4",
-      "bytes": 160704,
-      "text": "Nine years ago, I was forced to flee my home in Maungdaw township, Rakhine state, Myanmar. I was 13 years old. I remembe"
+      "h": "889f50c332dc7ba0",
+      "bytes": 195984,
+      "text": "A tiny alga has helped show how memories, feelings and behaviour form in our brains, in research by three scientists awa"
     },
     "2026-10-22_s0.mp3": {
-      "h": "d839d1a587e06733",
-      "bytes": 36288,
-      "text": "Nine years ago, I was forced to flee my home in Maungdaw township, Rakhine state, Myanmar."
+      "h": "56ec6ad8f5aed676",
+      "bytes": 67968,
+      "text": "A tiny alga has helped show how memories, feelings and behaviour form in our brains, in research by three scientists awa"
     },
     "2026-10-22_s1.mp3": {
-      "h": "971389d108db2d4e",
-      "bytes": 14688,
-      "text": "I was 13 years old."
+      "h": "a0e8f66b8c82f4b0",
+      "bytes": 58608,
+      "text": "Chlamydomonas is a one-celled alga that swims towards light using a light-sensing protein called channelrhodopsin, remar"
     },
     "2026-10-22_s2.mp3": {
-      "h": "789b5f0b16a757ea",
-      "bytes": 48816,
-      "text": "I remember how quickly an average day turned into a day when life felt extinguished, leaving behind the place where I gr"
+      "h": "d89cc5f4f1f6b5e9",
+      "bytes": 70704,
+      "text": "When the channelrhodopsin detects light, electrically charged ions rush into the cell from outside, triggering an electr"
     },
     "2026-10-22_s3.mp3": {
       "h": "cd5c797c0b63e9a8",
@@ -654,29 +654,29 @@
       "text": "I understood that he meant a great deal more than that."
     },
     "2026-11-06_full.mp3": {
-      "h": "1fc36a18cbcb7fa0",
-      "bytes": 270720,
-      "text": "In the late 1990s, the social scientist and author Mayer Hillman predicted that, in the future, our children and grandch"
+      "h": "b59602607f9f055d",
+      "bytes": 202176,
+      "text": "Patrick McCabe is instantly recognisable in the early autumn sunshine, his wheelchair surrounded by fellow pupils at Fal"
     },
     "2026-11-06_s0.mp3": {
-      "h": "61cfdfb66f960682",
-      "bytes": 72000,
-      "text": "In the late 1990s, the social scientist and author Mayer Hillman predicted that, in the future, our children and grandch"
+      "h": "16117255474b9814",
+      "bytes": 82944,
+      "text": "Patrick McCabe is instantly recognisable in the early autumn sunshine, his wheelchair surrounded by fellow pupils at Fal"
     },
     "2026-11-06_s1.mp3": {
-      "h": "e319098a7fe5ad52",
-      "bytes": 35136,
-      "text": "Twenty years later Greta Thunberg, addressing the UN, thundered: “You are failing us."
+      "h": "2f5df419d254f8e7",
+      "bytes": 30816,
+      "text": "His extraordinary GCSE success this summer has become the stuff of legend."
     },
     "2026-11-06_s2.mp3": {
-      "h": "475b303095ec5a79",
-      "bytes": 22464,
-      "text": "But the young people are starting to understand your betrayal."
+      "h": "03ff3236d78df519",
+      "bytes": 45072,
+      "text": "The 16-year-old has cerebral palsy and it took four months for him to complete his exams using eye-tracking technology."
     },
     "2026-11-06_s3.mp3": {
-      "h": "3060f777feffc866",
-      "bytes": 143136,
-      "text": "The eyes of all future generations are upon you.” Twenty-five years ago, Hillman also warned that public denial of the c"
+      "h": "1fbebc2c9c530b9c",
+      "bytes": 45216,
+      "text": "Now Patrick has started his A-levels – French, business and media studies – and fresh challenges lie ahead."
     },
     "2026-11-06_s4.mp3": {
       "h": "724eea3fd6b99cc4",
@@ -2383,6 +2383,11 @@
       "bytes": 11232,
       "text": "despite"
     },
+    "vocab_detect.mp3": {
+      "h": "2b66455f7e2e8041",
+      "bytes": 11232,
+      "text": "detect"
+    },
     "vocab_detection.mp3": {
       "h": "f4f3d323e670c925",
       "bytes": 11232,
@@ -2623,10 +2628,20 @@
       "bytes": 11232,
       "text": "extinguished"
     },
+    "vocab_extraordinary.mp3": {
+      "h": "185acd9318727e3d",
+      "bytes": 11520,
+      "text": "extraordinary"
+    },
     "vocab_extreme.mp3": {
       "h": "6928e84932543506",
       "bytes": 11232,
       "text": "extreme"
+    },
+    "vocab_eye_tracking.mp3": {
+      "h": "04dd59579655887f",
+      "bytes": 11232,
+      "text": "eye-tracking"
     },
     "vocab_eye_tracking_technology.mp3": {
       "h": "dfa78fc052775d7e",
@@ -3443,6 +3458,11 @@
       "bytes": 11232,
       "text": "licence"
     },
+    "vocab_lie_ahead.mp3": {
+      "h": "45d7735c0a184d8c",
+      "bytes": 11232,
+      "text": "lie ahead"
+    },
     "vocab_life_sized.mp3": {
       "h": "3c248bda5b3d030e",
       "bytes": 11232,
@@ -3887,6 +3907,11 @@
       "h": "39c2a0993ad1b3d5",
       "bytes": 10944,
       "text": "proposition"
+    },
+    "vocab_protein.mp3": {
+      "h": "2c65275ae0b05e53",
+      "bytes": 11232,
+      "text": "protein"
     },
     "vocab_protests.mp3": {
       "h": "2894a2d2eb6a223a",
@@ -4413,6 +4438,11 @@
       "bytes": 11232,
       "text": "swelling"
     },
+    "vocab_swim_towards.mp3": {
+      "h": "391e848a514cd605",
+      "bytes": 11952,
+      "text": "swim towards"
+    },
     "vocab_swims_towards.mp3": {
       "h": "8b698ebc384a3476",
       "bytes": 12096,
@@ -4462,6 +4492,11 @@
       "h": "539d2e4fa51a346e",
       "bytes": 15696,
       "text": "the fabric of everyday life"
+    },
+    "vocab_the_stuff_of_legend.mp3": {
+      "h": "358c6de36aac96d8",
+      "bytes": 12528,
+      "text": "the stuff of legend"
     },
     "vocab_thin.mp3": {
       "h": "6ca0fa2674cdc58a",
@@ -4567,6 +4602,11 @@
       "h": "22bd6f1be3239c0c",
       "bytes": 11232,
       "text": "tricky"
+    },
+    "vocab_trigger.mp3": {
+      "h": "63d62d4aee9a5d4f",
+      "bytes": 11232,
+      "text": "trigger"
     },
     "vocab_triggering.mp3": {
       "h": "4604b55107f21e22",
