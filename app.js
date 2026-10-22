@@ -394,20 +394,37 @@ function preloadWordAudio(word, audioUrl) {
 }
 
 // 依次尝试候选地址播放，全部失败才回调 onFail
+// 注意：404 时浏览器的 error 事件和 play() 的 reject 会**各触发一次**，
+// 如果不管，每个失败候选会让整条链多结算一次；而 playAllSentences 靠回调
+// 推进句子下标，多结算一次就跳一句并叠着播——听感就是好几个声音同时响。
 function playCandidates(candidates, rate, onDone, onFail) {
   const list = (candidates || []).filter(Boolean);
   let idx = 0;
+  let settled = false; // 整条链只允许结算一次
+  const settle = (fn) => {
+    if (settled) return;
+    settled = true;
+    currentAudioElement = null;
+    if (fn) fn();
+  };
   const tryNext = () => {
-    if (idx >= list.length) { currentAudioElement = null; if (onFail) onFail(); return; }
+    if (settled) return;
+    if (idx >= list.length) { settle(onFail); return; }
     const audio = new Audio(list[idx++]);
     audio.preload = 'auto';
     audio.playbackRate = rate;
     currentAudioElement = audio;
-    let settled = false;
-    const finish = () => { if (settled) return; settled = true; currentAudioElement = null; if (onDone) onDone(); };
-    audio.onended = finish;
-    audio.onerror = () => { if (!settled) tryNext(); };
-    audio.play().catch(() => { if (!settled) tryNext(); });
+    let thisFailed = false; // 单个候选的失败也只算一次
+    const fail = () => {
+      if (thisFailed || settled) return;
+      thisFailed = true;
+      if (currentAudioElement === audio) currentAudioElement = null;
+      tryNext();
+    };
+    audio.onended = () => settle(onDone);
+    audio.onerror = fail;
+    const playing = audio.play();
+    if (playing && typeof playing.catch === 'function') playing.catch(fail);
   };
   tryNext();
 }
@@ -571,7 +588,11 @@ function playAllSentences(rate) {
   function playNext() {
     if (!isPlayingAll || i >= sents.length) { isPlayingAll = false; return; }
     // Use speakInternal (NOT speak) to avoid resetting isPlayingAll
+    // advanced: 同一句的回调只允许推进一次，防止底层重复结算造成跳句与叠播
+    let advanced = false;
     speakInternal(sents[i], r, () => {
+      if (advanced) return;
+      advanced = true;
       if (!isPlayingAll) return;
       i++;
       if (i < sents.length) playNext();
