@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-24T06:59:54+08:00",
+  "generated_at": "2026-10-25T06:22:50+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1147,6 +1147,31 @@
       "h": "2fe0f3eeed516c3e",
       "bytes": 66765,
       "text": "The overpass is the centerpiece of a larger system built by the state to assist wildlife crossing the highway, which als"
+    },
+    "2026-11-23_full.mp3": {
+      "h": "b59602607f9f055d",
+      "bytes": 198092,
+      "text": "Patrick McCabe is instantly recognisable in the early autumn sunshine, his wheelchair surrounded by fellow pupils at Fal"
+    },
+    "2026-11-23_s0.mp3": {
+      "h": "16117255474b9814",
+      "bytes": 78716,
+      "text": "Patrick McCabe is instantly recognisable in the early autumn sunshine, his wheelchair surrounded by fellow pupils at Fal"
+    },
+    "2026-11-23_s1.mp3": {
+      "h": "2f5df419d254f8e7",
+      "bytes": 26732,
+      "text": "His extraordinary GCSE success this summer has become the stuff of legend."
+    },
+    "2026-11-23_s2.mp3": {
+      "h": "03ff3236d78df519",
+      "bytes": 40844,
+      "text": "The 16-year-old has cerebral palsy and it took four months for him to complete his exams using eye-tracking technology."
+    },
+    "2026-11-23_s3.mp3": {
+      "h": "1fbebc2c9c530b9c",
+      "bytes": 41132,
+      "text": "Now Patrick has started his A-levels – French, business and media studies – and fresh challenges lie ahead."
     },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
@@ -3942,6 +3967,11 @@
       "h": "124288e638b605d9",
       "bytes": 7005,
       "text": "punctuated"
+    },
+    "vocab_pupils.mp3": {
+      "h": "3d005778d4d28e93",
+      "bytes": 7004,
+      "text": "pupils"
     },
     "vocab_put_in_place.mp3": {
       "h": "d56aae11d245d368",
