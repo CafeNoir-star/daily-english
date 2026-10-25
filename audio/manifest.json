@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-25T06:22:50+08:00",
+  "generated_at": "2026-10-26T06:25:40+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1173,6 +1173,31 @@
       "bytes": 41132,
       "text": "Now Patrick has started his A-levels – French, business and media studies – and fresh challenges lie ahead."
     },
+    "2026-11-24_full.mp3": {
+      "h": "5035753d9382d876",
+      "bytes": 202124,
+      "text": "When Sophie Rose Jenkins announced she would not return to St Andrews University this academic year because of her exper"
+    },
+    "2026-11-24_s0.mp3": {
+      "h": "0c9d0da97762092f",
+      "bytes": 63884,
+      "text": "When Sophie Rose Jenkins announced she would not return to St Andrews University this academic year because of her exper"
+    },
+    "2026-11-24_s1.mp3": {
+      "h": "fb7ec500706c65ef",
+      "bytes": 32636,
+      "text": "But in the two weeks since she published her story on LinkedIn, it has resonated with hundreds of others."
+    },
+    "2026-11-24_s2.mp3": {
+      "h": "9cef919b0aeb1088",
+      "bytes": 54524,
+      "text": "“Working-class students have been made to feel ashamed of their home life at university,” the former comparative literat"
+    },
+    "2026-11-24_s3.mp3": {
+      "h": "12c3d95bc0faee80",
+      "bytes": 40844,
+      "text": "“Arriving at a university ranked first in the UK at the time from a background like mine, I thought I was doing everythi"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2052,6 +2077,11 @@
       "h": "ef8fe782bf949865",
       "bytes": 7005,
       "text": "clarify"
+    },
+    "vocab_classism.mp3": {
+      "h": "b567cdaf8890c93a",
+      "bytes": 7004,
+      "text": "classism"
     },
     "vocab_clumsy.mp3": {
       "h": "604985972190f05e",
@@ -3473,6 +3503,11 @@
       "bytes": 7005,
       "text": "legacy"
     },
+    "vocab_lengthy.mp3": {
+      "h": "286c438ed618a685",
+      "bytes": 7004,
+      "text": "lengthy"
+    },
     "vocab_let.mp3": {
       "h": "0262f9bb6ecbef4e",
       "bytes": 7005,
@@ -4008,6 +4043,11 @@
       "bytes": 7005,
       "text": "range from"
     },
+    "vocab_rank.mp3": {
+      "h": "9f0d66272a0406f6",
+      "bytes": 7004,
+      "text": "rank"
+    },
     "vocab_ranks.mp3": {
       "h": "210477a750ecb87a",
       "bytes": 7005,
@@ -4127,6 +4167,11 @@
       "h": "d5e7b9069fe0825b",
       "bytes": 7005,
       "text": "resilience"
+    },
+    "vocab_resonate.mp3": {
+      "h": "7b7046127fdc9967",
+      "bytes": 7004,
+      "text": "resonate"
     },
     "vocab_restriction.mp3": {
       "h": "993b33945189cffa",
@@ -4812,6 +4857,11 @@
       "h": "91f3be3b7a64c291",
       "bytes": 7005,
       "text": "workforce"
+    },
+    "vocab_working_class.mp3": {
+      "h": "d7447afe8ccd9243",
+      "bytes": 7724,
+      "text": "working-class"
     },
     "vocab_worse_off.mp3": {
       "h": "4b0556624d5449c1",
