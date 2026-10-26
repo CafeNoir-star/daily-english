@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-26T06:25:40+08:00",
+  "generated_at": "2026-10-27T07:41:50+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1198,6 +1198,26 @@
       "bytes": 40844,
       "text": "“Arriving at a university ranked first in the UK at the time from a background like mine, I thought I was doing everythi"
     },
+    "2026-11-25_full.mp3": {
+      "h": "74c8fe4eec46212f",
+      "bytes": 148844,
+      "text": "In the first episode of Armando Iannucci’s political satire The Thick of It, the hapless minister Hugh Abbot is in the b"
+    },
+    "2026-11-25_s0.mp3": {
+      "h": "606463728a7271b5",
+      "bytes": 76556,
+      "text": "In the first episode of Armando Iannucci’s political satire The Thick of It, the hapless minister Hugh Abbot is in the b"
+    },
+    "2026-11-25_s1.mp3": {
+      "h": "de7ceecaddfecbc2",
+      "bytes": 37244,
+      "text": "“So you want something sexy and eye-catching, and that is free and universally popular and instantly applicable."
+    },
+    "2026-11-25_s2.mp3": {
+      "h": "2602d4ef3108bf95",
+      "bytes": 27884,
+      "text": "No one can possibly object to it,” says the addled junior adviser Ollie Reeder."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1302,6 +1322,11 @@
       "h": "204124766936aa52",
       "bytes": 7005,
       "text": "additional"
+    },
+    "vocab_addled.mp3": {
+      "h": "560cdc910b800525",
+      "bytes": 7004,
+      "text": "addled"
     },
     "vocab_address.mp3": {
       "h": "c662180230cad147",
@@ -1623,6 +1648,11 @@
       "bytes": 7005,
       "text": "aspect"
     },
+    "vocab_assembled.mp3": {
+      "h": "8beaf09e106a180b",
+      "bytes": 7004,
+      "text": "assembled"
+    },
     "vocab_asset.mp3": {
       "h": "05fac94380a70241",
       "bytes": 7005,
@@ -1937,6 +1967,11 @@
       "h": "8b9248a4e0b64bbc",
       "bytes": 7005,
       "text": "brain"
+    },
+    "vocab_brainstorm.mp3": {
+      "h": "4e95058a32f7f441",
+      "bytes": 7004,
+      "text": "brainstorm"
     },
     "vocab_breakthrough.mp3": {
       "h": "593b158c04f6d36f",
@@ -2693,6 +2728,11 @@
       "bytes": 7005,
       "text": "extreme"
     },
+    "vocab_eye_catching.mp3": {
+      "h": "d1c4d4e9aa160e34",
+      "bytes": 7004,
+      "text": "eye-catching"
+    },
     "vocab_eye_tracking.mp3": {
       "h": "04dd59579655887f",
       "bytes": 7005,
@@ -2898,6 +2938,11 @@
       "bytes": 7005,
       "text": "france"
     },
+    "vocab_frantically.mp3": {
+      "h": "1da8e05a08475513",
+      "bytes": 7004,
+      "text": "frantically"
+    },
     "vocab_free.mp3": {
       "h": "4ff88aaddbd209d8",
       "bytes": 7005,
@@ -3067,6 +3112,11 @@
       "h": "0331353fdca40f3f",
       "bytes": 7005,
       "text": "halcyon"
+    },
+    "vocab_hapless.mp3": {
+      "h": "ae20e1200ea68f71",
+      "bytes": 4556,
+      "text": "hapless"
     },
     "vocab_harness.mp3": {
       "h": "0a4ca4ce7e4990cd",
@@ -3718,10 +3768,20 @@
       "bytes": 7005,
       "text": "nourishment"
     },
+    "vocab_object.mp3": {
+      "h": "1615307cc4523f18",
+      "bytes": 7004,
+      "text": "object"
+    },
     "vocab_occupational.mp3": {
       "h": "57e724232d47c372",
       "bytes": 7293,
       "text": "occupational"
+    },
+    "vocab_on_the_hoof.mp3": {
+      "h": "5d7cff18295d68b1",
+      "bytes": 7004,
+      "text": "on-the-hoof"
     },
     "vocab_on_the_other_end_of_the_phone.mp3": {
       "h": "d26e648726f6ca65",
