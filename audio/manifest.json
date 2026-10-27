@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-27T07:41:50+08:00",
+  "generated_at": "2026-10-28T07:40:31+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1218,6 +1218,26 @@
       "bytes": 27884,
       "text": "No one can possibly object to it,” says the addled junior adviser Ollie Reeder."
     },
+    "2026-11-26_full.mp3": {
+      "h": "a8748c6691095e45",
+      "bytes": 180092,
+      "text": "Big pharmaceutical companies have been accused of “free-riding on nature”, after a landmark biodiversity fund that invit"
+    },
+    "2026-11-26_s0.mp3": {
+      "h": "17e3ee6d7f670fe1",
+      "bytes": 68204,
+      "text": "Big pharmaceutical companies have been accused of “free-riding on nature”, after a landmark biodiversity fund that invit"
+    },
+    "2026-11-26_s1.mp3": {
+      "h": "890cd94927a79fe9",
+      "bytes": 74684,
+      "text": "The Cali Fund set out to raise $1bn (£750m) annually, by asking companies that profit from nature’s genetics to contribu"
+    },
+    "2026-11-26_s2.mp3": {
+      "h": "592a04307abceb2c",
+      "bytes": 30044,
+      "text": "But more than 18 months after the fund was launched, it remains far below this target."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1272,6 +1292,11 @@
       "h": "72c8f75b62572f59",
       "bytes": 7005,
       "text": "accurate"
+    },
+    "vocab_accuse.mp3": {
+      "h": "d3e0c4f58e775e1e",
+      "bytes": 7004,
+      "text": "accuse"
     },
     "vocab_acknowledge.mp3": {
       "h": "4f6c0a36ad32b85b",
@@ -1552,6 +1577,11 @@
       "h": "80ff69d5f5b55ce6",
       "bytes": 7005,
       "text": "annual"
+    },
+    "vocab_annually.mp3": {
+      "h": "ef3486f16539b220",
+      "bytes": 7004,
+      "text": "annually"
     },
     "vocab_another.mp3": {
       "h": "b7c8ffb8fbc67c17",
@@ -2298,6 +2328,11 @@
       "bytes": 7005,
       "text": "consult"
     },
+    "vocab_contribute.mp3": {
+      "h": "d97edb15bff0ddff",
+      "bytes": 7004,
+      "text": "contribute"
+    },
     "vocab_contribute_to.mp3": {
       "h": "4a0857a7b7a0e3a0",
       "bytes": 7005,
@@ -3028,6 +3063,11 @@
       "bytes": 7005,
       "text": "generously"
     },
+    "vocab_genetics.mp3": {
+      "h": "8ca752ea4016d134",
+      "bytes": 7004,
+      "text": "genetics"
+    },
     "vocab_gently.mp3": {
       "h": "5f4e484b31c096d3",
       "bytes": 7005,
@@ -3538,6 +3578,16 @@
       "bytes": 7005,
       "text": "labelled"
     },
+    "vocab_landmark.mp3": {
+      "h": "93ac1a0050ee54e7",
+      "bytes": 7004,
+      "text": "landmark"
+    },
+    "vocab_launch.mp3": {
+      "h": "f7c91fefc9c39de1",
+      "bytes": 7004,
+      "text": "launch"
+    },
     "vocab_leave_behind.mp3": {
       "h": "5b80adf820746ede",
       "bytes": 7005,
@@ -3932,6 +3982,11 @@
       "h": "4489926ad3a9d960",
       "bytes": 7005,
       "text": "pesticide"
+    },
+    "vocab_pharmaceutical.mp3": {
+      "h": "4ae8db49af4a660c",
+      "bytes": 7724,
+      "text": "pharmaceutical"
     },
     "vocab_physiology.mp3": {
       "h": "ac014429ec9c28d9",
@@ -4617,6 +4672,11 @@
       "h": "6752612bed112cbd",
       "bytes": 7005,
       "text": "takeover"
+    },
+    "vocab_target.mp3": {
+      "h": "0e8a3ad980ec1798",
+      "bytes": 7004,
+      "text": "target"
     },
     "vocab_tear_through.mp3": {
       "h": "d46d3dc5d6dac20d",
