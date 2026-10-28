@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-28T07:40:31+08:00",
+  "generated_at": "2026-10-29T07:58:31+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1238,6 +1238,21 @@
       "bytes": 30044,
       "text": "But more than 18 months after the fund was launched, it remains far below this target."
     },
+    "2026-11-27_full.mp3": {
+      "h": "385316ad07ecc038",
+      "bytes": 194492,
+      "text": "The producer looked at her for a long time and said: “Very nice to meet you but you’ll never make a movie because you ha"
+    },
+    "2026-11-27_s0.mp3": {
+      "h": "a090e20521df3a8e",
+      "bytes": 117164,
+      "text": "The producer looked at her for a long time and said: “Very nice to meet you but you’ll never make a movie because you ha"
+    },
+    "2026-11-27_s1.mp3": {
+      "h": "5989bab0f557358c",
+      "bytes": 73676,
+      "text": "Though she dabbled in film and TV, it wasn’t until the 1990s that she became a bona fide movie star, playing M in the Bo"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1978,6 +1993,11 @@
       "bytes": 7005,
       "text": "body"
     },
+    "vocab_bona_fide.mp3": {
+      "h": "f53d61a3d0bff4a9",
+      "bytes": 7004,
+      "text": "bona fide"
+    },
     "vocab_bones.mp3": {
       "h": "86a83d30702d729b",
       "bytes": 7005,
@@ -2007,6 +2027,11 @@
       "h": "593b158c04f6d36f",
       "bytes": 7005,
       "text": "breakthrough"
+    },
+    "vocab_breathe_a_sigh_of_relief.mp3": {
+      "h": "ed69e543279c50b7",
+      "bytes": 9452,
+      "text": "breathe a sigh of relief"
     },
     "vocab_broaden.mp3": {
       "h": "9483bc9bd8ec31a0",
@@ -2268,6 +2293,11 @@
       "bytes": 7005,
       "text": "conceive"
     },
+    "vocab_concentrate.mp3": {
+      "h": "0a45ca53d16020b4",
+      "bytes": 7004,
+      "text": "concentrate"
+    },
     "vocab_concerned.mp3": {
       "h": "aac69b54949593c6",
       "bytes": 7005,
@@ -2408,10 +2438,20 @@
       "bytes": 7005,
       "text": "curriculum"
     },
+    "vocab_dabble.mp3": {
+      "h": "e8f2dc6275c837c3",
+      "bytes": 7004,
+      "text": "dabble"
+    },
     "vocab_deathless.mp3": {
       "h": "c59cabf58b7e122e",
       "bytes": 7005,
       "text": "deathless"
+    },
+    "vocab_debut.mp3": {
+      "h": "502a2754b335ed3b",
+      "bytes": 7004,
+      "text": "debut"
     },
     "vocab_declare.mp3": {
       "h": "a0910bc7d1ab368f",
@@ -4023,6 +4063,11 @@
       "bytes": 7005,
       "text": "pollution"
     },
+    "vocab_portrayal.mp3": {
+      "h": "224ecd8ca8661176",
+      "bytes": 7004,
+      "text": "portrayal"
+    },
     "vocab_pose.mp3": {
       "h": "bd68205c2099fb1b",
       "bytes": 7005,
@@ -4082,6 +4127,11 @@
       "h": "22d398173dcd377f",
       "bytes": 7293,
       "text": "proclamation"
+    },
+    "vocab_professional.mp3": {
+      "h": "18342d1b3da73253",
+      "bytes": 7004,
+      "text": "professional"
     },
     "vocab_promptly.mp3": {
       "h": "1beb18531772c810",
@@ -4282,6 +4332,11 @@
       "h": "d5e7b9069fe0825b",
       "bytes": 7005,
       "text": "resilience"
+    },
+    "vocab_resolved.mp3": {
+      "h": "026ab2fab046093c",
+      "bytes": 7004,
+      "text": "resolved"
     },
     "vocab_resonate.mp3": {
       "h": "7b7046127fdc9967",
