@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-29T07:58:31+08:00",
+  "generated_at": "2026-10-30T07:54:42+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1253,6 +1253,26 @@
       "bytes": 73676,
       "text": "Though she dabbled in film and TV, it wasn’t until the 1990s that she became a bona fide movie star, playing M in the Bo"
     },
+    "2026-11-28_full.mp3": {
+      "h": "6a49fd4932c1bed4",
+      "bytes": 175772,
+      "text": "The bird observatory on the Calf of Man was sulking under a low cloud base as we stepped ashore at South Harbour. The da"
+    },
+    "2026-11-28_s0.mp3": {
+      "h": "55c83e62bab2583d",
+      "bytes": 35804,
+      "text": "The bird observatory on the Calf of Man was sulking under a low cloud base as we stepped ashore at South Harbour."
+    },
+    "2026-11-28_s1.mp3": {
+      "h": "8d4fcfe73dd1e7b2",
+      "bytes": 54092,
+      "text": "The dank mist was perfect for our surprise visit to the island, as it was not for the birds we had come across, but fung"
+    },
+    "2026-11-28_s2.mp3": {
+      "h": "c5c2f894f1ffcd42",
+      "bytes": 78572,
+      "text": "My wife, Liz, and I had taken the chance to accompany Nev Kilkenny, a visiting mycologist, who would help identify and s"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1282,6 +1302,11 @@
       "h": "7b09471cf5d5bcbb",
       "bytes": 7005,
       "text": "accessible"
+    },
+    "vocab_accompany.mp3": {
+      "h": "84900cb68e875d99",
+      "bytes": 7004,
+      "text": "accompany"
     },
     "vocab_according.mp3": {
       "h": "c3259afd125541d2",
@@ -2213,6 +2238,11 @@
       "bytes": 7005,
       "text": "combine"
     },
+    "vocab_come_across.mp3": {
+      "h": "20aa81e7decff1a6",
+      "bytes": 7004,
+      "text": "come across"
+    },
     "vocab_come_at_a_cost.mp3": {
       "h": "1dace4f2cfc9f9d3",
       "bytes": 7725,
@@ -2442,6 +2472,11 @@
       "h": "e8f2dc6275c837c3",
       "bytes": 7004,
       "text": "dabble"
+    },
+    "vocab_dank.mp3": {
+      "h": "9431e108b67d1efa",
+      "bytes": 7004,
+      "text": "dank"
     },
     "vocab_deathless.mp3": {
       "h": "c59cabf58b7e122e",
@@ -3083,6 +3118,11 @@
       "bytes": 7005,
       "text": "funding"
     },
+    "vocab_fungi.mp3": {
+      "h": "98883b97e35b7bb1",
+      "bytes": 4412,
+      "text": "fungi"
+    },
     "vocab_gadget.mp3": {
       "h": "e00b554deeb43785",
       "bytes": 7005,
@@ -3392,6 +3432,11 @@
       "h": "37775a7036bb3e04",
       "bytes": 7005,
       "text": "husband-to-be"
+    },
+    "vocab_identify.mp3": {
+      "h": "9bf0f8ff5f5d8bcb",
+      "bytes": 7004,
+      "text": "identify"
     },
     "vocab_identity.mp3": {
       "h": "1db089a9f84e14e9",
@@ -3862,6 +3907,11 @@
       "h": "1615307cc4523f18",
       "bytes": 7004,
       "text": "object"
+    },
+    "vocab_observatory.mp3": {
+      "h": "1961fb1b69f7840d",
+      "bytes": 7292,
+      "text": "observatory"
     },
     "vocab_occupational.mp3": {
       "h": "57e724232d47c372",
@@ -4598,6 +4648,11 @@
       "bytes": 8157,
       "text": "steering clear of"
     },
+    "vocab_step_ashore.mp3": {
+      "h": "2b7a034aa9a57314",
+      "bytes": 7004,
+      "text": "step ashore"
+    },
     "vocab_step_up.mp3": {
       "h": "17a81ff25e269c87",
       "bytes": 7005,
@@ -4652,6 +4707,11 @@
       "h": "fd0a4950be7bdd9f",
       "bytes": 7005,
       "text": "suggest"
+    },
+    "vocab_sulk.mp3": {
+      "h": "e21237a2e975d640",
+      "bytes": 7004,
+      "text": "sulk"
     },
     "vocab_surrender.mp3": {
       "h": "3647690baf72450f",
