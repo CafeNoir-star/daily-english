@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-30T07:54:42+08:00",
+  "generated_at": "2026-10-31T07:35:53+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1273,6 +1273,26 @@
       "bytes": 78572,
       "text": "My wife, Liz, and I had taken the chance to accompany Nev Kilkenny, a visiting mycologist, who would help identify and s"
     },
+    "2026-11-29_full.mp3": {
+      "h": "0b35f470cd4c28ef",
+      "bytes": 146396,
+      "text": "“You can see the water level at Ardingly going down and down. I don’t remember ever seeing it this low,” says Caroline A"
+    },
+    "2026-11-29_s0.mp3": {
+      "h": "5019c987cf5fe6e4",
+      "bytes": 19964,
+      "text": "“You can see the water level at Ardingly going down and down."
+    },
+    "2026-11-29_s1.mp3": {
+      "h": "6d81898da040814d",
+      "bytes": 54812,
+      "text": "I don’t remember ever seeing it this low,” says Caroline Allan, a lifetime resident of Haywards Heath, the nearest town "
+    },
+    "2026-11-29_s2.mp3": {
+      "h": "3046d3f910e22135",
+      "bytes": 64316,
+      "text": "The Ardingly reservoir, managed by South East Water and serving about 95,000 properties in and around Haywards Heath and"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2463,6 +2483,11 @@
       "bytes": 7293,
       "text": "curiosity"
     },
+    "vocab_currently.mp3": {
+      "h": "0517dc15ace78f45",
+      "bytes": 7004,
+      "text": "currently"
+    },
     "vocab_curriculum.mp3": {
       "h": "4a130aec0704c5a2",
       "bytes": 7005,
@@ -2557,6 +2582,11 @@
       "h": "da7630d6af834940",
       "bytes": 7005,
       "text": "depend on"
+    },
+    "vocab_depleted.mp3": {
+      "h": "cffbaedd55414d58",
+      "bytes": 7004,
+      "text": "depleted"
     },
     "vocab_deposits.mp3": {
       "h": "e8df668f16e4daa5",
@@ -3748,6 +3778,11 @@
       "bytes": 7005,
       "text": "look at"
     },
+    "vocab_managed.mp3": {
+      "h": "9fdf36c79835189a",
+      "bytes": 7004,
+      "text": "managed"
+    },
     "vocab_manifesto.mp3": {
       "h": "6358b5cb2992b884",
       "bytes": 7293,
@@ -4188,6 +4223,11 @@
       "bytes": 7005,
       "text": "promptly"
     },
+    "vocab_properties.mp3": {
+      "h": "d0449e8607744984",
+      "bytes": 7004,
+      "text": "properties"
+    },
     "vocab_proposition.mp3": {
       "h": "39c2a0993ad1b3d5",
       "bytes": 7005,
@@ -4373,6 +4413,16 @@
       "bytes": 7005,
       "text": "reserved"
     },
+    "vocab_reservoir.mp3": {
+      "h": "5f4fb936b3cb9e3e",
+      "bytes": 7004,
+      "text": "reservoir"
+    },
+    "vocab_resident.mp3": {
+      "h": "891cde22cc4a68f9",
+      "bytes": 7004,
+      "text": "resident"
+    },
     "vocab_residents.mp3": {
       "h": "f012b07379ae4901",
       "bytes": 7005,
@@ -4507,6 +4557,11 @@
       "h": "c2ff7fb2c6b82c2a",
       "bytes": 7005,
       "text": "serendipity"
+    },
+    "vocab_serving.mp3": {
+      "h": "f036766682a230b9",
+      "bytes": 7004,
+      "text": "serving"
     },
     "vocab_set_out.mp3": {
       "h": "cce623e0d2a38a08",
@@ -5052,6 +5107,11 @@
       "h": "3fcdcb3d0e685f28",
       "bytes": 7005,
       "text": "waste"
+    },
+    "vocab_water_level.mp3": {
+      "h": "69e437d1bdc8acb4",
+      "bytes": 7004,
+      "text": "water level"
     },
     "vocab_wearable.mp3": {
       "h": "0195564e5dfb34ad",
