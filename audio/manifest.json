@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-10-31T07:35:53+08:00",
+  "generated_at": "2026-11-01T07:21:27+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1293,6 +1293,21 @@
       "bytes": 64316,
       "text": "The Ardingly reservoir, managed by South East Water and serving about 95,000 properties in and around Haywards Heath and"
     },
+    "2026-11-30_full.mp3": {
+      "h": "a27706580e6d0370",
+      "bytes": 159356,
+      "text": "Your account of the datacentre controversy in Cardiff ( The datacentre next door: on the frontline of tech’s latest Davi"
+    },
+    "2026-11-30_s0.mp3": {
+      "h": "7ed104746fd67177",
+      "bytes": 105644,
+      "text": "Your account of the datacentre controversy in Cardiff ( The datacentre next door: on the frontline of tech’s latest Davi"
+    },
+    "2026-11-30_s1.mp3": {
+      "h": "6f441b52d0e2b9fc",
+      "bytes": 50492,
+      "text": "We also should ask the anti-datacentre folk if they’d be prepared to stop using their computers – lots of their online t"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1332,6 +1347,11 @@
       "h": "c3259afd125541d2",
       "bytes": 7005,
       "text": "according"
+    },
+    "vocab_account.mp3": {
+      "h": "ca20728d35f00c3a",
+      "bytes": 7004,
+      "text": "account"
     },
     "vocab_accountability.mp3": {
       "h": "f7f50285e1077421",
@@ -1833,6 +1853,11 @@
       "bytes": 7005,
       "text": "background"
     },
+    "vocab_balancing.mp3": {
+      "h": "dd2d44e075f348e3",
+      "bytes": 7004,
+      "text": "balancing"
+    },
     "vocab_ballooning.mp3": {
       "h": "8395a4d57595a1fa",
       "bytes": 7005,
@@ -1882,6 +1907,11 @@
       "h": "edf4aacee9db42da",
       "bytes": 7437,
       "text": "be hard pushed"
+    },
+    "vocab_be_prepared_to.mp3": {
+      "h": "2a8efac38b3df942",
+      "bytes": 7292,
+      "text": "be prepared to"
     },
     "vocab_be_up_for.mp3": {
       "h": "da06e29697aebed7",
@@ -2423,6 +2453,11 @@
       "bytes": 7293,
       "text": "controversial"
     },
+    "vocab_controversy.mp3": {
+      "h": "4efd595d503f8326",
+      "bytes": 7292,
+      "text": "controversy"
+    },
     "vocab_correlation.mp3": {
       "h": "1469596fc89ae50a",
       "bytes": 7005,
@@ -2432,6 +2467,11 @@
       "h": "d3f05d2c02fe9f57",
       "bytes": 7005,
       "text": "costly"
+    },
+    "vocab_council.mp3": {
+      "h": "ffff2a3ce77f6f1c",
+      "bytes": 7004,
+      "text": "council"
     },
     "vocab_counterproductive.mp3": {
       "h": "cc6e3a8a8c3906fd",
@@ -3838,6 +3878,11 @@
       "bytes": 7005,
       "text": "misleading"
     },
+    "vocab_missed_out.mp3": {
+      "h": "282c85b83826d94d",
+      "bytes": 7004,
+      "text": "missed out"
+    },
     "vocab_misunderstanding.mp3": {
       "h": "08b251460aa1e7bf",
       "bytes": 8013,
@@ -4402,6 +4447,11 @@
       "h": "ef2c91c6f32ca0f4",
       "bytes": 7005,
       "text": "repay"
+    },
+    "vocab_replacement.mp3": {
+      "h": "91b5c0a6d4701fe0",
+      "bytes": 7004,
+      "text": "replacement"
     },
     "vocab_reputation.mp3": {
       "h": "26b2a66d3f9245c6",
