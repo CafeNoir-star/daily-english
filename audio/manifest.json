@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-01T07:21:27+08:00",
+  "generated_at": "2026-11-02T07:28:08+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1308,6 +1308,41 @@
       "bytes": 50492,
       "text": "We also should ask the anti-datacentre folk if they’d be prepared to stop using their computers – lots of their online t"
     },
+    "2026-12-01_full.mp3": {
+      "h": "ec64f0bfa9837de0",
+      "bytes": 249932,
+      "text": "Are people deciding not to have kids because of climate anxiety and economic precarity? Or is this an unchosen fertility"
+    },
+    "2026-12-01_s0.mp3": {
+      "h": "610a01e9f6598141",
+      "bytes": 29612,
+      "text": "Are people deciding not to have kids because of climate anxiety and economic precarity?"
+    },
+    "2026-12-01_s1.mp3": {
+      "h": "7fa3a38dc4bb983e",
+      "bytes": 31916,
+      "text": "Or is this an unchosen fertility cliff edge, created by forever chemicals and our lifestyles?"
+    },
+    "2026-12-01_s2.mp3": {
+      "h": "8dc2e57276fee8c5",
+      "bytes": 41852,
+      "text": "This is not a drill, says Carroll, a biologist and reproductive scientist at Manchester Metropolitan University."
+    },
+    "2026-12-01_s3.mp3": {
+      "h": "e825ba8ac01bce0a",
+      "bytes": 60572,
+      "text": "“There’s compelling evidence to support a historical decline in sperm count and sperm concentration over the last number"
+    },
+    "2026-12-01_s4.mp3": {
+      "h": "10001b2f0ae8d72c",
+      "bytes": 29612,
+      "text": "First, it’s not a uniform picture and in some populations sperm counts are going up."
+    },
+    "2026-12-01_s5.mp3": {
+      "h": "51da6421109db4c5",
+      "bytes": 38972,
+      "text": "The Danish Young Men Study, for instance, showed no drop between 1996 and 2022."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2248,6 +2283,11 @@
       "bytes": 7004,
       "text": "classism"
     },
+    "vocab_cliff_edge.mp3": {
+      "h": "a79c7f75db6d8e7a",
+      "bytes": 7004,
+      "text": "cliff edge"
+    },
     "vocab_clumsy.mp3": {
       "h": "604985972190f05e",
       "bytes": 7005,
@@ -2342,6 +2382,11 @@
       "h": "4dcb0c3385a4eddd",
       "bytes": 8445,
       "text": "community trust"
+    },
+    "vocab_compelling.mp3": {
+      "h": "2bf274e6ecffd138",
+      "bytes": 7004,
+      "text": "compelling"
     },
     "vocab_competing.mp3": {
       "h": "ff67d6e54cfd0d38",
@@ -3057,6 +3102,11 @@
       "h": "43eef9a62abb8b1e",
       "bytes": 7005,
       "text": "for"
+    },
+    "vocab_for_instance.mp3": {
+      "h": "ddc6b4882f5259ea",
+      "bytes": 7436,
+      "text": "for instance"
     },
     "vocab_forced.mp3": {
       "h": "54e98d45ac70c3f4",
@@ -4193,6 +4243,11 @@
       "bytes": 7005,
       "text": "pollution"
     },
+    "vocab_population.mp3": {
+      "h": "db4d330579352723",
+      "bytes": 7004,
+      "text": "population"
+    },
     "vocab_portrayal.mp3": {
       "h": "224ecd8ca8661176",
       "bytes": 7004,
@@ -4222,6 +4277,11 @@
       "h": "f0b2b2ae5e318d4b",
       "bytes": 7005,
       "text": "potentially"
+    },
+    "vocab_precarity.mp3": {
+      "h": "97447bdd29ab6fee",
+      "bytes": 7004,
+      "text": "precarity"
     },
     "vocab_predict.mp3": {
       "h": "5226c875836a37ee",
@@ -4452,6 +4512,11 @@
       "h": "91b5c0a6d4701fe0",
       "bytes": 7004,
       "text": "replacement"
+    },
+    "vocab_reproductive.mp3": {
+      "h": "18a551737a895255",
+      "bytes": 7436,
+      "text": "reproductive"
     },
     "vocab_reputation.mp3": {
       "h": "26b2a66d3f9245c6",
@@ -5072,6 +5137,11 @@
       "h": "fd2a27641c8303d9",
       "bytes": 7005,
       "text": "unexpected"
+    },
+    "vocab_uniform.mp3": {
+      "h": "8146160c40cabf56",
+      "bytes": 7004,
+      "text": "uniform"
     },
     "vocab_uninhabitable.mp3": {
       "h": "3b62a97a6aead5c6",
