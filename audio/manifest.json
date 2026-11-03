@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-02T07:28:08+08:00",
+  "generated_at": "2026-11-03T10:09:18+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1343,6 +1343,36 @@
       "bytes": 38972,
       "text": "The Danish Young Men Study, for instance, showed no drop between 1996 and 2022."
     },
+    "2026-12-02_full.mp3": {
+      "h": "9c6f01ea538fcc33",
+      "bytes": 183404,
+      "text": "There’s no humble way to say it: I get a lot of fan mail. Almost every day, multi-paragraph emails arrive from passionat"
+    },
+    "2026-12-02_s0.mp3": {
+      "h": "07fecb05f8ddaa6c",
+      "bytes": 19964,
+      "text": "There’s no humble way to say it: I get a lot of fan mail."
+    },
+    "2026-12-02_s1.mp3": {
+      "h": "c1ffc12ec5e52be6",
+      "bytes": 49052,
+      "text": "Almost every day, multi-paragraph emails arrive from passionate and well-informed readers in Barcelona and Frankfurt, Ch"
+    },
+    "2026-12-02_s2.mp3": {
+      "h": "2bf8fb2b0380724a",
+      "bytes": 26444,
+      "text": "They have appealing names like Bella Monroe, Thalina Rose and Tricia Claxton."
+    },
+    "2026-12-02_s3.mp3": {
+      "h": "59f2bac56aa0d077",
+      "bytes": 41564,
+      "text": "Some of them are straightforward enthusiasts while others are more irreverent, like the one who signs off her messages “"
+    },
+    "2026-12-02_s4.mp3": {
+      "h": "60b6bee0ce225abe",
+      "bytes": 32636,
+      "text": "Some love the “deadpan genius” of my novels while others admire my nonfiction’s “moral courage”."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1482,6 +1512,11 @@
       "h": "a11f5c3beed47c29",
       "bytes": 7005,
       "text": "adjust"
+    },
+    "vocab_admire.mp3": {
+      "h": "af964fdf7b367ee2",
+      "bytes": 7004,
+      "text": "admire"
     },
     "vocab_adopting.mp3": {
       "h": "bd7f9e7c5c114e3f",
@@ -1727,6 +1762,11 @@
       "h": "631841a10e2272fe",
       "bytes": 7005,
       "text": "anyone"
+    },
+    "vocab_appealing.mp3": {
+      "h": "d91979348aee21ac",
+      "bytes": 7004,
+      "text": "appealing"
     },
     "vocab_applicable.mp3": {
       "h": "1530aadbaf21aefa",
@@ -3538,6 +3578,11 @@
       "bytes": 7725,
       "text": "humanitarian"
     },
+    "vocab_humble.mp3": {
+      "h": "055b9a4cd714802b",
+      "bytes": 7004,
+      "text": "humble"
+    },
     "vocab_hundred.mp3": {
       "h": "e9b039adefacfd02",
       "bytes": 7005,
@@ -3752,6 +3797,11 @@
       "h": "c5d7de1f87172a79",
       "bytes": 7437,
       "text": "irreplaceable"
+    },
+    "vocab_irreverent.mp3": {
+      "h": "a70b69212aabf811",
+      "bytes": 7004,
+      "text": "irreverent"
     },
     "vocab_irreversible.mp3": {
       "h": "54572a7689b61cc6",
@@ -4137,6 +4187,11 @@
       "h": "1a9252013891fed7",
       "bytes": 7005,
       "text": "parallel"
+    },
+    "vocab_passionate.mp3": {
+      "h": "26c3d35a2081fccb",
+      "bytes": 7004,
+      "text": "passionate"
     },
     "vocab_pave_the_way_for.mp3": {
       "h": "316d23671e6dd52f",
@@ -4728,6 +4783,11 @@
       "bytes": 7005,
       "text": "sift through"
     },
+    "vocab_sign_off.mp3": {
+      "h": "c5e3ab6667fcc021",
+      "bytes": 7004,
+      "text": "sign off"
+    },
     "vocab_significantly.mp3": {
       "h": "acb03f8f1a729008",
       "bytes": 7725,
@@ -4847,6 +4907,11 @@
       "h": "b71e21a2e1d4fdf3",
       "bytes": 7005,
       "text": "stop doing"
+    },
+    "vocab_straightforward.mp3": {
+      "h": "ffaecb2c66b424f3",
+      "bytes": 7004,
+      "text": "straightforward"
     },
     "vocab_strain.mp3": {
       "h": "26d10fbf2b46d504",
@@ -5242,6 +5307,11 @@
       "h": "a72f7b3f8f9bfcfc",
       "bytes": 7005,
       "text": "weed"
+    },
+    "vocab_well_informed.mp3": {
+      "h": "dd55df5023c815b4",
+      "bytes": 7004,
+      "text": "well-informed"
     },
     "vocab_wellness.mp3": {
       "h": "1644d71a678054a6",
