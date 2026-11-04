@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-03T10:09:18+08:00",
+  "generated_at": "2026-11-04T08:32:20+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1373,6 +1373,31 @@
       "bytes": 32636,
       "text": "Some love the “deadpan genius” of my novels while others admire my nonfiction’s “moral courage”."
     },
+    "2026-12-03_full.mp3": {
+      "h": "99c841efad7bdc36",
+      "bytes": 198524,
+      "text": "Pay stagnation over the last decade is unprecedented since Napoleonic times, the economist Paul Johnson told me, but the"
+    },
+    "2026-12-03_s0.mp3": {
+      "h": "558b4315aead313e",
+      "bytes": 108236,
+      "text": "Pay stagnation over the last decade is unprecedented since Napoleonic times, the economist Paul Johnson told me, but the"
+    },
+    "2026-12-03_s1.mp3": {
+      "h": "ad18e7d7541e8081",
+      "bytes": 40412,
+      "text": "Pay for the top 10% rose by 7.3% but only by 1.1% for the bottom 10%."
+    },
+    "2026-12-03_s2.mp3": {
+      "h": "d77989c1e3c0e0ac",
+      "bytes": 7004,
+      "text": "Why?"
+    },
+    "2026-12-03_s3.mp3": {
+      "h": "d2b292bf1795a192",
+      "bytes": 35084,
+      "text": "The national living wage has stopped rising faster than median pay, and top pay has taken off again."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2542,6 +2567,11 @@
       "h": "4efd595d503f8326",
       "bytes": 7292,
       "text": "controversy"
+    },
+    "vocab_corrected.mp3": {
+      "h": "7cc73f637d7634fd",
+      "bytes": 7004,
+      "text": "corrected"
     },
     "vocab_correlation.mp3": {
       "h": "1469596fc89ae50a",
@@ -3823,6 +3853,11 @@
       "bytes": 7005,
       "text": "judgment"
     },
+    "vocab_jumped_up.mp3": {
+      "h": "88211f760ef1ad47",
+      "bytes": 7004,
+      "text": "jumped up"
+    },
     "vocab_label.mp3": {
       "h": "64c65374dbab6fe3",
       "bytes": 7005,
@@ -3932,6 +3967,11 @@
       "h": "12b879592a57ab92",
       "bytes": 7005,
       "text": "measures"
+    },
+    "vocab_median.mp3": {
+      "h": "09f3246f599ac9a1",
+      "bytes": 7004,
+      "text": "median"
     },
     "vocab_melt_away.mp3": {
       "h": "4fefc493d07e952a",
@@ -4603,6 +4643,11 @@
       "bytes": 7005,
       "text": "resilience"
     },
+    "vocab_resolution.mp3": {
+      "h": "4680cad3c1a29b70",
+      "bytes": 7004,
+      "text": "resolution"
+    },
     "vocab_resolved.mp3": {
       "h": "026ab2fab046093c",
       "bytes": 7004,
@@ -4858,6 +4903,11 @@
       "bytes": 7005,
       "text": "stagnating"
     },
+    "vocab_stagnation.mp3": {
+      "h": "2e458071e7e76b55",
+      "bytes": 7292,
+      "text": "stagnation"
+    },
     "vocab_stakes.mp3": {
       "h": "e73619f2d6f51fe8",
       "bytes": 7005,
@@ -5017,6 +5067,11 @@
       "h": "19aad2963387b4e6",
       "bytes": 7293,
       "text": "take a bet on"
+    },
+    "vocab_taken_off.mp3": {
+      "h": "bb5f7e5f1f77d88e",
+      "bytes": 7004,
+      "text": "taken off"
     },
     "vocab_takeover.mp3": {
       "h": "6752612bed112cbd",
