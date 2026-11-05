@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-04T08:32:20+08:00",
+  "generated_at": "2026-11-05T08:50:18+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1398,6 +1398,21 @@
       "bytes": 35084,
       "text": "The national living wage has stopped rising faster than median pay, and top pay has taken off again."
     },
+    "2026-12-04_full.mp3": {
+      "h": "0ba18e09aa054931",
+      "bytes": 145244,
+      "text": "I'm aware that Airbnb has negatively impacted some urban communities, but without the income from the two self-catering "
+    },
+    "2026-12-04_s0.mp3": {
+      "h": "7d03c9c935738b29",
+      "bytes": 106076,
+      "text": "I'm aware that Airbnb has negatively impacted some urban communities, but without the income from the two self-catering "
+    },
+    "2026-12-04_s1.mp3": {
+      "h": "af06c14f2513da2f",
+      "bytes": 35804,
+      "text": "There may be tyrannical hosts with 90 pages of house rules, but the new guidelines are nonsensical."
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -1597,6 +1612,11 @@
       "h": "5c1b9018b1a33ad9",
       "bytes": 7005,
       "text": "affect"
+    },
+    "vocab_afford_to.mp3": {
+      "h": "c38a03e5736b87eb",
+      "bytes": 7004,
+      "text": "afford to"
     },
     "vocab_after.mp3": {
       "h": "405906c9d5be6ae5",
@@ -2588,6 +2608,11 @@
       "bytes": 7004,
       "text": "council"
     },
+    "vocab_councillor.mp3": {
+      "h": "aa3ec211aa6fa273",
+      "bytes": 7004,
+      "text": "councillor"
+    },
     "vocab_counterproductive.mp3": {
       "h": "cc6e3a8a8c3906fd",
       "bytes": 8157,
@@ -2632,6 +2657,11 @@
       "h": "ca82520d4c07c7e8",
       "bytes": 7005,
       "text": "criticize"
+    },
+    "vocab_croft.mp3": {
+      "h": "4aff838ae39ec11b",
+      "bytes": 7004,
+      "text": "croft"
     },
     "vocab_curiosity.mp3": {
       "h": "f90bc924da413d16",
@@ -3403,6 +3433,11 @@
       "bytes": 7005,
       "text": "grow up"
     },
+    "vocab_guidelines.mp3": {
+      "h": "6df1ecfa4d3d04d1",
+      "bytes": 7004,
+      "text": "guidelines"
+    },
     "vocab_gut.mp3": {
       "h": "823c1e79fcc29f80",
       "bytes": 7005,
@@ -4093,6 +4128,11 @@
       "bytes": 7005,
       "text": "navigate"
     },
+    "vocab_negatively_impacted.mp3": {
+      "h": "8e50d52389e619c5",
+      "bytes": 9452,
+      "text": "negatively impacted"
+    },
     "vocab_nevertheless.mp3": {
       "h": "80d7ab15fdb172ce",
       "bytes": 7293,
@@ -4107,6 +4147,11 @@
       "h": "cefc253f5f4b326e",
       "bytes": 7005,
       "text": "nonetheless"
+    },
+    "vocab_nonsensical.mp3": {
+      "h": "308eb8ceed724274",
+      "bytes": 7292,
+      "text": "nonsensical"
     },
     "vocab_not_least.mp3": {
       "h": "9433eeeb21e0dcba",
@@ -4758,6 +4803,11 @@
       "bytes": 7437,
       "text": "seek approval"
     },
+    "vocab_self_catering.mp3": {
+      "h": "6bb22b666cced4b9",
+      "bytes": 7292,
+      "text": "self-catering"
+    },
     "vocab_sensory.mp3": {
       "h": "cfa2f267001d9968",
       "bytes": 7005,
@@ -5227,6 +5277,11 @@
       "h": "851f2f8c942242a3",
       "bytes": 7005,
       "text": "tween"
+    },
+    "vocab_tyrannical.mp3": {
+      "h": "6226972739e4e516",
+      "bytes": 7004,
+      "text": "tyrannical"
     },
     "vocab_underfunding.mp3": {
       "h": "a75b825d7179464b",
