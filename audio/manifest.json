@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-05T08:50:18+08:00",
+  "generated_at": "2026-11-06T08:57:17+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1413,6 +1413,21 @@
       "bytes": 35804,
       "text": "There may be tyrannical hosts with 90 pages of house rules, but the new guidelines are nonsensical."
     },
+    "2026-12-05_full.mp3": {
+      "h": "87a88e05f6ffa829",
+      "bytes": 231932,
+      "text": "Every year, Korean parents pay hefty sums to send their children to these private after-school academies designed to tur"
+    },
+    "2026-12-05_s0.mp3": {
+      "h": "1d000366490a4197",
+      "bytes": 84476,
+      "text": "Every year, Korean parents pay hefty sums to send their children to these private after-school academies designed to tur"
+    },
+    "2026-12-05_s1.mp3": {
+      "h": "d94b14bb7c1b3d1f",
+      "bytes": 144092,
+      "text": "In the third book in what she has called her Diaspora Quartet – a follow-up to 2017's Pachinko, recently named one of th"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2718,6 +2733,11 @@
       "bytes": 7005,
       "text": "dedicate"
     },
+    "vocab_deem.mp3": {
+      "h": "801f979254910f5f",
+      "bytes": 7004,
+      "text": "deem"
+    },
     "vocab_defend.mp3": {
       "h": "a4555a4be0d70c08",
       "bytes": 7005,
@@ -2888,6 +2908,11 @@
       "bytes": 7005,
       "text": "dramatically"
     },
+    "vocab_drill.mp3": {
+      "h": "12e014092855ffa7",
+      "bytes": 7004,
+      "text": "drill"
+    },
     "vocab_drown_out.mp3": {
       "h": "134a0b50ffba5463",
       "bytes": 7005,
@@ -2902,6 +2927,11 @@
       "h": "290050a9bb4e1193",
       "bytes": 7725,
       "text": "earnings report"
+    },
+    "vocab_edge.mp3": {
+      "h": "a0f2c69a18eaea9d",
+      "bytes": 7004,
+      "text": "edge"
     },
     "vocab_edge_towards.mp3": {
       "h": "9d88664408bb7dce",
@@ -3532,6 +3562,11 @@
       "h": "1bbe6dd1229af223",
       "bytes": 7005,
       "text": "hedge"
+    },
+    "vocab_hefty.mp3": {
+      "h": "ce3c9d3f500683ad",
+      "bytes": 7004,
+      "text": "hefty"
     },
     "vocab_helps.mp3": {
       "h": "74314fc0903eb7e2",
@@ -4763,6 +4798,11 @@
       "bytes": 7005,
       "text": "scale back"
     },
+    "vocab_scarcity.mp3": {
+      "h": "503ab04b1b198278",
+      "bytes": 7004,
+      "text": "scarcity"
+    },
     "vocab_scent.mp3": {
       "h": "8e6b2801689893e7",
       "bytes": 7005,
@@ -4922,6 +4962,11 @@
       "h": "bee20638eef97e5b",
       "bytes": 7005,
       "text": "slash"
+    },
+    "vocab_snag.mp3": {
+      "h": "27c89d320cc1602e",
+      "bytes": 7004,
+      "text": "snag"
     },
     "vocab_soaring.mp3": {
       "h": "9d5dc97b8d5e667e",
@@ -5113,6 +5158,11 @@
       "bytes": 7005,
       "text": "symptom"
     },
+    "vocab_symptomatic.mp3": {
+      "h": "75855a27137297e6",
+      "bytes": 7292,
+      "text": "symptomatic"
+    },
     "vocab_take_a_bet_on.mp3": {
       "h": "19aad2963387b4e6",
       "bytes": 7293,
@@ -5272,6 +5322,11 @@
       "h": "4604b55107f21e22",
       "bytes": 7005,
       "text": "triggering"
+    },
+    "vocab_turbocharge.mp3": {
+      "h": "3e04e3d76b270804",
+      "bytes": 7292,
+      "text": "turbocharge"
     },
     "vocab_tween.mp3": {
       "h": "851f2f8c942242a3",
