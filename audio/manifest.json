@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-07T08:03:10+08:00",
+  "generated_at": "2026-11-08T07:34:15+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1448,6 +1448,26 @@
       "bytes": 54812,
       "text": "We also made sure to ask a broad range of teens – from book lovers to tech fiends and plenty in between – to try to repr"
     },
+    "2026-12-07_full.mp3": {
+      "h": "23b731c9e599833d",
+      "bytes": 170012,
+      "text": "These days, Woonsocket is down to one full-service supermarket: a solitary Price Rite serving 45,000 residents, 37% of t"
+    },
+    "2026-12-07_s0.mp3": {
+      "h": "97d763fabdb50b35",
+      "bytes": 79724,
+      "text": "These days, Woonsocket is down to one full-service supermarket: a solitary Price Rite serving 45,000 residents, 37% of t"
+    },
+    "2026-12-07_s1.mp3": {
+      "h": "70daaa8960a42c9f",
+      "bytes": 22412,
+      "text": "A nearby Dollar General offers frozen meat and packaged foods."
+    },
+    "2026-12-07_s2.mp3": {
+      "h": "d95b62c132e7b339",
+      "bytes": 61004,
+      "text": "Locals with cars ( 18% of Woonsocket residents have no vehicle) might travel farther afield, beyond Woonsocket's borders"
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -1657,6 +1677,11 @@
       "h": "c38a03e5736b87eb",
       "bytes": 7004,
       "text": "afford to"
+    },
+    "vocab_afield.mp3": {
+      "h": "ebaf7359d94c3912",
+      "bytes": 7004,
+      "text": "afield"
     },
     "vocab_after.mp3": {
       "h": "405906c9d5be6ae5",
@@ -3838,6 +3863,11 @@
       "bytes": 7725,
       "text": "infrastructure"
     },
+    "vocab_insecure.mp3": {
+      "h": "a2337e8ec6c42d96",
+      "bytes": 7004,
+      "text": "insecure"
+    },
     "vocab_insight.mp3": {
       "h": "f67b30498047f2f3",
       "bytes": 7005,
@@ -4377,6 +4407,11 @@
       "h": "48619257272a3113",
       "bytes": 7005,
       "text": "perceive"
+    },
+    "vocab_perch.mp3": {
+      "h": "24b9ac476a785ebb",
+      "bytes": 7004,
+      "text": "perch"
     },
     "vocab_perched.mp3": {
       "h": "3908a56036e270ef",
@@ -5113,6 +5148,11 @@
       "bytes": 7005,
       "text": "stretch"
     },
+    "vocab_strip_mall.mp3": {
+      "h": "c39b2f4dc262793b",
+      "bytes": 7004,
+      "text": "strip mall"
+    },
     "vocab_strive.mp3": {
       "h": "5c970ffc6eec744f",
       "bytes": 7005,
@@ -5467,6 +5507,11 @@
       "h": "6a7ebfc5e096475a",
       "bytes": 7005,
       "text": "vast"
+    },
+    "vocab_vehicle.mp3": {
+      "h": "0b0591061c39a455",
+      "bytes": 7004,
+      "text": "vehicle"
     },
     "vocab_verbal.mp3": {
       "h": "a1cca50fa76375fa",
