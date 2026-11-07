@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-06T08:57:17+08:00",
+  "generated_at": "2026-11-07T08:03:10+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1428,6 +1428,31 @@
       "bytes": 144092,
       "text": "In the third book in what she has called her Diaspora Quartet – a follow-up to 2017's Pachinko, recently named one of th"
     },
+    "2026-12-06_full.mp3": {
+      "h": "fdb8d9e0671830d5",
+      "bytes": 167852,
+      "text": "Because there is no doubt your teen thinks they know better than you, we took them at their word and asked what they thi"
+    },
+    "2026-12-06_s0.mp3": {
+      "h": "80f8fbd501858596",
+      "bytes": 60572,
+      "text": "Because there is no doubt your teen thinks they know better than you, we took them at their word and asked what they thi"
+    },
+    "2026-12-06_s1.mp3": {
+      "h": "55b6db74a2581952",
+      "bytes": 45452,
+      "text": "To ensure the selection was truly tried and tested, we asked them only about presents they have already received, love a"
+    },
+    "2026-12-06_s2.mp3": {
+      "h": "0d0971232ed89a66",
+      "bytes": 54812,
+      "text": "We also made sure to ask a broad range of teens – from book lovers to tech fiends and plenty in between – to try to repr"
+    },
+    "vocab_a_broad_range_of.mp3": {
+      "h": "5362d5c3f631ebe4",
+      "bytes": 8012,
+      "text": "a broad range of"
+    },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
       "bytes": 7005,
@@ -2578,6 +2603,11 @@
       "bytes": 7005,
       "text": "consistent"
     },
+    "vocab_constantly.mp3": {
+      "h": "1d78db9025e8f293",
+      "bytes": 7004,
+      "text": "constantly"
+    },
     "vocab_consult.mp3": {
       "h": "190b435b70400ff4",
       "bytes": 7005,
@@ -2988,6 +3018,11 @@
       "bytes": 7005,
       "text": "engagement"
     },
+    "vocab_ensure.mp3": {
+      "h": "03503cd82262dd65",
+      "bytes": 7004,
+      "text": "ensure"
+    },
     "vocab_enthusiasm.mp3": {
       "h": "2acc576ee35698bc",
       "bytes": 7437,
@@ -3147,6 +3182,11 @@
       "h": "b5d9eb8c1c8894ec",
       "bytes": 7005,
       "text": "fencing"
+    },
+    "vocab_fiend.mp3": {
+      "h": "1315a1e870a138a2",
+      "bytes": 7004,
+      "text": "fiend"
     },
     "vocab_fight.mp3": {
       "h": "517bd000b74cbc11",
@@ -4173,6 +4213,11 @@
       "bytes": 7293,
       "text": "nevertheless"
     },
+    "vocab_no_doubt.mp3": {
+      "h": "cf9183b3830e5917",
+      "bytes": 7004,
+      "text": "no doubt"
+    },
     "vocab_noise.mp3": {
       "h": "9424ac79de34c97c",
       "bytes": 7005,
@@ -5168,6 +5213,11 @@
       "bytes": 7293,
       "text": "take a bet on"
     },
+    "vocab_take_someone_at_their_word.mp3": {
+      "h": "c32e32a2110623a1",
+      "bytes": 9164,
+      "text": "take someone at their word"
+    },
     "vocab_taken_off.mp3": {
       "h": "bb5f7e5f1f77d88e",
       "bytes": 7004,
@@ -5312,6 +5362,11 @@
       "h": "22bd6f1be3239c0c",
       "bytes": 7005,
       "text": "tricky"
+    },
+    "vocab_tried_and_tested.mp3": {
+      "h": "2b24d52fce93283c",
+      "bytes": 7724,
+      "text": "tried and tested"
     },
     "vocab_trigger.mp3": {
       "h": "63d62d4aee9a5d4f",
