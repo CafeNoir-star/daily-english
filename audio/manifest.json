@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-09T07:33:40+08:00",
+  "generated_at": "2026-11-10T10:39:09+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1487,6 +1487,21 @@
       "h": "177174fe365f4156",
       "bytes": 72092,
       "text": "It is widely used in soft plastic food packaging in the United States and European Union, and is found in children’s toy"
+    },
+    "2026-12-09_full.mp3": {
+      "h": "20400be70b9e5a2a",
+      "bytes": 147116,
+      "text": "Mexico is facing a “toxic crisis” and has become a “garbage sink” for the US, exposing Mexican communities to dangerous "
+    },
+    "2026-12-09_s0.mp3": {
+      "h": "7123c6d8ced69381",
+      "bytes": 59132,
+      "text": "Mexico is facing a “toxic crisis” and has become a “garbage sink” for the US, exposing Mexican communities to dangerous "
+    },
+    "2026-12-09_s1.mp3": {
+      "h": "52713618b712d9db",
+      "bytes": 84764,
+      "text": "In an interview with the Guardian and Quinto Elemento Lab, an investigative outlet, Marcos Orellana, an environmental sp"
     },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
@@ -3487,6 +3502,11 @@
       "h": "78c67c126575c20c",
       "bytes": 7005,
       "text": "garbage"
+    },
+    "vocab_garbage_sink.mp3": {
+      "h": "8e52a91277dc2d29",
+      "bytes": 7292,
+      "text": "garbage sink"
     },
     "vocab_generations.mp3": {
       "h": "f20cc44b4210f2c1",
