@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-10T10:39:09+08:00",
+  "generated_at": "2026-11-11T08:32:13+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1503,6 +1503,26 @@
       "bytes": 84764,
       "text": "In an interview with the Guardian and Quinto Elemento Lab, an investigative outlet, Marcos Orellana, an environmental sp"
     },
+    "2026-12-10_full.mp3": {
+      "h": "e0797bf0274eba0f",
+      "bytes": 162812,
+      "text": "The Abu Obeida mosque in Deir Alla, Balqa, to the west of Amman, stands in one of the hottest and most arid stretches of"
+    },
+    "2026-12-10_s0.mp3": {
+      "h": "f7372bcc0f3eecc0",
+      "bytes": 47612,
+      "text": "The Abu Obeida mosque in Deir Alla, Balqa, to the west of Amman, stands in one of the hottest and most arid stretches of"
+    },
+    "2026-12-10_s1.mp3": {
+      "h": "5ed9dc2f4d911af2",
+      "bytes": 63452,
+      "text": "Yet an oasis of trees and flowerbeds surrounds it, improbably green against a landscape of bare ochre hills, watered by "
+    },
+    "2026-12-10_s2.mp3": {
+      "h": "ed39a235418f1a1f",
+      "bytes": 44732,
+      "text": "The water does not come from the municipal network, but from the taps where worshippers wash their hands, faces and feet"
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -1947,6 +1967,11 @@
       "h": "bf1a4c6597155e9f",
       "bytes": 7005,
       "text": "argue"
+    },
+    "vocab_arid.mp3": {
+      "h": "44fafdcc768bbcae",
+      "bytes": 7004,
+      "text": "arid"
     },
     "vocab_arise.mp3": {
       "h": "8b77d8a6a37ef441",
@@ -3018,6 +3043,11 @@
       "bytes": 7004,
       "text": "drill"
     },
+    "vocab_drip.mp3": {
+      "h": "049c32667ae76ade",
+      "bytes": 7004,
+      "text": "drip"
+    },
     "vocab_drown_out.mp3": {
       "h": "134a0b50ffba5463",
       "bytes": 7005,
@@ -3868,6 +3898,11 @@
       "bytes": 7293,
       "text": "impressively"
     },
+    "vocab_improbably.mp3": {
+      "h": "272d49bca804326e",
+      "bytes": 7004,
+      "text": "improbably"
+    },
     "vocab_improve.mp3": {
       "h": "69a42959af3e5974",
       "bytes": 7005,
@@ -4037,6 +4072,11 @@
       "h": "54572a7689b61cc6",
       "bytes": 7005,
       "text": "irreversible"
+    },
+    "vocab_irrigation.mp3": {
+      "h": "08bdf6e15aa42d3a",
+      "bytes": 7004,
+      "text": "irrigation"
     },
     "vocab_jasmine.mp3": {
       "h": "5bfd08bdac5988b8",
@@ -4278,6 +4318,11 @@
       "bytes": 8013,
       "text": "mover and shaker"
     },
+    "vocab_municipal.mp3": {
+      "h": "89841039bcb7b05f",
+      "bytes": 7004,
+      "text": "municipal"
+    },
     "vocab_myriad.mp3": {
       "h": "03cb7358f1089b5d",
       "bytes": 7005,
@@ -4342,6 +4387,11 @@
       "h": "9161c5f792868455",
       "bytes": 7005,
       "text": "nourishment"
+    },
+    "vocab_oasis.mp3": {
+      "h": "834d2bc8b3b63d04",
+      "bytes": 7004,
+      "text": "oasis"
     },
     "vocab_object.mp3": {
       "h": "1615307cc4523f18",
@@ -5697,6 +5747,11 @@
       "h": "4b0556624d5449c1",
       "bytes": 7005,
       "text": "worse off"
+    },
+    "vocab_worshipper.mp3": {
+      "h": "dfa4fa39ee3b040e",
+      "bytes": 7004,
+      "text": "worshipper"
     },
     "vocab_wrestle_with.mp3": {
       "h": "1557a00db3963261",
