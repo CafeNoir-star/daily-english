@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-12T09:53:13+08:00",
+  "generated_at": "2026-11-13T09:01:16+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1548,10 +1548,35 @@
       "bytes": 41132,
       "text": "Now Patrick has started his A-levels – French, business and media studies – and fresh challenges lie ahead."
     },
+    "2026-12-12_full.mp3": {
+      "h": "1ee15d25ac192e48",
+      "bytes": 187724,
+      "text": "But Democrats' crushing win in the US midterm elections has delivered a timely shot of optimism to countries now looking"
+    },
+    "2026-12-12_s0.mp3": {
+      "h": "95bcc48d0efd5b1d",
+      "bytes": 53084,
+      "text": "But Democrats' crushing win in the US midterm elections has delivered a timely shot of optimism to countries now looking"
+    },
+    "2026-12-12_s1.mp3": {
+      "h": "3117efe1aa958948",
+      "bytes": 58124,
+      "text": "For the second year in a row, there will be no official US government presence at the annual climate summit, this year k"
+    },
+    "2026-12-12_s2.mp3": {
+      "h": "78db740eaf9494e1",
+      "bytes": 69356,
+      "text": "While almost every other country in the world sends delegations to the talks, Trump has derided the climate crisis as a "
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
       "text": "a broad range of"
+    },
+    "vocab_a_shot_of_optimism.mp3": {
+      "h": "9a7c3dfd5e2057c8",
+      "bytes": 9164,
+      "text": "a shot of optimism"
     },
     "vocab_ability.mp3": {
       "h": "083dbabef569d46b",
@@ -2833,6 +2858,11 @@
       "bytes": 7004,
       "text": "croft"
     },
+    "vocab_crushing.mp3": {
+      "h": "2d34680032bbaa53",
+      "bytes": 7004,
+      "text": "crushing"
+    },
     "vocab_curiosity.mp3": {
       "h": "f90bc924da413d16",
       "bytes": 7293,
@@ -2957,6 +2987,11 @@
       "h": "d77df9734c32e228",
       "bytes": 7005,
       "text": "deprivation"
+    },
+    "vocab_deride.mp3": {
+      "h": "6149b339095da86e",
+      "bytes": 7004,
+      "text": "deride"
     },
     "vocab_descend.mp3": {
       "h": "d363f3ea1acff0fb",
@@ -3938,6 +3973,11 @@
       "bytes": 7005,
       "text": "improvements"
     },
+    "vocab_in_a_row.mp3": {
+      "h": "87fbcab0232e78f3",
+      "bytes": 7004,
+      "text": "in a row"
+    },
     "vocab_in_front_of.mp3": {
       "h": "b41612a4094fb767",
       "bytes": 7005,
@@ -4428,6 +4468,11 @@
       "bytes": 7292,
       "text": "observatory"
     },
+    "vocab_obstruction.mp3": {
+      "h": "d539a94efe4e0c8a",
+      "bytes": 7004,
+      "text": "obstruction"
+    },
     "vocab_occupational.mp3": {
       "h": "57e724232d47c372",
       "bytes": 7293,
@@ -4702,6 +4747,11 @@
       "h": "f8492df6421f4765",
       "bytes": 7005,
       "text": "prediction"
+    },
+    "vocab_presence.mp3": {
+      "h": "f65997ec64701fb6",
+      "bytes": 7004,
+      "text": "presence"
     },
     "vocab_pressure.mp3": {
       "h": "3b4c0c6565e036a8",
@@ -5478,6 +5528,11 @@
       "bytes": 7005,
       "text": "thunder"
     },
+    "vocab_timely.mp3": {
+      "h": "d3496bacbfccf29e",
+      "bytes": 7004,
+      "text": "timely"
+    },
     "vocab_tornado.mp3": {
       "h": "474446ad24ee5490",
       "bytes": 7005,
@@ -5757,6 +5812,11 @@
       "h": "d788956320b23c44",
       "bytes": 7005,
       "text": "wisdom"
+    },
+    "vocab_withdrawal.mp3": {
+      "h": "17138af5c3efb205",
+      "bytes": 7004,
+      "text": "withdrawal"
     },
     "vocab_workforce.mp3": {
       "h": "91f3be3b7a64c291",
