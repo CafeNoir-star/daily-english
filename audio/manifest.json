@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-14T08:50:50+08:00",
+  "generated_at": "2026-11-15T07:48:59+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1603,6 +1603,26 @@
       "bytes": 38972,
       "text": "They might carry groceries home, for example, which is certainly something my tiny chihuahua-mix is incapable of."
     },
+    "2026-12-14_full.mp3": {
+      "h": "9cca6c154bbdddd5",
+      "bytes": 142652,
+      "text": "The government's plans to release thousands of prisoners early were dealt a blow on Friday after probation officers acro"
+    },
+    "2026-12-14_s0.mp3": {
+      "h": "3b83c8815f5e4690",
+      "bytes": 60572,
+      "text": "The government's plans to release thousands of prisoners early were dealt a blow on Friday after probation officers acro"
+    },
+    "2026-12-14_s1.mp3": {
+      "h": "11a195d1d92d3cdc",
+      "bytes": 52364,
+      "text": "Members of the union, Napo, backed overtime restrictions and other forms of action short of a strike, which is likely to"
+    },
+    "2026-12-14_s2.mp3": {
+      "h": "7d61f9e9ed0cdc46",
+      "bytes": 22844,
+      "text": "Plans are being made for strike action to follow at a later stage."
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -2127,6 +2147,11 @@
       "h": "27e90dfa57c358ac",
       "bytes": 7005,
       "text": "at"
+    },
+    "vocab_at_a_later_stage.mp3": {
+      "h": "f37756ac7d0fb439",
+      "bytes": 8732,
+      "text": "at a later stage"
     },
     "vocab_attention.mp3": {
       "h": "d0278de5f6e5df29",
@@ -2923,6 +2948,11 @@
       "bytes": 7004,
       "text": "dank"
     },
+    "vocab_deal_a_blow.mp3": {
+      "h": "5b5cae593d143cd0",
+      "bytes": 7004,
+      "text": "deal a blow"
+    },
     "vocab_deathless.mp3": {
       "h": "c59cabf58b7e122e",
       "bytes": 7005,
@@ -3267,6 +3297,11 @@
       "h": "c28818d749bfe85e",
       "bytes": 7005,
       "text": "evolve"
+    },
+    "vocab_excessive.mp3": {
+      "h": "adc09cdc4cc2d0b5",
+      "bytes": 7004,
+      "text": "excessive"
     },
     "vocab_exchange.mp3": {
       "h": "a3497f3e45b19383",
@@ -4623,6 +4658,11 @@
       "bytes": 7005,
       "text": "overpass"
     },
+    "vocab_overtime.mp3": {
+      "h": "adf3f4619354fb44",
+      "bytes": 7004,
+      "text": "overtime"
+    },
     "vocab_overwhelm.mp3": {
       "h": "95c65348018609be",
       "bytes": 7005,
@@ -4837,6 +4877,11 @@
       "h": "3345867ecfeeaaae",
       "bytes": 7005,
       "text": "priority"
+    },
+    "vocab_probation.mp3": {
+      "h": "24c5512fcc2da0c7",
+      "bytes": 7004,
+      "text": "probation"
     },
     "vocab_proclamation.mp3": {
       "h": "22d398173dcd377f",
@@ -5823,6 +5868,11 @@
       "bytes": 7005,
       "text": "volumes"
     },
+    "vocab_vote_to_strike.mp3": {
+      "h": "04dab2ee100d1ef8",
+      "bytes": 7436,
+      "text": "vote to strike"
+    },
     "vocab_vulnerable.mp3": {
       "h": "36e83e3080c38d7d",
       "bytes": 7005,
@@ -5902,6 +5952,11 @@
       "h": "d7447afe8ccd9243",
       "bytes": 7724,
       "text": "working-class"
+    },
+    "vocab_workload.mp3": {
+      "h": "8c6e326cc8ba9895",
+      "bytes": 7004,
+      "text": "workload"
     },
     "vocab_worse_off.mp3": {
       "h": "4b0556624d5449c1",
