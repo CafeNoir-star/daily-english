@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-13T09:01:16+08:00",
+  "generated_at": "2026-11-14T08:50:50+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1567,6 +1567,41 @@
       "h": "78db740eaf9494e1",
       "bytes": 69356,
       "text": "While almost every other country in the world sends delegations to the talks, Trump has derided the climate crisis as a "
+    },
+    "2026-12-13_full.mp3": {
+      "h": "67e9926f13ae0d5a",
+      "bytes": 241724,
+      "text": "If so, I suggest you head to San Francisco, where a startup called Dimensional has been paying people $20 (£15) an hour "
+    },
+    "2026-12-13_s0.mp3": {
+      "h": "482c3829a82b6e8c",
+      "bytes": 62444,
+      "text": "If so, I suggest you head to San Francisco, where a startup called Dimensional has been paying people $20 (£15) an hour "
+    },
+    "2026-12-13_s1.mp3": {
+      "h": "32a1ad38d5b1966d",
+      "bytes": 30764,
+      "text": "This isn’t because the dogs need the exercise – it is because the company needs the training data."
+    },
+    "2026-12-13_s2.mp3": {
+      "h": "bf5b9cb78011a0fd",
+      "bytes": 50924,
+      "text": "As reported in the New York Times, the goal is to develop “operating systems that can integrate with AI agents so the ma"
+    },
+    "2026-12-13_s3.mp3": {
+      "h": "32ddc9c8505d4aad",
+      "bytes": 21692,
+      "text": "What exactly will these machines do when they can act more independently?"
+    },
+    "2026-12-13_s4.mp3": {
+      "h": "6af7467dc6811c8b",
+      "bytes": 18956,
+      "text": "The founder of Dimensional insists they will help people."
+    },
+    "2026-12-13_s5.mp3": {
+      "h": "dad180e2b90255a3",
+      "bytes": 38972,
+      "text": "They might carry groceries home, for example, which is certainly something my tiny chihuahua-mix is incapable of."
     },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
@@ -3498,6 +3533,11 @@
       "bytes": 7005,
       "text": "four"
     },
+    "vocab_four_legged.mp3": {
+      "h": "aa43645e5a8ca203",
+      "bytes": 7004,
+      "text": "four-legged"
+    },
     "vocab_fragment.mp3": {
       "h": "5172cf7b97e10171",
       "bytes": 7005,
@@ -3662,6 +3702,11 @@
       "h": "fc95e735309552cb",
       "bytes": 7005,
       "text": "grim"
+    },
+    "vocab_groceries.mp3": {
+      "h": "0fd05dad4b0419b5",
+      "bytes": 7004,
+      "text": "groceries"
     },
     "vocab_grounding.mp3": {
       "h": "ac63f36343e5993f",
@@ -3993,6 +4038,11 @@
       "bytes": 7005,
       "text": "inadequate"
     },
+    "vocab_incapable_of.mp3": {
+      "h": "a85b7d8cad9c107e",
+      "bytes": 7724,
+      "text": "incapable of"
+    },
     "vocab_incentive.mp3": {
       "h": "9b5ee7d3c5562147",
       "bytes": 7005,
@@ -4007,6 +4057,11 @@
       "h": "36425e17767b82a5",
       "bytes": 7293,
       "text": "incredulity"
+    },
+    "vocab_independently.mp3": {
+      "h": "79303d1619c2dd13",
+      "bytes": 7436,
+      "text": "independently"
     },
     "vocab_inequality.mp3": {
       "h": "9d5452c9cd006d18",
@@ -4032,6 +4087,11 @@
       "h": "f67b30498047f2f3",
       "bytes": 7005,
       "text": "insight"
+    },
+    "vocab_insist.mp3": {
+      "h": "7d133180f3bea18a",
+      "bytes": 7004,
+      "text": "insist"
     },
     "vocab_insole.mp3": {
       "h": "b3f113843821713a",
@@ -4067,6 +4127,11 @@
       "h": "df5f22665ed90c0d",
       "bytes": 7005,
       "text": "insure"
+    },
+    "vocab_integrate.mp3": {
+      "h": "33d3f70dacf79ce2",
+      "bytes": 7004,
+      "text": "integrate"
     },
     "vocab_intelligence.mp3": {
       "h": "482e7bdd5b5d5323",
@@ -5298,6 +5363,11 @@
       "bytes": 7005,
       "text": "stall"
     },
+    "vocab_startup.mp3": {
+      "h": "71bcd582d7e88d66",
+      "bytes": 7004,
+      "text": "startup"
+    },
     "vocab_steer_clear_of.mp3": {
       "h": "6e73aeddb0fcdfc6",
       "bytes": 8013,
@@ -5572,6 +5642,11 @@
       "h": "dbe430a13866b3f6",
       "bytes": 7005,
       "text": "traction"
+    },
+    "vocab_training_data.mp3": {
+      "h": "74d5120c46dde9f9",
+      "bytes": 7004,
+      "text": "training data"
     },
     "vocab_transaction.mp3": {
       "h": "41c48b55fa9164e1",
