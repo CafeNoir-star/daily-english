@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-15T07:48:59+08:00",
+  "generated_at": "2026-11-16T07:54:55+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1623,6 +1623,26 @@
       "bytes": 22844,
       "text": "Plans are being made for strike action to follow at a later stage."
     },
+    "2026-12-15_full.mp3": {
+      "h": "db1ecd7383e6bfea",
+      "bytes": 169292,
+      "text": "Every morning in central Cameroon, the primatologist Sheri Speede wakes to a daunting task. At the Sanaga-Yong sanctuary"
+    },
+    "2026-12-15_s0.mp3": {
+      "h": "c95a45b6f5886e70",
+      "bytes": 32924,
+      "text": "Every morning in central Cameroon, the primatologist Sheri Speede wakes to a daunting task."
+    },
+    "2026-12-15_s1.mp3": {
+      "h": "cb155735fe9d3316",
+      "bytes": 61436,
+      "text": "At the Sanaga-Yong sanctuary, which she founded in 1999, there are 75 chimpanzees to feed four times a day and monitor f"
+    },
+    "2026-12-15_s2.mp3": {
+      "h": "516618b10948d9e2",
+      "bytes": 68204,
+      "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -2318,6 +2338,11 @@
       "bytes": 7005,
       "text": "begun"
     },
+    "vocab_behavioural.mp3": {
+      "h": "3cb66d4bd07c7b0f",
+      "bytes": 6572,
+      "text": "behavioural"
+    },
     "vocab_being.mp3": {
       "h": "e8b95d665e2ceb50",
       "bytes": 7005,
@@ -2947,6 +2972,11 @@
       "h": "9431e108b67d1efa",
       "bytes": 7004,
       "text": "dank"
+    },
+    "vocab_daunting.mp3": {
+      "h": "9577df168f59446d",
+      "bytes": 4268,
+      "text": "daunting"
     },
     "vocab_deal_a_blow.mp3": {
       "h": "5b5cae593d143cd0",
@@ -4868,6 +4898,11 @@
       "bytes": 7005,
       "text": "prevention"
     },
+    "vocab_primatologist.mp3": {
+      "h": "44a1f8571e2958a2",
+      "bytes": 8444,
+      "text": "primatologist"
+    },
     "vocab_primed.mp3": {
       "h": "7240e268ef2f3fc2",
       "bytes": 7005,
@@ -5173,6 +5208,16 @@
       "bytes": 7005,
       "text": "rightful"
     },
+    "vocab_round_the_clock.mp3": {
+      "h": "b92a2f7adee53d33",
+      "bytes": 7292,
+      "text": "round-the-clock"
+    },
+    "vocab_routine.mp3": {
+      "h": "012da8a947ea870d",
+      "bytes": 4556,
+      "text": "routine"
+    },
     "vocab_run_away.mp3": {
       "h": "0c58121e7097ddb9",
       "bytes": 7005,
@@ -5187,6 +5232,11 @@
       "h": "93a16ab2bc0181ae",
       "bytes": 7437,
       "text": "run the other way"
+    },
+    "vocab_sanctuary.mp3": {
+      "h": "7e42a105df86f89e",
+      "bytes": 7004,
+      "text": "sanctuary"
     },
     "vocab_scale_back.mp3": {
       "h": "f5fc12bffe86a29e",
