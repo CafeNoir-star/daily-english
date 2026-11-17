@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-16T07:54:55+08:00",
+  "generated_at": "2026-11-17T10:52:16+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1639,6 +1639,26 @@
       "text": "At the Sanaga-Yong sanctuary, which she founded in 1999, there are 75 chimpanzees to feed four times a day and monitor f"
     },
     "2026-12-15_s2.mp3": {
+      "h": "516618b10948d9e2",
+      "bytes": 68204,
+      "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
+    },
+    "2026-12-16_full.mp3": {
+      "h": "db1ecd7383e6bfea",
+      "bytes": 169292,
+      "text": "Every morning in central Cameroon, the primatologist Sheri Speede wakes to a daunting task. At the Sanaga-Yong sanctuary"
+    },
+    "2026-12-16_s0.mp3": {
+      "h": "c95a45b6f5886e70",
+      "bytes": 32924,
+      "text": "Every morning in central Cameroon, the primatologist Sheri Speede wakes to a daunting task."
+    },
+    "2026-12-16_s1.mp3": {
+      "h": "cb155735fe9d3316",
+      "bytes": 61436,
+      "text": "At the Sanaga-Yong sanctuary, which she founded in 1999, there are 75 chimpanzees to feed four times a day and monitor f"
+    },
+    "2026-12-16_s2.mp3": {
       "h": "516618b10948d9e2",
       "bytes": 68204,
       "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
@@ -5217,6 +5237,11 @@
       "h": "012da8a947ea870d",
       "bytes": 4556,
       "text": "routine"
+    },
+    "vocab_rowdy.mp3": {
+      "h": "485a7610bedaf5d6",
+      "bytes": 7004,
+      "text": "rowdy"
     },
     "vocab_run_away.mp3": {
       "h": "0c58121e7097ddb9",
