@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-17T10:52:16+08:00",
+  "generated_at": "2026-11-18T10:18:13+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1663,6 +1663,21 @@
       "bytes": 68204,
       "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
     },
+    "2026-12-17_full.mp3": {
+      "h": "889819e7ad57b321",
+      "bytes": 133004,
+      "text": "At the Sanaga-Yong sanctuary, which she founded in 1999, there are 75 chimpanzees to feed four times a day and monitor f"
+    },
+    "2026-12-17_s0.mp3": {
+      "h": "cb155735fe9d3316",
+      "bytes": 61436,
+      "text": "At the Sanaga-Yong sanctuary, which she founded in 1999, there are 75 chimpanzees to feed four times a day and monitor f"
+    },
+    "2026-12-17_s1.mp3": {
+      "h": "516618b10948d9e2",
+      "bytes": 68204,
+      "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -2632,6 +2647,11 @@
       "h": "d5b86a962d9a3f00",
       "bytes": 8445,
       "text": "change the stakes"
+    },
+    "vocab_chimpanzee.mp3": {
+      "h": "554436ee3311dbbb",
+      "bytes": 7004,
+      "text": "chimpanzee"
     },
     "vocab_chronic.mp3": {
       "h": "24fc197e1a51d91a",
@@ -4427,6 +4447,11 @@
       "h": "09f3246f599ac9a1",
       "bytes": 7004,
       "text": "median"
+    },
+    "vocab_medication.mp3": {
+      "h": "a6fafcf1744686e9",
+      "bytes": 7004,
+      "text": "medication"
     },
     "vocab_melt_away.mp3": {
       "h": "4fefc493d07e952a",
