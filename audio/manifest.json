@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-18T10:18:13+08:00",
+  "generated_at": "2026-11-19T09:50:08+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1678,6 +1678,31 @@
       "bytes": 68204,
       "text": "Of those, more than 30 need to be given routine birth-control medications, four are babies requiring round-the-clock car"
     },
+    "2026-12-18_full.mp3": {
+      "h": "46d321e063c272ec",
+      "bytes": 201404,
+      "text": "In May 2026, the government overhauled private renting by abolishing no-fault evictions and shifting private tenancies t"
+    },
+    "2026-12-18_s0.mp3": {
+      "h": "ed2d3347412704c7",
+      "bytes": 51212,
+      "text": "In May 2026, the government overhauled private renting by abolishing no-fault evictions and shifting private tenancies t"
+    },
+    "2026-12-18_s1.mp3": {
+      "h": "6eb29e404e24b6aa",
+      "bytes": 26012,
+      "text": "However, deposit protection remains an issue for many private renters."
+    },
+    "2026-12-18_s2.mp3": {
+      "h": "6c61a476e5b0df9c",
+      "bytes": 50204,
+      "text": "The government has promised and begun consulting on reforms, including scrapping insured deposit schemes, but has yet to"
+    },
+    "2026-12-18_s3.mp3": {
+      "h": "3609d88614ec097f",
+      "bytes": 63452,
+      "text": "Landlords and letting agents are currently permitted to hold tenant deposits in their own bank accounts and this creates"
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -1692,6 +1717,11 @@
       "h": "083dbabef569d46b",
       "bytes": 7005,
       "text": "ability"
+    },
+    "vocab_abolish.mp3": {
+      "h": "5194d926dde85c33",
+      "bytes": 7004,
+      "text": "abolish"
     },
     "vocab_about.mp3": {
       "h": "5780daf6db0b013d",
@@ -3363,6 +3393,11 @@
       "bytes": 7005,
       "text": "eventually"
     },
+    "vocab_eviction.mp3": {
+      "h": "2b4f6d4d6f2d079e",
+      "bytes": 7004,
+      "text": "eviction"
+    },
     "vocab_evolve.mp3": {
       "h": "c28818d749bfe85e",
       "bytes": 7005,
@@ -4078,6 +4113,11 @@
       "bytes": 7005,
       "text": "if"
     },
+    "vocab_imbalance.mp3": {
+      "h": "5ff5dc675fb0181d",
+      "bytes": 7004,
+      "text": "imbalance"
+    },
     "vocab_immune.mp3": {
       "h": "86bac50e25a1ccb7",
       "bytes": 7005,
@@ -4723,6 +4763,11 @@
       "bytes": 7005,
       "text": "outweigh"
     },
+    "vocab_overhaul.mp3": {
+      "h": "02212c428983edce",
+      "bytes": 7004,
+      "text": "overhaul"
+    },
     "vocab_overlook.mp3": {
       "h": "1b8ee344f03e5e40",
       "bytes": 7005,
@@ -4797,6 +4842,11 @@
       "h": "56f0d2a0e8114592",
       "bytes": 7005,
       "text": "performing"
+    },
+    "vocab_permit.mp3": {
+      "h": "cf0f3f416e6fa283",
+      "bytes": 7004,
+      "text": "permit"
     },
     "vocab_persecution.mp3": {
       "h": "69bd62c0b8583b97",
@@ -5308,6 +5358,11 @@
       "bytes": 7005,
       "text": "score"
     },
+    "vocab_scrap.mp3": {
+      "h": "c0bed61c5a070090",
+      "bytes": 7004,
+      "text": "scrap"
+    },
     "vocab_scroll.mp3": {
       "h": "c29dac5a5a8c62fe",
       "bytes": 7005,
@@ -5697,6 +5752,11 @@
       "h": "d46d3dc5d6dac20d",
       "bytes": 7005,
       "text": "tear through"
+    },
+    "vocab_tenancy.mp3": {
+      "h": "326d588df629b244",
+      "bytes": 7004,
+      "text": "tenancy"
     },
     "vocab_tension.mp3": {
       "h": "e6bacb0da062aa5f",
