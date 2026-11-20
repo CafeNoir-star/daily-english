@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-11-19T09:50:08+08:00",
+  "generated_at": "2026-11-20T09:45:37+08:00",
   "voice": "en-US-JennyNeural",
   "files": {
     "2026-10-15_full.mp3": {
@@ -1703,6 +1703,36 @@
       "bytes": 63452,
       "text": "Landlords and letting agents are currently permitted to hold tenant deposits in their own bank accounts and this creates"
     },
+    "2026-12-19_full.mp3": {
+      "h": "82db1d0aad95d152",
+      "bytes": 173612,
+      "text": "My car was involved in a minor no-fault accident. The other driver admitted responsibility and said they would pay for r"
+    },
+    "2026-12-19_s0.mp3": {
+      "h": "29ed1cbaad7086e4",
+      "bytes": 17804,
+      "text": "My car was involved in a minor no-fault accident."
+    },
+    "2026-12-19_s1.mp3": {
+      "h": "e7531c757c02dd24",
+      "bytes": 32924,
+      "text": "The other driver admitted responsibility and said they would pay for repairs without involving insurers."
+    },
+    "2026-12-19_s2.mp3": {
+      "h": "a313fddb8fd3cb98",
+      "bytes": 22124,
+      "text": "I informed my insurer, the AA, without making a claim."
+    },
+    "2026-12-19_s3.mp3": {
+      "h": "447f99cc5db210cd",
+      "bytes": 63452,
+      "text": "It had recently sent a renewal quote for £364, but after reporting the accident I was sent a revised figure of £796.86."
+    },
+    "2026-12-19_s4.mp3": {
+      "h": "a8d7506cfd344279",
+      "bytes": 23564,
+      "text": "I was told by a call handler that any insurance company would do the same."
+    },
     "vocab_a_broad_range_of.mp3": {
       "h": "5362d5c3f631ebe4",
       "bytes": 8012,
@@ -1862,6 +1892,11 @@
       "h": "af964fdf7b367ee2",
       "bytes": 7004,
       "text": "admire"
+    },
+    "vocab_admitted.mp3": {
+      "h": "6f389bc5683bc380",
+      "bytes": 7004,
+      "text": "admitted"
     },
     "vocab_adopting.mp3": {
       "h": "bd7f9e7c5c114e3f",
@@ -4273,6 +4308,11 @@
       "bytes": 7005,
       "text": "insure"
     },
+    "vocab_insurer.mp3": {
+      "h": "d2e237822e5c4bd1",
+      "bytes": 7004,
+      "text": "insurer"
+    },
     "vocab_integrate.mp3": {
       "h": "33d3f70dacf79ce2",
       "bytes": 7004,
@@ -4468,6 +4508,11 @@
       "bytes": 7005,
       "text": "look at"
     },
+    "vocab_making_a_claim.mp3": {
+      "h": "2fca9f2d26460e65",
+      "bytes": 7724,
+      "text": "making a claim"
+    },
     "vocab_managed.mp3": {
       "h": "9fdf36c79835189a",
       "bytes": 7004,
@@ -4632,6 +4677,11 @@
       "h": "cf9183b3830e5917",
       "bytes": 7004,
       "text": "no doubt"
+    },
+    "vocab_no_fault.mp3": {
+      "h": "a4bdacd52ce5f348",
+      "bytes": 7004,
+      "text": "no-fault"
     },
     "vocab_noise.mp3": {
       "h": "9424ac79de34c97c",
@@ -5083,6 +5133,11 @@
       "bytes": 7005,
       "text": "quit"
     },
+    "vocab_quote.mp3": {
+      "h": "f5d98dda084d28a1",
+      "bytes": 7004,
+      "text": "quote"
+    },
     "vocab_radical.mp3": {
       "h": "5da0e27d89a66a80",
       "bytes": 7005,
@@ -5203,6 +5258,16 @@
       "bytes": 7005,
       "text": "renewable"
     },
+    "vocab_renewal.mp3": {
+      "h": "65666332603da116",
+      "bytes": 7004,
+      "text": "renewal"
+    },
+    "vocab_repairs.mp3": {
+      "h": "1057042f29476b65",
+      "bytes": 7004,
+      "text": "repairs"
+    },
     "vocab_repay.mp3": {
       "h": "ef2c91c6f32ca0f4",
       "bytes": 7005,
@@ -5292,6 +5357,11 @@
       "h": "c2a5b03a666cc312",
       "bytes": 7005,
       "text": "reverent"
+    },
+    "vocab_revised.mp3": {
+      "h": "0b743a74b5268c56",
+      "bytes": 7004,
+      "text": "revised"
     },
     "vocab_revolutionize.mp3": {
       "h": "9dd59f769919409f",
